@@ -1,1 +1,10 @@
-target/
+target
+.classpath
+.settings
+.project
+*~
+generated
+/runtime
+/modal.log
+/work
+/velocity.log
