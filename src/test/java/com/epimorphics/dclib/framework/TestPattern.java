@@ -60,6 +60,11 @@ public class TestPattern {
         assertEquals("prefix:bar", ans[1]);
     }
     
+    @Test
+    public void testScripts() {
+        assertEquals("foo bar", eval("{={a;b}}"));
+    }
+    
     private Object eval(String pattern) {
         return new Pattern(pattern, dc).evaluate(env);
     }

@@ -147,7 +147,9 @@ public class Pattern {
             case '{' :
                 if (blockDepth == 0) {
                     // Start new expression block
-                    components.add( block.toString() );
+                    if (block.length() > 0) {
+                        components.add( block.toString() );
+                    }
                     block = new StringBuilder();
                     if (pattern.charAt(i+1) == '=') {
                         isScript = true;
@@ -155,6 +157,8 @@ public class Pattern {
                     } else {
                         isScript = false;
                     }
+                } else {
+                    block.append(c);
                 }
                 blockDepth++;
                 break;
@@ -166,6 +170,8 @@ public class Pattern {
                     String src = block.toString();
                     components.add( isScript ? engine.createScript(src) : engine.createExpression(src) );
                     block = new StringBuilder();
+                } else {
+                    block.append(c);
                 }
                 break;
                 
@@ -177,7 +183,7 @@ public class Pattern {
         }
         
         if (block.length() > 0) {
-            components.add(block.toString());
+            components.add( block.toString() );
         }
         
         if (components.size() == 0) {
