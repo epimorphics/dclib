@@ -22,6 +22,7 @@ public class DataContext {
     // TODO sources
     
     protected PrefixMapping prefixes;
+    protected BindingEnv env = new BindingEnv();
     
     public DataContext() {
     }
@@ -39,5 +40,12 @@ public class DataContext {
         } else {
             return uri;
         }
+    }
+    
+    /**
+     * Get the global binding environment with default parameter settings
+     */
+    public BindingEnv getGlobalEnv() {
+        return env;
     }
 }

@@ -25,7 +25,9 @@ public class ValueFactory {
     protected static final Pattern FLOAT_PATTERN = Pattern.compile("[0-9]+(\\.[0-9]+)?[eE][-+][0-9]+(\\.[0-9]+)?");
     
     public static Object asValue(String string) {
-        if (INTEGER_PATTERN.matcher(string).matches()) {
+        if (string == null || string.isEmpty()) {
+            return new ValueString(null); 
+        } else if (INTEGER_PATTERN.matcher(string).matches()) {
             return Long.valueOf(string);
         } else if (FLOAT_PATTERN.matcher(string).matches()) {
             return Double.valueOf(string);

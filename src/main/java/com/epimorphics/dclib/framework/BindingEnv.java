@@ -52,10 +52,18 @@ public class BindingEnv extends HashMap<String, Object> implements Map<String, O
         return doGet(name);   
     }
     
+    /**
+     * Return the most recent binding of a key or null if there is one (even 
+     * if there is an inherited value further up the chain).
+     */
+    public Object getLocal(String name) {
+        return super.get(name);
+    }
+    
     // Sometimes the java type system just seems to work against you
     private Object doGet(Object key) {
         Object v = super.get(key);
-        if (v == null) {
+        if (v == null && parent != null) {
             return parent.get(key);
         } 
         return v;

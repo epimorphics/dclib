@@ -9,6 +9,9 @@
 
 package com.epimorphics.dclib.framework;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -16,6 +19,12 @@ import java.util.regex.Pattern;
 import org.apache.commons.jexl2.Expression;
 import org.apache.commons.jexl2.JexlEngine;
 import org.apache.commons.jexl2.MapContext;
+import org.apache.jena.atlas.json.JSON;
+import org.apache.jena.atlas.json.JsonObject;
+
+import com.epimorphics.dclib.framework.TestConverterProcess.TestTemplate;
+import com.epimorphics.dclib.templates.ResourceMapTemplate;
+import com.epimorphics.tasks.ProgressMonitor;
 
 /**
  * Playpen used for experiments
@@ -39,8 +48,24 @@ public class Temp {
         System.out.println(" -> " + result);
     }
     
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
+        InputStream is = new FileInputStream( "test/simple-skos-template.json");
+        JsonObject spec = JSON.parse( is );
+        is.close();
         
+        DataContext dc = new DataContext();
+        Template template = new ResourceMapTemplate(spec, dc);
+        is = new FileInputStream("test/WIMS_Sampling_Mechanisms.csv");
+        ConverterProcess process = new ConverterProcess(new DataContext(), is);
+        process.setTemplate( template );
+        process.getEnv().put("$base", "http://example.com/");
+        boolean ok = process.process();
+        if (ok) {
+            process.getModel().write(System.out, "Turtle");
+        } else {
+            System.out.println("FAILED");
+            TestConverterProcess.printMessages( (ProgressMonitor)process.getMessageReporter() );
+        }
 //        new Temp().testJexl();
     }
     
