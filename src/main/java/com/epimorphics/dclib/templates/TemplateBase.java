@@ -99,7 +99,7 @@ public class TemplateBase implements Template {
     }
 
     @Override
-    public boolean convertRow(ConverterProcess config, BindingEnv row, int rowNumber) {
+    public Node convertRow(ConverterProcess config, BindingEnv row, int rowNumber) {
         if (requiredColumns != null) {
             for (String required : requiredColumns) {
                 if (!row.containsKey(required)) {
@@ -107,7 +107,7 @@ public class TemplateBase implements Template {
                 }
             }
         }
-        return true;
+        return null;
     }
 
     @Override

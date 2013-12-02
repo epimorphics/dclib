@@ -9,6 +9,8 @@
 
 package com.epimorphics.dclib.framework;
 
+import com.hp.hpl.jena.graph.Node;
+
 /**
  * Defines a CSV to RDF data mapping, may be standalone or may be composed
  * into larger templates.
@@ -29,9 +31,10 @@ public interface Template {
 
     /**
      * Execute the template on one row of data, in the context of a fully configured conversion process.
-     * @return true if the conversion succeeded.
+     * Throw an exception if the conversion is not possible, this will be caught and logged higher up
+     * @return a most salient created resource, if any
      */
-    public boolean convertRow(ConverterProcess config, BindingEnv row, int rowNumber);
+    public Node convertRow(ConverterProcess config, BindingEnv row, int rowNumber);
     
     /**
      * Return the name of this template, may be null

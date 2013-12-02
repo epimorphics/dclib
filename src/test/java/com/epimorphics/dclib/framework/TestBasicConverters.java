@@ -31,6 +31,13 @@ public class TestBasicConverters {
         checkAgainstExpected("test/cond-template.json", "test/test-parameterized.csv", "test/test-map-result.ttl");
         checkAgainstExpected("test/cond-template.json", "test/test-map.csv", "test/test-map-result.ttl");
     }
+    
+    @Test
+    public void testHierarchy() throws IOException {
+        checkAgainstExpected("test/hierarchy.json", "test/hierarchy1.csv", "test/hierarchy-result.ttl");
+        checkAgainstExpected("test/hierarchy2.json", "test/hierarchy2.csv", "test/hierarchy-result.ttl");
+        checkAgainstExpected("test/hierarchy2.json", "test/hierarchy2b.csv", "test/hierarchy-result.ttl");
+    }
 
     private void checkAgainstExpected(String templateFile, String dataFile, String resultFile) throws IOException {
         ConverterService service = new ConverterService();

@@ -1,0 +1,7 @@
+{
+    "parent-link" : "<skos:broader>" ,
+    "child-link" : "<skos:narrower>" ,
+    "_0" : { "bind" : {"notation" : "{id1}", "label" : "{label1}"}, "template" : "simple-skos" },
+    "_1" : { "bind" : {"notation" : "{id2}", "label" : "{label2}"}, "template" : "simple-skos" },
+    "_2" : { "bind" : {"notation" : "{id3}", "label" : "{label3}"}, "template" : "simple-skos" }
+}

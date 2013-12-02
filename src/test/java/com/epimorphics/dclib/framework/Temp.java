@@ -53,11 +53,12 @@ public class Temp {
     
     public static void main(String[] args) throws IOException {
         ConverterService service = new ConverterService();
-        Model m = service.simpleConvert("test/simple-skos-template.json", "test/test-map.csv");
+        service.getDataContext().registerTemplate("test/simple-skos-template.json");
+        service.put("$base", "http://example.com/");
+        Model m = service.simpleConvert("test/hierarchy2.json", "test/hierarchy2.csv");
         if (m != null) {
             m.write(System.out, "Turtle");
         }
-//        new Temp().testJexl();
     }
     
     public static class Test {

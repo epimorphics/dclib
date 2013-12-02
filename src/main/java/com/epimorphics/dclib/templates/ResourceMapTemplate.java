@@ -58,7 +58,7 @@ public class ResourceMapTemplate extends TemplateBase implements Template {
     }
 
     @Override
-    public boolean convertRow(ConverterProcess config, BindingEnv row,
+    public Node convertRow(ConverterProcess config, BindingEnv row,
             int rowNumber) {
         super.convertRow(config, row, rowNumber);
         StreamRDF out = config.getOutputStream();
@@ -84,7 +84,7 @@ public class ResourceMapTemplate extends TemplateBase implements Template {
                 // Missing data at this stage is silently ignored so can have optional properties in the map
             }
         }
-        return true;
+        return subject;
     }
 
 }

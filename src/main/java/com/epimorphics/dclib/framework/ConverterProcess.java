@@ -46,6 +46,7 @@ public class ConverterProcess {
     
     protected Template template;
     protected BindingEnv env;
+    protected Object state;  // Template - specific state information
     
     protected StreamRDF   outputStream;
     protected Model  result;   // May not be used if the stream is set directly  
@@ -94,13 +95,13 @@ public class ConverterProcess {
             BindingEnv row = nextRow();
             if (row != null) {
                 try {
-                    if ( !template.convertRow(this, row, lineNumber) ) {
-                        messageReporter.setSuccess(false);
-                    }
+                    template.convertRow(this, row, lineNumber);
                 } catch (Exception e) {
                     messageReporter.report("Error: " + e, lineNumber);
-                    log.error("Error process line " + lineNumber, e);
                     messageReporter.failed();
+                    if (!(e instanceof NullResult)) {
+                        log.error("Error process line " + lineNumber, e);
+                    }
                 }
             } else {
                 break;
@@ -192,6 +193,15 @@ public class ConverterProcess {
         BATCH_SIZE = bATCH_SIZE;
     }
     
+    
+    public Object getState() {
+        return state;
+    }
+
+    public void setState(Object state) {
+        this.state = state;
+    }
+
     /**
      * Return the model into which the conversion results were stored.
      * May be overridden by direct call to setOutputStream

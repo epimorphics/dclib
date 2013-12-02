@@ -21,6 +21,7 @@ import com.epimorphics.dclib.framework.ConverterProcess;
 import com.epimorphics.dclib.framework.DataContext;
 import com.epimorphics.dclib.framework.Pattern;
 import com.epimorphics.dclib.framework.Template;
+import com.hp.hpl.jena.graph.Node;
 
 public class ParameterizedTemplate extends TemplateBase implements Template {
     protected Map<String, Pattern> parameters = new HashMap<String, Pattern>();
@@ -46,7 +47,7 @@ public class ParameterizedTemplate extends TemplateBase implements Template {
     }
 
     @Override
-    public boolean convertRow(ConverterProcess config, BindingEnv row, int rowNumber) {
+    public Node convertRow(ConverterProcess config, BindingEnv row, int rowNumber) {
         super.convertRow(config, row, rowNumber);
         BindingEnv env = new BindingEnv(row);
         for (Entry<String, Pattern> ent : parameters.entrySet()) {

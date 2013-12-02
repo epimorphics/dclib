@@ -14,6 +14,7 @@ import com.epimorphics.dclib.framework.ConverterProcess;
 import com.epimorphics.dclib.framework.DataContext;
 import com.epimorphics.dclib.framework.Template;
 import com.epimorphics.util.EpiException;
+import com.hp.hpl.jena.graph.Node;
 
 /**
  * An indirect point to a template that allows for late binding of template names
@@ -47,7 +48,7 @@ public class TemplateRef implements Template {
     }
 
     @Override
-    public boolean convertRow(ConverterProcess config, BindingEnv row,
+    public Node convertRow(ConverterProcess config, BindingEnv row,
             int rowNumber) {
         return getTemplate().convertRow(config, row, rowNumber);
     }

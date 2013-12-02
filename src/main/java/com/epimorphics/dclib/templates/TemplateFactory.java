@@ -15,9 +15,11 @@ import java.io.InputStream;
 
 import org.apache.jena.atlas.json.JSON;
 import org.apache.jena.atlas.json.JsonObject;
+import org.apache.jena.atlas.json.JsonParseException;
 
 import com.epimorphics.dclib.framework.DataContext;
 import com.epimorphics.dclib.framework.Template;
+import com.epimorphics.util.EpiException;
 
 /**
  * Utilities to instantiate an appropriate template from a JSON specification.
@@ -39,14 +41,22 @@ public class TemplateFactory {
     }
 
     public static Template templateFrom(InputStream is, DataContext dc) {
-        JsonObject json = JSON.parse(is);
         try {
-            // just making sure
-            is.close();
-        } catch (IOException e) {
-            // ignore
+            JsonObject json = JSON.parse(is);
+            try {
+                // just making sure
+                is.close();
+            } catch (IOException e) {
+                // ignore
+            }
+            return templateFrom(json, dc);
+        } catch (JsonParseException e) {
+            if (e.getLine() >= 0) {
+                throw new EpiException( String.format("Illegal json: %s at line %d column %d", e.toString(), e.getLine(), e.getColumn()));
+            } else {
+                throw e;
+            }
         }
-        return templateFrom(json, dc);
     }
 
     public static Template templateFrom(String filename, DataContext dc) throws IOException {
