@@ -112,12 +112,23 @@ public class TemplateBase implements Template {
 
     @Override
     public String getName() {
-        return spec.get(JSONConstants.NAME).getAsString().value();
+        return getJsonString(JSONConstants.NAME);
     }
 
     @Override
     public String getDescription() {
-        return spec.get(JSONConstants.DESCRIPTION).getAsString().value();
+        return getJsonString(JSONConstants.DESCRIPTION);
+    }
+    
+    protected String getJsonString(String key) {
+        JsonValue v = spec.get(key);
+        if (v == null) {
+            return null;
+        } else if (v.isString()) {
+            return v.getAsString().value();
+        } else {
+            throw new EpiException("Expected json property to be a string but found: " + v);
+        }
     }
 
     // General JSON helper functions

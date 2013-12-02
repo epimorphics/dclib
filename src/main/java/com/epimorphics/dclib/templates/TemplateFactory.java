@@ -12,10 +12,13 @@ package com.epimorphics.dclib.templates;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Iterator;
 
 import org.apache.jena.atlas.json.JSON;
+import org.apache.jena.atlas.json.JsonArray;
 import org.apache.jena.atlas.json.JsonObject;
 import org.apache.jena.atlas.json.JsonParseException;
+import org.apache.jena.atlas.json.JsonValue;
 
 import com.epimorphics.dclib.framework.DataContext;
 import com.epimorphics.dclib.framework.Template;
@@ -28,21 +31,42 @@ import com.epimorphics.util.EpiException;
  */
 public class TemplateFactory {
 
-    public static Template templateFrom(JsonObject json, DataContext dc) {
-        if (ResourceMapTemplate.isSpec(json)) {
-            return new ResourceMapTemplate(json, dc);
-        } else if (ParameterizedTemplate.isSpec(json)) {
-            return new ParameterizedTemplate(json, dc);
-        } else if (HierarchyTemplate.isSpec(json)) {
-            return new HierarchyTemplate(json, dc);
+    public static Template templateFrom(JsonValue json, DataContext dc) {
+        if (json.isArray()) {
+            JsonArray templates = json.getAsArray();
+            Template firstTemplate = null;
+            for (Iterator<JsonValue> i = templates.iterator(); i.hasNext();) {
+                JsonValue j = i.next();
+                if (j.isObject()) {
+                    Template t = templateFrom(j.getAsObject(), dc);
+                    if (firstTemplate == null) {
+                        firstTemplate = t;
+                    }
+                    if (t.getName() != null) {
+                        dc.registerTemplate(t);
+                    }
+                }
+            }
+            return firstTemplate;
+        } else if (json.isObject()) {
+            JsonObject jo = json.getAsObject();
+            if (ResourceMapTemplate.isSpec(jo)) {
+                return new ResourceMapTemplate(jo, dc);
+            } else if (ParameterizedTemplate.isSpec(jo)) {
+                return new ParameterizedTemplate(jo, dc);
+            } else if (HierarchyTemplate.isSpec(jo)) {
+                return new HierarchyTemplate(jo, dc);
+            } else {
+                return null;
+            }
         } else {
-            return null;
+            throw new EpiException("Templates must be specified as a JSON object or an array of objects");
         }
     }
 
     public static Template templateFrom(InputStream is, DataContext dc) {
         try {
-            JsonObject json = JSON.parse(is);
+            JsonValue json = JSON.parseAny(is);
             try {
                 // just making sure
                 is.close();

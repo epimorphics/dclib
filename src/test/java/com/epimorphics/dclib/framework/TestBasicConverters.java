@@ -38,6 +38,11 @@ public class TestBasicConverters {
         checkAgainstExpected("test/hierarchy2.json", "test/hierarchy2.csv", "test/hierarchy-result.ttl");
         checkAgainstExpected("test/hierarchy2.json", "test/hierarchy2b.csv", "test/hierarchy-result.ttl");
     }
+    
+    @Test
+    public void testTemplateInclusion() throws IOException {
+        checkAgainstExpected("test/hierarchy-complete.json", "test/hierarchy1.csv", "test/hierarchy-result.ttl");
+    }
 
     private void checkAgainstExpected(String templateFile, String dataFile, String resultFile) throws IOException {
         ConverterService service = new ConverterService();
