@@ -23,6 +23,7 @@ import org.apache.jena.riot.system.StreamRDF;
 import com.epimorphics.dclib.framework.BindingEnv;
 import com.epimorphics.dclib.framework.ConverterProcess;
 import com.epimorphics.dclib.framework.DataContext;
+import com.epimorphics.dclib.framework.NullResult;
 import com.epimorphics.dclib.framework.Pattern;
 import com.epimorphics.dclib.framework.Template;
 import com.epimorphics.dclib.framework.ValueString;
@@ -51,8 +52,7 @@ public class ResourceMapTemplate extends TemplateBase implements Template {
     }
     
     public ResourceMapTemplate(JsonObject spec, DataContext dc) {
-        this.spec = spec;
-        init();
+        super(spec);
         root = new Pattern( getRequiredField(JSONConstants.ID), dc );
         for (Entry<String, JsonValue> entry : spec.entrySet()) {
             Pattern prop = new Pattern(entry.getKey(), dc);
@@ -67,6 +67,7 @@ public class ResourceMapTemplate extends TemplateBase implements Template {
     @Override
     public boolean convertRow(ConverterProcess config, BindingEnv row,
             int rowNumber) {
+        super.convertRow(config, row, rowNumber);
         StreamRDF out = config.getOutputStream();
         Node subject = asURINode(root.evaluate(row));
         for (int i = 0; i < propPatterns.size(); i++) {
@@ -85,8 +86,9 @@ public class ResourceMapTemplate extends TemplateBase implements Template {
                             value));
                 }
             } catch (JexlException.Variable e) {
-                // Missing data at this stage is silently ignored so can have
-                // optional properties in the map
+                // Missing data at this stage is silently ignored so can have optional properties in the map
+            } catch (NullResult e) {
+                // Missing data at this stage is silently ignored so can have optional properties in the map
             }
         }
         return true;

@@ -29,6 +29,8 @@ public class TemplateFactory {
     public static Template templateFrom(JsonObject json, DataContext dc) {
         if (ResourceMapTemplate.isSpec(json)) {
             return new ResourceMapTemplate(json, dc);
+        } else if (ParameterizedTemplate.isSpec(json)) {
+            return new ParameterizedTemplate(json, dc);
         } else {
             return null;
         }

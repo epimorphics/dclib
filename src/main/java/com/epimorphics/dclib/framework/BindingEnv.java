@@ -42,6 +42,7 @@ public class BindingEnv extends HashMap<String, Object> implements Map<String, O
         this.parent = parent;
     }
     
+    
     @Override
     public Object get(Object key) {
         return doGet(key);
@@ -79,5 +80,9 @@ public class BindingEnv extends HashMap<String, Object> implements Map<String, O
     @Override
     public boolean has(String name) {
         return doGet(name) != null;
+    }
+    
+    public void setParent(BindingEnv parent) {
+        this.parent = parent;
     }
 }

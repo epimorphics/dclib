@@ -21,11 +21,24 @@ public class TestBasicConverters {
     
     @Test
     public void testResourceMap() throws IOException {
-        ConverterService service = new ConverterService();
-        service.put("$base", "http://example.com/");
-        Model m = service.simpleConvert("test/simple-skos-template.json", "test/test-map.csv");
-        assertNotNull(m);
-        assertTrue(m.isIsomorphicWith( FileManager.get().loadModel("test/test-map-result.ttl") ));
+        checkAgainstExpected("test/simple-skos-template.json", "test/test-map.csv", "test/test-map-result.ttl");
     }
 
+    @Test
+    public void testParameterized() throws IOException {
+        checkAgainstExpected("test/parameterized-template.json", "test/test-parameterized.csv", "test/test-map-result.ttl");
+        
+        checkAgainstExpected("test/cond-template.json", "test/test-parameterized.csv", "test/test-map-result.ttl");
+        checkAgainstExpected("test/cond-template.json", "test/test-map.csv", "test/test-map-result.ttl");
+    }
+
+    private void checkAgainstExpected(String templateFile, String dataFile, String resultFile) throws IOException {
+        ConverterService service = new ConverterService();
+        service.getDataContext().registerTemplate("test/simple-skos-template.json");
+        service.put("$base", "http://example.com/");
+        Model m = service.simpleConvert(templateFile, dataFile);
+        assertNotNull(m);
+        assertTrue(m.isIsomorphicWith( FileManager.get().loadModel(resultFile) ));
+        
+    }
 }

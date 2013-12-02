@@ -9,7 +9,9 @@
 
 package com.epimorphics.dclib.framework;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -18,7 +20,6 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.epimorphics.dclib.templates.TemplateBase;
 import com.epimorphics.tasks.ProgressMessage;
 import com.epimorphics.tasks.ProgressMonitor;
 import com.epimorphics.tasks.SimpleProgressMonitor;
@@ -90,7 +91,7 @@ public class TestConverterProcess {
 
     // Dummy template to test the calling harness
     // Will raise error if the value column is a number above 20
-    public static final class TestTemplate extends TemplateBase implements Template {
+    public static final class TestTemplate implements Template {
         
         @Override
         public boolean isApplicableTo(String[] columnNames) {
@@ -112,6 +113,16 @@ public class TestConverterProcess {
                 config.getOutputStream().triple( new Triple(root, property, vnode) );
             }
             return true;
+        }
+
+        @Override
+        public String getName() {
+            return "test-template";
+        }
+
+        @Override
+        public String getDescription() {
+            return null;
         }
         
     }

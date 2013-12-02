@@ -1,0 +1,4 @@
+{
+    "bind" : { "notation" : "{notation == null ? code : notation}", "label" : "{label == null ? name : label }" },
+    "template" : "simple-skos"
+}

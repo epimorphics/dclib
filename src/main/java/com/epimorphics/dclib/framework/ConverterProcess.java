@@ -15,6 +15,8 @@ import java.io.InputStreamReader;
 
 import org.apache.jena.riot.system.StreamRDF;
 import org.apache.jena.riot.system.StreamRDFLib;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import au.com.bytecode.opencsv.CSVReader;
 
@@ -33,6 +35,8 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
  * @author <a href="mailto:dave@epimorphics.com">Dave Reynolds</a>
  */
 public class ConverterProcess {
+    static final Logger log = LoggerFactory.getLogger( ConverterProcess.class );
+    
     protected int BATCH_SIZE = 100;
     protected DataContext dataContext;
     protected ProgressReporter messageReporter = new SimpleProgressMonitor();
@@ -95,6 +99,7 @@ public class ConverterProcess {
                     }
                 } catch (Exception e) {
                     messageReporter.report("Error: " + e, lineNumber);
+                    log.error("Error process line " + lineNumber, e);
                     messageReporter.failed();
                 }
             } else {

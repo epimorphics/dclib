@@ -24,10 +24,15 @@ import com.epimorphics.util.NameUtils;
  * 
  * @author <a href="mailto:dave@epimorphics.com">Dave Reynolds</a>
  */
-public abstract class TemplateBase implements Template {
+public class TemplateBase implements Template {
     protected JsonObject spec;
     
     protected String[] requiredColumns;
+    
+    public TemplateBase(JsonObject spec) {
+        this.spec = spec;
+        init();
+    }
     
     protected void init() {
         if (spec.hasKey(JSONConstants.REQUIRED)) {
@@ -70,16 +75,25 @@ public abstract class TemplateBase implements Template {
     }
 
     @Override
-    public abstract boolean convertRow(ConverterProcess config, BindingEnv row, int rowNumber);
+    public boolean convertRow(ConverterProcess config, BindingEnv row, int rowNumber) {
+        if (requiredColumns != null) {
+            for (String required : requiredColumns) {
+                if (!row.containsKey(required)) {
+                    throw new EpiException("Missing parameter '" + required + "' required for template " + getName());
+                }
+            }
+        }
+        return true;
+    }
 
     @Override
     public String getName() {
-        return spec.get(JSONConstants.NAME).getAsString().toString();
+        return spec.get(JSONConstants.NAME).getAsString().value();
     }
 
     @Override
     public String getDescription() {
-        return spec.get(JSONConstants.DESCRIPTION).getAsString().toString();
+        return spec.get(JSONConstants.DESCRIPTION).getAsString().value();
     }
 
 

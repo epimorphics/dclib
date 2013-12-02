@@ -33,8 +33,8 @@ public class Pattern {
     protected List<Object> components = new ArrayList<>();
     
     static {
-        engine.setSilent(false);
-        engine.setStrict(true);
+        engine.setSilent(true);
+        engine.setStrict(false);
         engine.setCache(500);
     }
     
@@ -92,6 +92,9 @@ public class Pattern {
                 }  else {
                     // Can't happen
                     throw new EpiException("Internal state error in pattern evaluation");
+                }
+                if (result == null) {
+                    throw new NullResult();
                 }
                 if (result instanceof Value && ((Value)result).isMulti()) {
                     if (!multiValued) {
