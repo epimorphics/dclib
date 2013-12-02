@@ -33,17 +33,17 @@ public class ValueBase<T> implements Value {
 
     @Override
     public String getString() {
-        return value.toString();
+        return value == null ? "null" : value.toString();
     }
 
     @Override
     public String toString() {
-        return value.toString();
+        return getString();
     }
     
     @Override
     public Value append(Value val) {
-        String base = value.toString();
+        String base = getString();
         if (val.isMulti()) {
             Object[] values = val.getValues();
             String[] results = new String[values.length];

@@ -11,10 +11,11 @@ package com.epimorphics.dclib.templates;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map.Entry;
 
+import org.apache.commons.jexl2.JexlException;
 import org.apache.jena.atlas.json.JsonObject;
 import org.apache.jena.atlas.json.JsonValue;
 import org.apache.jena.riot.system.StreamRDF;
@@ -39,7 +40,15 @@ import com.hp.hpl.jena.graph.Triple;
  */
 public class ResourceMapTemplate extends TemplateBase implements Template {
     protected Pattern root;
-    protected Map<Pattern, Pattern> map = new HashMap<Pattern, Pattern>();
+    protected List<Pattern> propPatterns = new ArrayList<>();
+    protected List<Pattern> valPatterns = new ArrayList<>();
+    
+    /**
+     * Test if a json object specifies on of these templates
+     */
+    public static boolean isSpec(JsonObject spec) {
+        return spec.hasKey( JSONConstants.ID );
+    }
     
     public ResourceMapTemplate(JsonObject spec, DataContext dc) {
         this.spec = spec;
@@ -48,27 +57,36 @@ public class ResourceMapTemplate extends TemplateBase implements Template {
         for (Entry<String, JsonValue> entry : spec.entrySet()) {
             Pattern prop = new Pattern(entry.getKey(), dc);
             if (prop.isURI()) {
-                Pattern val = new Pattern(entry.getValue().toString(), dc);
-                map.put(prop, val);
+                Pattern val = new Pattern(entry.getValue().getAsString().value(), dc);
+                propPatterns.add( prop );
+                valPatterns.add( val );
             }
         }
     }
 
     @Override
-    public boolean convertRow(ConverterProcess config, BindingEnv row, int rowNumber) {
+    public boolean convertRow(ConverterProcess config, BindingEnv row,
+            int rowNumber) {
         StreamRDF out = config.getOutputStream();
-        Node subject = asURINode( root.evaluate(row) );
-        for (Entry<Pattern, Pattern> mapent : map.entrySet()) {
-            Pattern propPattern = mapent.getKey();
-            Pattern valPattern = mapent.getValue();
-            Node prop = asURINode( propPattern.evaluate(row) );
-            Object value = valPattern.evaluate(row);
-            if (value instanceof ValueStringArray) {
-                for (Object v : ((ValueStringArray)value).getValues()) {
-                    out.triple( asTriple(propPattern, valPattern, subject, prop, v) );
+        Node subject = asURINode(root.evaluate(row));
+        for (int i = 0; i < propPatterns.size(); i++) {
+            Pattern propPattern = propPatterns.get(i);
+            Pattern valPattern = valPatterns.get(i);
+            try {
+                Node prop = asURINode(propPattern.evaluate(row));
+                Object value = valPattern.evaluate(row);
+                if (value instanceof ValueStringArray) {
+                    for (Object v : ((ValueStringArray) value).getValues()) {
+                        out.triple(asTriple(propPattern, valPattern, subject,
+                                prop, v));
+                    }
+                } else {
+                    out.triple(asTriple(propPattern, valPattern, subject, prop,
+                            value));
                 }
-            } else {
-                out.triple( asTriple(propPattern, valPattern, subject, prop, value) );
+            } catch (JexlException.Variable e) {
+                // Missing data at this stage is silently ignored so can have
+                // optional properties in the map
             }
         }
         return true;

@@ -24,7 +24,10 @@ import org.apache.jena.atlas.json.JsonObject;
 
 import com.epimorphics.dclib.framework.TestConverterProcess.TestTemplate;
 import com.epimorphics.dclib.templates.ResourceMapTemplate;
+import com.epimorphics.dclib.templates.TemplateFactory;
 import com.epimorphics.tasks.ProgressMonitor;
+import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.util.FileManager;
 
 /**
  * Playpen used for experiments
@@ -49,22 +52,10 @@ public class Temp {
     }
     
     public static void main(String[] args) throws IOException {
-        InputStream is = new FileInputStream( "test/simple-skos-template.json");
-        JsonObject spec = JSON.parse( is );
-        is.close();
-        
-        DataContext dc = new DataContext();
-        Template template = new ResourceMapTemplate(spec, dc);
-        is = new FileInputStream("test/WIMS_Sampling_Mechanisms.csv");
-        ConverterProcess process = new ConverterProcess(new DataContext(), is);
-        process.setTemplate( template );
-        process.getEnv().put("$base", "http://example.com/");
-        boolean ok = process.process();
-        if (ok) {
-            process.getModel().write(System.out, "Turtle");
-        } else {
-            System.out.println("FAILED");
-            TestConverterProcess.printMessages( (ProgressMonitor)process.getMessageReporter() );
+        ConverterService service = new ConverterService();
+        Model m = service.simpleConvert("test/simple-skos-template.json", "test/test-map.csv");
+        if (m != null) {
+            m.write(System.out, "Turtle");
         }
 //        new Temp().testJexl();
     }

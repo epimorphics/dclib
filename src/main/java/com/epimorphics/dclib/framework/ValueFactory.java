@@ -26,7 +26,7 @@ public class ValueFactory {
     
     public static Object asValue(String string) {
         if (string == null || string.isEmpty()) {
-            return new ValueString(null); 
+            return new ValueNull();
         } else if (INTEGER_PATTERN.matcher(string).matches()) {
             return Long.valueOf(string);
         } else if (FLOAT_PATTERN.matcher(string).matches()) {

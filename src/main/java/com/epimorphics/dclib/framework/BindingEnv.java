@@ -65,7 +65,9 @@ public class BindingEnv extends HashMap<String, Object> implements Map<String, O
         Object v = super.get(key);
         if (v == null && parent != null) {
             return parent.get(key);
-        } 
+        } else if (v instanceof ValueNull) {
+            return null;
+        }
         return v;
     }
 

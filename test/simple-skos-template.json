@@ -1,7 +1,7 @@
 {
     "name" : "simple-skos",
     "description" : "Basic template for SKOS support notation, label and optional description fields",
-        "@id" : "<{$base}/notation>",
+        "@id" : "<{$base}{notation}>",
         "<rdf:type>" : "<skos:Concept>",
         "<skos:notation>" : "{notation}",
         "<dct:description>" : "{description}",
