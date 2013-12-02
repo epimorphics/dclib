@@ -124,6 +124,11 @@ public class TestConverterProcess {
         public String getDescription() {
             return null;
         }
+
+        @Override
+        public boolean isApplicableTo(BindingEnv row) {
+            return true;
+        }
         
     }
 }

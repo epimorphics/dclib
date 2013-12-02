@@ -21,6 +21,11 @@ public interface Template {
      * based on checking column names.
      */
     public boolean isApplicableTo(String[] columnNames);
+    
+    /**
+     * Test if this template can be applied to the given row
+     */
+    public boolean isApplicableTo(BindingEnv row);
 
     /**
      * Execute the template on one row of data, in the context of a fully configured conversion process.

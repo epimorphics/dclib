@@ -31,6 +31,8 @@ public class TemplateFactory {
             return new ResourceMapTemplate(json, dc);
         } else if (ParameterizedTemplate.isSpec(json)) {
             return new ParameterizedTemplate(json, dc);
+        } else if (HierarchyTemplate.isSpec(json)) {
+            return new HierarchyTemplate(json, dc);
         } else {
             return null;
         }

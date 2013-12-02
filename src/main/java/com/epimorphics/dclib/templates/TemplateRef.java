@@ -62,4 +62,9 @@ public class TemplateRef implements Template {
         return getTemplate().getDescription();
     }
 
+    @Override
+    public boolean isApplicableTo(BindingEnv row) {
+        return getTemplate().isApplicableTo(row);
+    }
+
 }

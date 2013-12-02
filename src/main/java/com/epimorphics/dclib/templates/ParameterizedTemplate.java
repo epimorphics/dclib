@@ -21,11 +21,9 @@ import com.epimorphics.dclib.framework.ConverterProcess;
 import com.epimorphics.dclib.framework.DataContext;
 import com.epimorphics.dclib.framework.Pattern;
 import com.epimorphics.dclib.framework.Template;
-import com.epimorphics.util.EpiException;
 
 public class ParameterizedTemplate extends TemplateBase implements Template {
     protected Map<String, Pattern> parameters = new HashMap<String, Pattern>();
-    protected String tname;
     protected DataContext dc;
     protected Template template;
     
@@ -39,22 +37,12 @@ public class ParameterizedTemplate extends TemplateBase implements Template {
     public ParameterizedTemplate(JsonObject spec, DataContext dc) {
         super(spec);
         this.dc = dc;
-        tname = spec.get(JSONConstants.TEMPLATE).getAsString().value();
+        template = getTemplateRef( spec.get(JSONConstants.TEMPLATE), dc );
         JsonObject binding = spec.get(JSONConstants.BIND).getAsObject();
         for (Entry<String, JsonValue> ent : binding.entrySet()) {
             Pattern p = new Pattern(ent.getValue().getAsString().value(), dc);
             parameters.put(ent.getKey(), p);
         }
-    }
-    
-    protected Template getTemplate() {
-        if (template == null) {
-            template = dc.getTemplate(tname);
-            if (template == null) {
-                throw new EpiException("Can't find template called: " + tname);
-            }
-        }
-        return template;
     }
 
     @Override
@@ -65,7 +53,7 @@ public class ParameterizedTemplate extends TemplateBase implements Template {
             Object value = ent.getValue().evaluate(row);
             env.put(ent.getKey(), value);
         }
-        return getTemplate().convertRow(config, env, rowNumber);
+        return template.convertRow(config, env, rowNumber);
     }    
 
 }
