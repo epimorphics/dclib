@@ -44,13 +44,21 @@ public class TestBasicConverters {
         checkAgainstExpected("test/hierarchy-complete.json", "test/hierarchy1.csv", "test/hierarchy-result.ttl");
     }
 
-    private void checkAgainstExpected(String templateFile, String dataFile, String resultFile) throws IOException {
+    public static void checkAgainstExpected(String templateFile, String dataFile, String resultFile) throws IOException {
         ConverterService service = new ConverterService();
         service.getDataContext().registerTemplate("test/simple-skos-template.json");
         service.put("$base", "http://example.com/");
         Model m = service.simpleConvert(templateFile, dataFile);
         assertNotNull(m);
-        assertTrue(m.isIsomorphicWith( FileManager.get().loadModel(resultFile) ));
+        Model expected = FileManager.get().loadModel(resultFile);
+        boolean same = m.isIsomorphicWith(expected);
+        if (!same) {
+            System.err.println("Result mismatch, result was:");
+            m.write(System.err, "Turtle");
+            System.err.println("Expected:");
+            expected.write(System.err, "Turtle");
+        }
+        assertTrue( same );
         
     }
 }

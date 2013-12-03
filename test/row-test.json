@@ -1,0 +1,5 @@
+{
+    "@id" : "<{$row.bnode}>",
+    "<skos:notation>" : "{$row.number}",
+    "<skos:label>" : "{name}"
+}

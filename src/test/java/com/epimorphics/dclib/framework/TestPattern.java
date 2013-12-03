@@ -64,7 +64,7 @@ public class TestPattern {
     
     @Test
     public void testScripts() {
-        assertEquals("foo bar", eval("{={a;b}}"));
+        assertEquals("foo bar", eval("{={a;b}}").toString());
     }
     
     private Object eval(String pattern) {

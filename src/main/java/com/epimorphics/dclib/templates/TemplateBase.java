@@ -148,9 +148,13 @@ public class TemplateBase implements Template {
     protected Node asURINode(Object result) {
         if (result instanceof String || result instanceof ValueString) {
             return NodeFactory.createURI( result.toString() );
-        } else {
-            throw new EpiException("Found " + result + " when expecting a URI");
+        } else if (result instanceof Node) {
+            Node n = (Node)result;
+            if (n.isBlank() || n.isURI()) {
+                return n;
+            }
         }
+        throw new EpiException("Found " + result + " when expecting a URI");
     }
 
     protected Node asNode(Pattern pattern, Object result) {
@@ -170,10 +174,8 @@ public class TemplateBase implements Template {
                 return NodeFactory.createUncachedLiteral(result, XSDDatatype.XSDinteger);
             } else if (result instanceof Double) {
                 return NodeFactory.createUncachedLiteral(result, XSDDatatype.XSDdouble);
-            } else if (result instanceof Long) {
-                return NodeFactory.createUncachedLiteral(result, XSDDatatype.XSDlong);
             } else {
-                return NodeFactory.createUncachedLiteral(((Number)result).intValue(), XSDDatatype.XSDint);
+                return NodeFactory.createUncachedLiteral(((Number)result).intValue(), XSDDatatype.XSDinteger);
             }
         } else {
             // TODO handle dates

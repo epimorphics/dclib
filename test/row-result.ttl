@@ -1,0 +1,11 @@
+[]
+        <http://www.w3.org/2004/02/skos/core#label>
+                "b" ;
+        <http://www.w3.org/2004/02/skos/core#notation>
+                2 .
+
+[]
+        <http://www.w3.org/2004/02/skos/core#label>
+                "a" ;
+        <http://www.w3.org/2004/02/skos/core#notation>
+                1 .

@@ -77,27 +77,16 @@ public class Pattern {
     public Object evaluate(BindingEnv env) {
         if (isConstant) {
             return components.get(0);
+        } else if (components.size() == 1) {
+            return evaluateComponent(0, env);
         } else {
+            // Multiple components concatenated a strings
             boolean multiValued = false;
             int len = components.size();
             StringBuilder ansString = new StringBuilder();
             Value ans = null;
             for (int i = 0; i < len; i++) {
-                Object component = components.get(i);
-                Object result = null;
-                if (component instanceof String) {
-                    result = component;
-                } else if (component instanceof Expression) {
-                    result = ((Expression)component).evaluate(env);
-                } else if (component instanceof Script) {
-                    result = ((Script)component).execute(env);
-                }  else {
-                    // Can't happen
-                    throw new EpiException("Internal state error in pattern evaluation");
-                }
-                if (result == null) {
-                    throw new NullResult();
-                }
+                Object result = evaluateComponent(i, env);
                 if (result instanceof Value && ((Value)result).isMulti()) {
                     if (!multiValued) {
                         multiValued = true;
@@ -120,6 +109,25 @@ public class Pattern {
                 return ansString.toString();
             }
         }
+    }
+    
+    protected Object evaluateComponent(int i, BindingEnv env) {
+        Object component = components.get(i);
+        Object result = null;
+        if (component instanceof String) {
+            result = component;
+        } else if (component instanceof Expression) {
+            result = ((Expression)component).evaluate(env);
+        } else if (component instanceof Script) {
+            result = ((Script)component).execute(env);
+        }  else {
+            // Can't happen
+            throw new EpiException("Internal state error in pattern evaluation");
+        }
+        if (result == null) {
+            throw new NullResult();
+        }
+        return result;
     }
     
     protected void expandPrefixes(DataContext dc) {
