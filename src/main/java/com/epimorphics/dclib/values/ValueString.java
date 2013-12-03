@@ -9,6 +9,8 @@
 
 package com.epimorphics.dclib.values;
 
+import com.epimorphics.util.NameUtils;
+
 public class ValueString extends ValueBase<String> implements Value {
 
     public ValueString(String value) {
@@ -18,6 +20,29 @@ public class ValueString extends ValueBase<String> implements Value {
     public ValueStringArray split(String pattern) {
         return new ValueStringArray( value.split(pattern) );
     }
+    
+    @Override
+    public String toString() {
+        return value;
+    }
+    
+    public String toLowerCase() {
+        return value.toLowerCase();
+    }
+    
+    public String toUpperCase() {
+        return value.toUpperCase();
+    }
+    
+    public String toSegment() {
+        return NameUtils.safeName(value);
+    }
+    
+    public Object toNumber() {
+        return ValueFactory.asValue(value);
+    }
+    
+    
     
     // TODO implement string manipulation functions
 }

@@ -35,8 +35,8 @@ public class Pattern {
     protected List<Object> components = new ArrayList<>();
     
     static {
-        engine.setSilent(true);
         engine.setStrict(false);
+        engine.setSilent(true);
         engine.setCache(500);
     }
     
@@ -106,7 +106,7 @@ public class Pattern {
             if (multiValued) {
                 return ans;
             } else {
-                return ansString.toString();
+                return new ValueString(ansString.toString());
             }
         }
     }

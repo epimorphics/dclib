@@ -46,10 +46,10 @@ public class TestPattern {
     
     @Test
     public void testSimpleSubstitution() {
-        assertEquals("this is a string", eval("this is {a}"));
-        assertEquals("this is 42", eval("this is {i}"));
-        assertEquals("this is 40", eval("this is {i-2}"));
-        assertEquals("bar = 42", eval("{b.value.split(' ').1} = {i}"));
+        assertEquals("this is a string", eval("this is {a}").toString());
+        assertEquals("this is 42", eval("this is {i}").toString());
+        assertEquals("this is 40", eval("this is {i-2}").toString());
+        assertEquals("bar = 42", eval("{b.value.split(' ').1} = {i}").toString());
         assertEquals("big", eval("{i > 10 ? 'big' : 'little'}"));
     }
     
