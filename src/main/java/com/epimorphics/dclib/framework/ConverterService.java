@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 
 import com.epimorphics.dclib.templates.TemplateFactory;
 import com.epimorphics.tasks.LiveProgressMonitor;
+import com.epimorphics.tasks.SimpleProgressMonitor;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.shared.PrefixMapping;
@@ -36,6 +37,7 @@ public class ConverterService {
     public static final String DEFAULT_BASE_URI = "";   // Default is relative URIs for registry use
     
     protected DataContext dc;
+    protected boolean silent = false;
     
     public ConverterService() {
         dc = new DataContext();
@@ -88,6 +90,14 @@ public class ConverterService {
     }
     
     /**
+     * Set to true to suppress process messages
+     * @param silent
+     */
+    public void setSilent(boolean silent) {
+        this.silent = silent;
+    }
+    
+    /**
      * Simple invocation. Load template and data from a file, run process
      * and return memory model containing results or null if there was a problem.
      * Problems/progress reporting live to stdout.
@@ -99,7 +109,7 @@ public class ConverterService {
         InputStream is = new FileInputStream(dataFile);
         ConverterProcess process = new ConverterProcess(dc, is);
         process.setTemplate( template );
-        process.setMessageReporter(new LiveProgressMonitor() );
+        process.setMessageReporter( silent ? new SimpleProgressMonitor() : new LiveProgressMonitor() );
         boolean ok = process.process();
         
         return ok ?  process.getModel() : null;

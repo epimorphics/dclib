@@ -127,6 +127,45 @@
         <artifactId>maven-release-plugin</artifactId>
         <version>2.3.2</version>
       </plugin>
+      
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>2.2</version>
+        <configuration>
+          <filters>
+            <filter>
+              <artifact>*:*</artifact>
+              <excludes>
+                <exclude>META-INF/*.SF</exclude>
+                <exclude>META-INF/*.DSA</exclude>
+                <exclude>META-INF/*.RSA</exclude>
+              </excludes>
+            </filter>
+          </filters>
+    
+          <transformers>
+            <transformer
+              implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+              <mainClass>com.epimorphics.dclib.Main</mainClass>
+            </transformer>
+            <transformer implementation="org.apache.maven.plugins.shade.resource.IncludeResourceTransformer">
+              <resource>log4j.properties</resource>
+              <file>src/test/resources/log4j.properties</file>
+            </transformer>
+            
+          </transformers>
+        </configuration>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      
     </plugins>
 
     <extensions>
@@ -163,7 +202,7 @@
               </pluginExecutions>
             </lifecycleMappingMetadata>
           </configuration>
-        </plugin>
+        </plugin>        
       </plugins>
     </pluginManagement>
   </build>
