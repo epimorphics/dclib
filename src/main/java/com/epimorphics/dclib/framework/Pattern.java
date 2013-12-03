@@ -16,6 +16,8 @@ import org.apache.commons.jexl2.Expression;
 import org.apache.commons.jexl2.JexlEngine;
 import org.apache.commons.jexl2.Script;
 
+import com.epimorphics.dclib.values.Value;
+import com.epimorphics.dclib.values.ValueString;
 import com.epimorphics.util.EpiException;
 
 /**

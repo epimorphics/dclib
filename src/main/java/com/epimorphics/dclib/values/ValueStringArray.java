@@ -7,7 +7,7 @@
  *
  *****************************************************************/
 
-package com.epimorphics.dclib.framework;
+package com.epimorphics.dclib.values;
 
 /**
  * Wraps an array of strings, e.g. from a split operation. This allows

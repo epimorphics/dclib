@@ -7,7 +7,7 @@
  *
  *****************************************************************/
 
-package com.epimorphics.dclib.framework;
+package com.epimorphics.dclib.values;
 
 /**
  * Represents a wrapped value during pattern processing. Some values may be represented

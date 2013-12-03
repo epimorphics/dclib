@@ -7,7 +7,7 @@
  *
  *****************************************************************/
 
-package com.epimorphics.dclib.framework;
+package com.epimorphics.dclib.values;
 
 public class ValueString extends ValueBase<String> implements Value {
 

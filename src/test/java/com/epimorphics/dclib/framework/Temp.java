@@ -25,6 +25,7 @@ import org.apache.jena.atlas.json.JsonObject;
 import com.epimorphics.dclib.framework.TestConverterProcess.TestTemplate;
 import com.epimorphics.dclib.templates.ResourceMapTemplate;
 import com.epimorphics.dclib.templates.TemplateFactory;
+import com.epimorphics.dclib.values.Row;
 import com.epimorphics.tasks.ProgressMonitor;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.util.FileManager;
@@ -43,22 +44,27 @@ public class Temp {
         values.put("a", 12);
         values.put("b", "abcde");
         values.put("c", new Test());
+        values.put("$row", new Row(42));
         
-        Expression expression = engine.createExpression("'I see ' + c.hello()");
+        Expression expression = engine.createExpression("'I see ' + $row.bnode");
         
         Object result = expression.evaluate(new MapContext(values));
         
         System.out.println(" -> " + result);
     }
     
-    public static void main(String[] args) throws IOException {
+    public void testTemplate() throws IOException {
         ConverterService service = new ConverterService();
-        service.getDataContext().registerTemplate("test/simple-skos-template.json");
         service.put("$base", "http://example.com/");
-        Model m = service.simpleConvert("test/hierarchy2.json", "test/hierarchy2.csv");
+        Model m = service.simpleConvert("test/row-test.json", "test/test-ok.csv");
         if (m != null) {
             m.write(System.out, "Turtle");
         }
+    }
+    
+    public static void main(String[] args) throws IOException {
+        new Temp().testTemplate();
+//        new Temp().testJexl();
     }
     
     public static class Test {

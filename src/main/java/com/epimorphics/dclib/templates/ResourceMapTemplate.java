@@ -24,7 +24,7 @@ import com.epimorphics.dclib.framework.DataContext;
 import com.epimorphics.dclib.framework.NullResult;
 import com.epimorphics.dclib.framework.Pattern;
 import com.epimorphics.dclib.framework.Template;
-import com.epimorphics.dclib.framework.ValueStringArray;
+import com.epimorphics.dclib.values.ValueStringArray;
 import com.hp.hpl.jena.graph.Node;
 
 /**

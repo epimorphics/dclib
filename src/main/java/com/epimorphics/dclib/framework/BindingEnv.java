@@ -14,6 +14,8 @@ import java.util.Map;
 
 import org.apache.commons.jexl2.JexlContext;
 
+import com.epimorphics.dclib.values.ValueNull;
+
 /**
  * Represents a set of name to value mappings. Can be chained so it's 
  * possible to efficiently override some values in a local environment

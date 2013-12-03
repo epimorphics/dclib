@@ -11,6 +11,8 @@ package com.epimorphics.dclib.framework;
 
 import org.junit.Test;
 
+import com.epimorphics.dclib.values.ValueFactory;
+import com.epimorphics.dclib.values.ValueStringArray;
 import com.hp.hpl.jena.util.FileManager;
 import com.hp.hpl.jena.vocabulary.RDF;
 

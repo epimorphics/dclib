@@ -7,7 +7,7 @@
  *
  *****************************************************************/
 
-package com.epimorphics.dclib.framework;
+package com.epimorphics.dclib.values;
 
 import java.math.BigDecimal;
 import java.util.regex.Pattern;

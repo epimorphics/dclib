@@ -7,7 +7,7 @@
  *
  *****************************************************************/
 
-package com.epimorphics.dclib.framework;
+package com.epimorphics.dclib.values;
 
 /**
  * A simple packaged value.

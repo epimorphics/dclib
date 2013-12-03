@@ -20,6 +20,8 @@ import org.slf4j.LoggerFactory;
 
 import au.com.bytecode.opencsv.CSVReader;
 
+import com.epimorphics.dclib.values.Row;
+import com.epimorphics.dclib.values.ValueFactory;
 import com.epimorphics.tasks.ProgressReporter;
 import com.epimorphics.tasks.SimpleProgressMonitor;
 import com.epimorphics.tasks.TaskState;
@@ -36,6 +38,8 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
  */
 public class ConverterProcess {
     static final Logger log = LoggerFactory.getLogger( ConverterProcess.class );
+    
+    static final String ROW_OBJECT_NAME = "$row";
     
     protected int BATCH_SIZE = 100;
     protected DataContext dataContext;
@@ -94,6 +98,7 @@ public class ConverterProcess {
             }
             BindingEnv row = nextRow();
             if (row != null) {
+                row.put(ROW_OBJECT_NAME, new Row(lineNumber));
                 try {
                     template.convertRow(this, row, lineNumber);
                 } catch (Exception e) {
