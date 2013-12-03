@@ -56,7 +56,7 @@ public class Temp {
     public void testTemplate() throws IOException {
         ConverterService service = new ConverterService();
         service.put("$base", "http://example.com/");
-        Model m = service.simpleConvert("test/row-test.json", "test/test-ok.csv");
+        Model m = service.simpleConvert("test/defra-org.json", "test/defra-orgs.csv");
         if (m != null) {
             m.write(System.out, "Turtle");
         }

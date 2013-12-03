@@ -50,7 +50,7 @@ public class TemplateBase implements Template {
             Object[] required = spec.get(JSONConstants.REQUIRED).getAsArray().toArray();
             requiredColumns = new String[ required.length ];
             for (int i = 0; i < required.length; i++) {
-                requiredColumns[i] = NameUtils.safeVarName( required[i].toString() );
+                requiredColumns[i] = NameUtils.safeVarName( ((JsonValue)required[i]).getAsString().value() );
                 
             }
         }

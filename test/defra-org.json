@@ -1,0 +1,17 @@
+[{
+    "required" : ["label", "id1", "id2"],
+    "parent-link" : "<org:subOrganizationOf>" ,
+    "child-link" : "<org:hasSubOrganization>" ,
+    "_1" : { "bind" : {"id" : "{id1}"}, "template" : "basic-organization" },
+    "_2" : { "bind" : {"id" : "{id2}"}, "template" : "basic-organization" }
+},
+{
+    "name" : "basic-organization",
+    "required" : ["id"],
+    "@id" : "<{$base}/{notation}>",
+    "<owl:sameAs>" : "<id>",
+    "<skos:prefLabel>" : "{label}",
+    "<rdf:type>" : "<org:Organization>",
+    "<skos:notation>" : "{notation}",
+    "<foaf:homepage>" : "<{homepage}>"
+}]
