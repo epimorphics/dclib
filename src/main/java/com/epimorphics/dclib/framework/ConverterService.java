@@ -42,7 +42,7 @@ public class ConverterService {
     
     public ConverterService() {
         dc = new DataContext();
-        dc.getGlobalEnv().put("$base", DEFAULT_BASE_URI);
+        dc.getGlobalEnv().put(ConverterProcess.BASE_OBJECT_NAME, DEFAULT_BASE_URI);
         PrefixMapping prefixes = FileManager.get().loadModel(DEFAULT_PREFIXES_RESOURCE);
         if (prefixes != null) {
             dc.setPrefixes(prefixes);

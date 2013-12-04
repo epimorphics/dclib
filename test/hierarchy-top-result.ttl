@@ -1,0 +1,99 @@
+<http://example.com/A.2>
+        a       <http://www.w3.org/2004/02/skos/core#Concept> ;
+        <http://www.w3.org/2004/02/skos/core#broader>
+                <http://example.com/A> ;
+        <http://www.w3.org/2004/02/skos/core#inScheme>
+                <http://example.com/> ;
+        <http://www.w3.org/2004/02/skos/core#narrower>
+                <http://example.com/A.2.a> ;
+        <http://www.w3.org/2004/02/skos/core#notation>
+                "A.2" ;
+        <http://www.w3.org/2004/02/skos/core#prefLabel>
+                "A.2" .
+
+<http://example.com/B.1.b>
+        a       <http://www.w3.org/2004/02/skos/core#Concept> ;
+        <http://www.w3.org/2004/02/skos/core#broader>
+                <http://example.com/B.1> ;
+        <http://www.w3.org/2004/02/skos/core#inScheme>
+                <http://example.com/> ;
+        <http://www.w3.org/2004/02/skos/core#notation>
+                "B.1.b" ;
+        <http://www.w3.org/2004/02/skos/core#prefLabel>
+                "B.1.b" .
+
+<http://example.com/B.1>
+        a       <http://www.w3.org/2004/02/skos/core#Concept> ;
+        <http://www.w3.org/2004/02/skos/core#broader>
+                <http://example.com/B> ;
+        <http://www.w3.org/2004/02/skos/core#inScheme>
+                <http://example.com/> ;
+        <http://www.w3.org/2004/02/skos/core#narrower>
+                <http://example.com/B.1.b> , <http://example.com/B.1.a> ;
+        <http://www.w3.org/2004/02/skos/core#notation>
+                "B.1" ;
+        <http://www.w3.org/2004/02/skos/core#prefLabel>
+                "B.1" .
+
+<http://example.com/A>
+        a       <http://www.w3.org/2004/02/skos/core#Concept> ;
+        <http://www.w3.org/2004/02/skos/core#inScheme>
+                <http://example.com/> ;
+        <http://www.w3.org/2004/02/skos/core#narrower>
+                <http://example.com/A.2> , <http://example.com/A.1> ;
+        <http://www.w3.org/2004/02/skos/core#notation>
+                "A" ;
+        <http://www.w3.org/2004/02/skos/core#prefLabel>
+                "A" ;
+        <http://www.w3.org/2004/02/skos/core#topConceptOf>
+                <http://example.com/> .
+
+<http://example.com/A.2.a>
+        a       <http://www.w3.org/2004/02/skos/core#Concept> ;
+        <http://www.w3.org/2004/02/skos/core#broader>
+                <http://example.com/A.2> ;
+        <http://www.w3.org/2004/02/skos/core#inScheme>
+                <http://example.com/> ;
+        <http://www.w3.org/2004/02/skos/core#notation>
+                "A.2.a" ;
+        <http://www.w3.org/2004/02/skos/core#prefLabel>
+                "A.2.a" .
+
+<http://example.com/A.1>
+        a       <http://www.w3.org/2004/02/skos/core#Concept> ;
+        <http://www.w3.org/2004/02/skos/core#broader>
+                <http://example.com/A> ;
+        <http://www.w3.org/2004/02/skos/core#inScheme>
+                <http://example.com/> ;
+        <http://www.w3.org/2004/02/skos/core#notation>
+                "A.1" ;
+        <http://www.w3.org/2004/02/skos/core#prefLabel>
+                "A.1" .
+
+<http://example.com/B>
+        a       <http://www.w3.org/2004/02/skos/core#Concept> ;
+        <http://www.w3.org/2004/02/skos/core#inScheme>
+                <http://example.com/> ;
+        <http://www.w3.org/2004/02/skos/core#narrower>
+                <http://example.com/B.1> ;
+        <http://www.w3.org/2004/02/skos/core#notation>
+                "B" ;
+        <http://www.w3.org/2004/02/skos/core#prefLabel>
+                "B" ;
+        <http://www.w3.org/2004/02/skos/core#topConceptOf>
+                <http://example.com/> .
+
+<http://example.com/B.1.a>
+        a       <http://www.w3.org/2004/02/skos/core#Concept> ;
+        <http://www.w3.org/2004/02/skos/core#broader>
+                <http://example.com/B.1> ;
+        <http://www.w3.org/2004/02/skos/core#inScheme>
+                <http://example.com/> ;
+        <http://www.w3.org/2004/02/skos/core#notation>
+                "B.1.a" ;
+        <http://www.w3.org/2004/02/skos/core#prefLabel>
+                "B.1.a" .
+
+<http://example.com/>
+        <http://www.w3.org/2004/02/skos/core#hasTopConcept>
+                <http://example.com/B> , <http://example.com/A> .

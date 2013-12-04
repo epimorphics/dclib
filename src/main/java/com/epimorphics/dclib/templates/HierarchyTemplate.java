@@ -25,6 +25,8 @@ import com.hp.hpl.jena.graph.Triple;
 public class HierarchyTemplate extends TemplateBase implements Template {
     protected Pattern parentLink;
     protected Pattern childLink;
+    protected Pattern topLink;
+    protected Pattern invTopLink;
     protected List<Template> levelTemplates = new ArrayList<>();
     
     /**
@@ -42,6 +44,12 @@ public class HierarchyTemplate extends TemplateBase implements Template {
         }
         if (spec.hasKey(JSONConstants.CHILD)) {
             childLink = new Pattern( getRequiredField(JSONConstants.CHILD), dc );
+        }
+        if (spec.hasKey(JSONConstants.TOP)) {
+            topLink = new Pattern( getRequiredField(JSONConstants.TOP), dc );
+        }
+        if (spec.hasKey(JSONConstants.INV_TOP)) {
+            invTopLink = new Pattern( getRequiredField(JSONConstants.INV_TOP), dc );
         }
         for (String key : spec.keys()) {
             if (key.startsWith("_")) {
@@ -74,13 +82,13 @@ public class HierarchyTemplate extends TemplateBase implements Template {
                     state[i] = resource;
                     if (i > 0 && state[i-1] != null) {
                         Node parent = state[i-1];
-                        if (parentLink != null) {
-                            Node link = asURINode( parentLink.evaluate(row) );
-                            config.getOutputStream().triple( new Triple(resource, link, parent) );
-                        }
-                        if (childLink != null) {
-                            Node link = asURINode( childLink.evaluate(row) );
-                            config.getOutputStream().triple( new Triple(parent, link, resource) );
+                        condLink(config, row, parentLink, resource, parent);
+                        condLink(config, row, childLink, parent, resource);
+                    } else if (i == 0) {
+                        Node dataset = (Node) row.get(ConverterProcess.DATASET_OBJECT_NAME);
+                        if (dataset != null) {
+                            condLink(config, row, topLink, dataset, resource);
+                            condLink(config, row, invTopLink, resource, dataset);
                         }
                     }
                 }
@@ -89,6 +97,14 @@ public class HierarchyTemplate extends TemplateBase implements Template {
             }
         }
         return resource;
+    }
+
+    protected void condLink(ConverterProcess config, BindingEnv row, Pattern link,
+            Node resource, Node parent) {
+        if (link != null) {
+            Node linkn = asURINode( link.evaluate(row) );
+            config.getOutputStream().triple( new Triple(resource, linkn, parent) );
+        }
     }
     
 

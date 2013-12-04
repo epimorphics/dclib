@@ -21,6 +21,8 @@ public class JSONConstants {
     public static final String OPTIONAL     = "optional-templates";
     public static final String PARENT       = "parent-link";
     public static final String CHILD        = "child-link";
+    public static final String TOP          = "top-link";
+    public static final String INV_TOP      = "inv-top-link";
     public static final String BIND         = "bind";
     
 }

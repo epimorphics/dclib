@@ -26,6 +26,8 @@ import com.epimorphics.tasks.ProgressReporter;
 import com.epimorphics.tasks.SimpleProgressMonitor;
 import com.epimorphics.tasks.TaskState;
 import com.epimorphics.util.NameUtils;
+import com.hp.hpl.jena.graph.Node;
+import com.hp.hpl.jena.graph.NodeFactory;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 
@@ -39,8 +41,10 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
 public class ConverterProcess {
     static final Logger log = LoggerFactory.getLogger( ConverterProcess.class );
     
-    static final String ROW_OBJECT_NAME = "$row";
-    
+    public static final String ROW_OBJECT_NAME = "$row";
+    public static final String BASE_OBJECT_NAME = "$base";
+    public static final String DATASET_OBJECT_NAME = "$dataset";
+
     protected int BATCH_SIZE = 100;
     protected DataContext dataContext;
     protected ProgressReporter messageReporter = new SimpleProgressMonitor();
@@ -84,6 +88,8 @@ public class ConverterProcess {
      * @return true if the conversion succeeded
      */
     public boolean process() {
+        preprocess();
+        
         // TODO locate a matching template it none is set
 
         int lineNumber = 1;
@@ -117,6 +123,16 @@ public class ConverterProcess {
         close();
         
         return messageReporter.succeeded();
+    }
+    
+    private void preprocess() {
+        // TODO handle metadata preamble
+        
+        Object baseURI = env.get(BASE_OBJECT_NAME);
+        if (baseURI != null) {
+            Node dataset = NodeFactory.createURI(baseURI.toString());
+            env.put(DATASET_OBJECT_NAME, dataset);
+        }
     }
     
     private BindingEnv nextRow() {
