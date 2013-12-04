@@ -1,0 +1,20 @@
+[
+  {
+    "parent-link" : "<skos:broader>" ,
+    "child-link" : "<skos:narrower>" ,
+    "top-link" : "<skos:hasTopConcept>",
+    "inv-top-link" : "<skos:topConceptOf>",
+    "_0" : { "bind" : {"notation" : "{id1}"}, "template" : "skos" },
+    "_1" : { "bind" : {"notation" : "{id2}"}, "template" : "skos" },
+    "_2" : { "bind" : {"notation" : "{id3}"}, "template" : "skos" }
+  }, {
+    "name" : "skos",
+    "description" : "Basic template for SKOS support notation, label and optional description fields",
+        "@id" : "<{$base}/{notation}>",
+        "<rdf:type>" : "<skos:Concept>",
+        "<skos:notation>" : "{notation}",
+        "<dct:description>" : "{description}",
+        "<skos:prefLabel>" : "{label}",
+        "<skos:inScheme>" : "{$dataset}"
+  }
+]

@@ -49,6 +49,11 @@ public class TestBasicConverters {
         checkAgainstExpected("test/skos-collection.json", "test/test-map.csv", "test/skos-collection-result.ttl");
         checkAgainstExpected("test/hierarchy-complete-top.json", "test/hierarchy1.csv", "test/hierarchy-top-result.ttl");
     }
+    
+    @Test
+    public void testMetadata() throws IOException {
+        checkAgainstExpected("test/hierarchy-complete-top-meta.json", "test/hierarchy1-meta.csv", "test/hierarchy-top-result.ttl");
+    }
 
     public static void checkAgainstExpected(String templateFile, String dataFile, String resultFile) throws IOException {
         ConverterService service = new ConverterService();

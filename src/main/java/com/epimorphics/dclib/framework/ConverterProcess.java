@@ -44,6 +44,8 @@ public class ConverterProcess {
     public static final String ROW_OBJECT_NAME = "$row";
     public static final String BASE_OBJECT_NAME = "$base";
     public static final String DATASET_OBJECT_NAME = "$dataset";
+    
+    static final String META = "meta";
 
     protected int BATCH_SIZE = 100;
     protected DataContext dataContext;
@@ -51,6 +53,9 @@ public class ConverterProcess {
     
     protected String[] headers;
     protected CSVReader dataSource;
+    protected boolean hasPreamble = false;
+    protected String[] peekRow;
+    protected int lineNumber = 0;
     
     protected Template template;
     protected BindingEnv env;
@@ -73,6 +78,9 @@ public class ConverterProcess {
             for(int i = 0; i < headerLine.length; i++) {
                 headers[i] = NameUtils.safeVarName( headerLine[i] );
             }
+            if (headerLine.length > 1 && headerLine[0].equals("#")) {
+                hasPreamble = true;
+            }
             // Default is to converter into an in-memory model, can override by setting explicit StreamRDF dest
             setModel( ModelFactory.createDefaultModel() );
             
@@ -88,36 +96,40 @@ public class ConverterProcess {
      * @return true if the conversion succeeded
      */
     public boolean process() {
-        preprocess();
-        
-        // TODO locate a matching template it none is set
-
-        int lineNumber = 1;
-        if (messageReporter.getState() == TaskState.Terminated) {
-            return messageReporter.succeeded();
-        }
-        messageReporter.setState( TaskState.Running );
-
-        while(true) {
-            if (lineNumber % BATCH_SIZE == 0) {
-                messageReporter.report("Processing row " + lineNumber);
+        try {
+            preprocess();
+            
+            // TODO locate a matching template it none is set
+    
+            if (messageReporter.getState() == TaskState.Terminated) {
+                return messageReporter.succeeded();
             }
-            BindingEnv row = nextRow();
-            if (row != null) {
-                row.put(ROW_OBJECT_NAME, new Row(lineNumber));
-                try {
-                    template.convertRow(this, row, lineNumber);
-                } catch (Exception e) {
-                    messageReporter.report("Error: " + e, lineNumber);
-                    messageReporter.failed();
-                    if (!(e instanceof NullResult)) {
-                        log.error("Error process line " + lineNumber, e);
-                    }
+            messageReporter.setState( TaskState.Running );
+    
+            while(true) {
+                if (lineNumber % BATCH_SIZE == 0) {
+                    messageReporter.report("Processing row " + lineNumber);
                 }
-            } else {
-                break;
+                BindingEnv row = nextRow();
+                if (row != null) {
+                    row.put(ROW_OBJECT_NAME, new Row(lineNumber));
+                    try {
+                        template.convertRow(this, row, lineNumber);
+                    } catch (Exception e) {
+                        messageReporter.report("Error: " + e, lineNumber);
+                        messageReporter.failed();
+                        if (!(e instanceof NullResult)) {
+                            log.error("Error process line " + lineNumber, e);
+                        }
+                    }
+                } else {
+                    break;
+                }
+                lineNumber++;
             }
-            lineNumber++;
+        } catch (IOException e) {
+            messageReporter.report("Problem reading next line of source");
+            messageReporter.failed();
         }
         messageReporter.setState(TaskState.Terminated);
         close();
@@ -125,8 +137,33 @@ public class ConverterProcess {
         return messageReporter.succeeded();
     }
     
-    private void preprocess() {
-        // TODO handle metadata preamble
+    private void preprocess() throws IOException {
+        // Check for linkedcsv-style preamble
+        if (hasPreamble) {
+            while (true) {
+                peekRow = dataSource.readNext();
+                lineNumber++;
+                if (peekRow == null || peekRow.length == 0 || peekRow[0].isEmpty()) {
+                    break;
+                }
+                if (peekRow[0].equals(META)) {
+                    if (peekRow.length >= 3) {
+                        if (peekRow[1].equals(BASE_OBJECT_NAME)) {
+                            String base = peekRow[2];
+                            env.put(BASE_OBJECT_NAME, base);
+                        } else {
+                            Pattern prop = new Pattern(peekRow[1], dataContext);
+                            Pattern value = new Pattern(peekRow[2], dataContext);
+                            // TODO patterns for metadata
+                        }
+                    } else {
+                        messageReporter.report("Badly formed metadata row", lineNumber);
+                    }
+                } else {
+                    messageReporter.report("Unrecognized preamble row: " + peekRow[0], lineNumber);
+                }
+            }
+        }
         
         Object baseURI = env.get(BASE_OBJECT_NAME);
         if (baseURI != null) {
@@ -135,23 +172,18 @@ public class ConverterProcess {
         }
     }
     
-    private BindingEnv nextRow() {
+    private BindingEnv nextRow() throws IOException {
         if (dataSource != null) {
-            try {
-                String[] rowValues = dataSource.readNext();
-                if (rowValues == null || rowValues.length == 0) {
-                    return null;
-                }
-                BindingEnv row = new BindingEnv( env );
-                for (int i = 0; i < headers.length; i++) {
-                    row.put(headers[i], ValueFactory.asValue(rowValues[i]));
-                }
-                return row;
-            } catch (IOException e) {
-                messageReporter.report("Problem reading next line of source");
-                messageReporter.failed();
-                close();
+            String[] rowValues = (peekRow != null) ? peekRow : dataSource.readNext(); 
+            peekRow = null;
+            if (rowValues == null || rowValues.length == 0) {
+                return null;
             }
+            BindingEnv row = new BindingEnv( env );
+            for (int i = 0; i < headers.length; i++) {
+                row.put(headers[i], ValueFactory.asValue(rowValues[i]));
+            }
+            return row;
         }
         return null;
     }
