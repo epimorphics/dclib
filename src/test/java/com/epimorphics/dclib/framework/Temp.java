@@ -56,7 +56,8 @@ public class Temp {
     public void testTemplate() throws IOException {
         ConverterService service = new ConverterService();
         service.put("$base", "http://example.com/");
-        Model m = service.simpleConvert("test/defra-org.json", "test/defra-orgs.csv");
+        String der = "/home/der/epimorphics/projects/registries/DefraPilot/data/";
+        Model m = service.simpleConvert(der + "simple-skos.json", der + "category.csv");
         if (m != null) {
             m.write(System.out, "Turtle");
         }

@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 
 import com.epimorphics.dclib.templates.TemplateFactory;
 import com.epimorphics.tasks.LiveProgressMonitor;
+import com.epimorphics.tasks.ProgressReporter;
 import com.epimorphics.tasks.SimpleProgressMonitor;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
@@ -100,18 +101,28 @@ public class ConverterService {
     /**
      * Simple invocation. Load template and data from a file, run process
      * and return memory model containing results or null if there was a problem.
-     * Problems/progress reporting live to stdout.
+     * Problems/progress reporting live to given reporter
      * @throws IOException 
      */
-    public Model simpleConvert(String templateFile, String dataFile) throws IOException {
+    public Model simpleConvert(String templateFile, String dataFile, ProgressReporter reporter) throws IOException {
         Template template = TemplateFactory.templateFrom(templateFile, dc);
         
         InputStream is = new FileInputStream(dataFile);
         ConverterProcess process = new ConverterProcess(dc, is);
         process.setTemplate( template );
-        process.setMessageReporter( silent ? new SimpleProgressMonitor() : new LiveProgressMonitor() );
+        process.setMessageReporter( reporter );
         boolean ok = process.process();
         
         return ok ?  process.getModel() : null;
+    }
+    
+    /**
+     * Simple invocation. Load template and data from a file, run process
+     * and return memory model containing results or null if there was a problem.
+     * Problems/progress reporting live to stdout unless silent is set.
+     * @throws IOException 
+     */
+    public Model simpleConvert(String templateFile, String dataFile) throws IOException {
+        return simpleConvert(templateFile, dataFile, silent ? new SimpleProgressMonitor() : new LiveProgressMonitor() );
     }
 }
