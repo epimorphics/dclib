@@ -28,6 +28,7 @@ import com.epimorphics.tasks.TaskState;
 import com.epimorphics.util.NameUtils;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.NodeFactory;
+import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 
@@ -78,6 +79,7 @@ public class ConverterProcess {
             for(int i = 0; i < headerLine.length; i++) {
                 headers[i] = NameUtils.safeVarName( headerLine[i] );
             }
+            lineNumber++;
             if (headerLine.length > 1 && headerLine[0].equals("#")) {
                 hasPreamble = true;
             }
@@ -138,6 +140,14 @@ public class ConverterProcess {
     }
     
     private void preprocess() throws IOException {
+        Node dataset = NodeFactory.createAnon();
+        
+        Object baseURI = env.get(BASE_OBJECT_NAME);
+        if (baseURI != null) {
+            dataset = NodeFactory.createURI(baseURI.toString());
+            env.put(DATASET_OBJECT_NAME, dataset);
+        }
+
         // Check for linkedcsv-style preamble
         if (hasPreamble) {
             while (true) {
@@ -151,10 +161,16 @@ public class ConverterProcess {
                         if (peekRow[1].equals(BASE_OBJECT_NAME)) {
                             String base = peekRow[2];
                             env.put(BASE_OBJECT_NAME, base);
+                            dataset = NodeFactory.createURI(base);
+                            env.put(DATASET_OBJECT_NAME, dataset);
                         } else {
-                            Pattern prop = new Pattern(peekRow[1], dataContext);
-                            Pattern value = new Pattern(peekRow[2], dataContext);
-                            // TODO patterns for metadata
+                            try {
+                                Node prop = new Pattern(peekRow[1], dataContext).evaluateAsURINode(env);
+                                Node value = new Pattern(peekRow[2], dataContext).evaluateAsNode(env);
+                                getOutputStream().triple( new Triple(dataset, prop, value) );
+                            } catch (Exception e) {
+                                messageReporter.report("Failed to process metadata row: " + e, lineNumber);
+                            }
                         }
                     } else {
                         messageReporter.report("Badly formed metadata row", lineNumber);
@@ -163,12 +179,6 @@ public class ConverterProcess {
                     messageReporter.report("Unrecognized preamble row: " + peekRow[0], lineNumber);
                 }
             }
-        }
-        
-        Object baseURI = env.get(BASE_OBJECT_NAME);
-        if (baseURI != null) {
-            Node dataset = NodeFactory.createURI(baseURI.toString());
-            env.put(DATASET_OBJECT_NAME, dataset);
         }
     }
     

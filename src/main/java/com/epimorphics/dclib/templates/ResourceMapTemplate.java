@@ -62,12 +62,12 @@ public class ResourceMapTemplate extends TemplateBase implements Template {
             int rowNumber) {
         super.convertRow(config, row, rowNumber);
         StreamRDF out = config.getOutputStream();
-        Node subject = asURINode(root.evaluate(row));
+        Node subject = root.evaluateAsURINode(row);
         for (int i = 0; i < propPatterns.size(); i++) {
             Pattern propPattern = propPatterns.get(i);
             Pattern valPattern = valPatterns.get(i);
             try {
-                Node prop = asURINode(propPattern.evaluate(row));
+                Node prop = propPattern.evaluateAsNode(row);
                 Object value = valPattern.evaluate(row);
                 if (value instanceof ValueStringArray) {
                     for (Object v : ((ValueStringArray) value).getValues()) {

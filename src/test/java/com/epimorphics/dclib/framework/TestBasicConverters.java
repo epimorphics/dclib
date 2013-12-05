@@ -14,6 +14,7 @@ import java.io.IOException;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
+import com.epimorphics.rdfutil.RDFUtil;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.util.FileManager;
 
@@ -52,7 +53,7 @@ public class TestBasicConverters {
     
     @Test
     public void testMetadata() throws IOException {
-        checkAgainstExpected("test/hierarchy-complete-top-meta.json", "test/hierarchy1-meta.csv", "test/hierarchy-top-result.ttl");
+        checkAgainstExpected("test/hierarchy-complete-top-meta.json", "test/hierarchy1-meta.csv", "test/hierarchy-top-meta-result.ttl");
     }
 
     public static void checkAgainstExpected(String templateFile, String dataFile, String resultFile) throws IOException {
@@ -61,7 +62,9 @@ public class TestBasicConverters {
         service.put("$base", "http://example.com/");
         Model m = service.simpleConvert(templateFile, dataFile);
         assertNotNull(m);
-        Model expected = FileManager.get().loadModel(resultFile);
+        String DUMMY = "http://example.com/DONOTUSE/";
+        Model expected = FileManager.get().loadModel(resultFile, DUMMY, "Turtle");
+        expected = RDFUtil.mapNamespace(expected, DUMMY, "");
         boolean same = m.isIsomorphicWith(expected);
         if (!same) {
             System.err.println("Result mismatch, result was:");

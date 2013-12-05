@@ -9,9 +9,6 @@
 
 package com.epimorphics.dclib.templates;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
-
 import org.apache.jena.atlas.json.JsonObject;
 import org.apache.jena.atlas.json.JsonValue;
 
@@ -21,12 +18,9 @@ import com.epimorphics.dclib.framework.DataContext;
 import com.epimorphics.dclib.framework.Pattern;
 import com.epimorphics.dclib.framework.Template;
 import com.epimorphics.dclib.values.ValueNull;
-import com.epimorphics.dclib.values.ValueString;
 import com.epimorphics.util.EpiException;
 import com.epimorphics.util.NameUtils;
-import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
 import com.hp.hpl.jena.graph.Node;
-import com.hp.hpl.jena.graph.NodeFactory;
 import com.hp.hpl.jena.graph.Triple;
 
 /**
@@ -144,50 +138,12 @@ public class TemplateBase implements Template {
     }
     
     // General RDF helper functions
-
-    protected Node asURINode(Object result) {
-        if (result instanceof String || result instanceof ValueString) {
-            return NodeFactory.createURI( result.toString() );
-        } else if (result instanceof Node) {
-            Node n = (Node)result;
-            if (n.isBlank() || n.isURI()) {
-                return n;
-            }
-        }
-        throw new EpiException("Found " + result + " when expecting a URI");
-    }
-
-    protected Node asNode(Pattern pattern, Object result) {
-        // Assumes we have already taken care of multiple valued objects
-        if (pattern.isURI()) {
-            return asURINode(result);
-        } else if (result instanceof Node) {
-            return (Node) result;
-        } else if (result instanceof String) {
-            return NodeFactory.createLiteral( (String)result );
-        } else if (result instanceof ValueString) {
-            return NodeFactory.createLiteral( ((ValueString)result).getString() );
-        } else if (result instanceof Number) {
-            if (result instanceof BigDecimal) {
-                return NodeFactory.createUncachedLiteral(result, XSDDatatype.XSDdecimal);
-            } else if (result instanceof BigInteger) {
-                return NodeFactory.createUncachedLiteral(result, XSDDatatype.XSDinteger);
-            } else if (result instanceof Double) {
-                return NodeFactory.createUncachedLiteral(result, XSDDatatype.XSDdouble);
-            } else {
-                return NodeFactory.createUncachedLiteral(((Number)result).intValue(), XSDDatatype.XSDinteger);
-            }
-        } else {
-            // TODO handle dates
-        }                
-        return null;
-    }
     
     protected Triple asTriple(Pattern propPattern, Pattern valPattern, Node subject, Node prop, Object v) {
         if (propPattern.isInverse()) {
-            return new Triple( asURINode(v), prop, subject);
+            return new Triple( valPattern.asURINode(v), prop, subject);
         } else {
-            return new Triple(subject, prop, asNode(valPattern, v));
+            return new Triple(subject, prop, valPattern.asNode(v));
         }
     }
 

@@ -9,6 +9,8 @@
 
 package com.epimorphics.dclib.framework;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +21,9 @@ import org.apache.commons.jexl2.Script;
 import com.epimorphics.dclib.values.Value;
 import com.epimorphics.dclib.values.ValueString;
 import com.epimorphics.util.EpiException;
+import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
+import com.hp.hpl.jena.graph.Node;
+import com.hp.hpl.jena.graph.NodeFactory;
 
 /**
  * Represents a string pattern in a Template, e.g. for constructing property values.
@@ -110,6 +115,70 @@ public class Pattern {
             }
         }
     }
+
+
+    /**
+     * Interpret the pattern in some binding environment of variables.
+     * Return the result converted to an RDF Node
+     */
+    public Node evaluateAsNode(BindingEnv env) {
+        return asNode( evaluate(env) );
+    }
+
+    /**
+     * Interpret the pattern in some binding environment of variables.
+     * Return the result converted to a resource Node or throw an
+     * exception if this is not possible
+     */
+    public Node evaluateAsURINode(BindingEnv env) {
+        return asNode( evaluate(env) );
+    }
+
+    /**
+     * Convert a pattern result to a resource Node or
+     * raise an exception if this is not possible.
+     */
+    public Node asURINode(Object result) {
+        if (result instanceof String || result instanceof ValueString) {
+            return NodeFactory.createURI( result.toString() );
+        } else if (result instanceof Node) {
+            Node n = (Node)result;
+            if (n.isBlank() || n.isURI()) {
+                return n;
+            }
+        }
+        throw new EpiException("Found " + result + " when expecting a URI");
+    }
+
+    /**
+     * Convert a result from this pattern to an RDF Node
+     */
+    public Node asNode(Object result) {
+        // Assumes we have already taken care of multiple valued objects
+        if (isURI()) {
+            return asURINode(result);
+        } else if (result instanceof Node) {
+            return (Node) result;
+        } else if (result instanceof String) {
+            return NodeFactory.createLiteral( (String)result );
+        } else if (result instanceof ValueString) {
+            return NodeFactory.createLiteral( ((ValueString)result).getString() );
+        } else if (result instanceof Number) {
+            if (result instanceof BigDecimal) {
+                return NodeFactory.createUncachedLiteral(result, XSDDatatype.XSDdecimal);
+            } else if (result instanceof BigInteger) {
+                return NodeFactory.createUncachedLiteral(result, XSDDatatype.XSDinteger);
+            } else if (result instanceof Double) {
+                return NodeFactory.createUncachedLiteral(result, XSDDatatype.XSDdouble);
+            } else {
+                return NodeFactory.createUncachedLiteral(((Number)result).intValue(), XSDDatatype.XSDinteger);
+            }
+        } else {
+            // TODO handle dates
+        }                
+        return null;
+    }
+    
     
     protected Object evaluateComponent(int i, BindingEnv env) {
         Object component = components.get(i);
