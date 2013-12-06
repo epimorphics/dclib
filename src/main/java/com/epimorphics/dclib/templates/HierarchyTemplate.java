@@ -17,6 +17,7 @@ import org.apache.jena.atlas.json.JsonObject;
 import com.epimorphics.dclib.framework.BindingEnv;
 import com.epimorphics.dclib.framework.ConverterProcess;
 import com.epimorphics.dclib.framework.DataContext;
+import com.epimorphics.dclib.framework.NullResult;
 import com.epimorphics.dclib.framework.Pattern;
 import com.epimorphics.dclib.framework.Template;
 import com.hp.hpl.jena.graph.Node;
@@ -92,7 +93,7 @@ public class HierarchyTemplate extends TemplateBase implements Template {
                         }
                     }
                 }
-            } catch (Exception e) {
+            } catch (NullResult e) {
                 // No successful match so proceed to later templates
             }
         }
