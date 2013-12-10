@@ -63,9 +63,12 @@ public class ResourceMapTemplate extends TemplateBase implements Template {
         super.convertRow(config, row, rowNumber);
         StreamRDF out = config.getOutputStream();
         Node subject = root.evaluateAsURINode(row);
+        if (subject == null) return subject;
         for (int i = 0; i < propPatterns.size(); i++) {
             Pattern propPattern = propPatterns.get(i);
+            debugCheck(config, row, rowNumber, propPattern);
             Pattern valPattern = valPatterns.get(i);
+            debugCheck(config, row, rowNumber, valPattern);
             try {
                 Node prop = propPattern.evaluateAsNode(row);
                 Object value = valPattern.evaluate(row);
@@ -85,6 +88,16 @@ public class ResourceMapTemplate extends TemplateBase implements Template {
             }
         }
         return subject;
+    }
+
+    private void debugCheck(ConverterProcess config, BindingEnv row, int rowNumber, Pattern p) {
+        if (config.isDebugging()) {
+            try {
+                p.evaluate(row);
+            } catch (Exception e) {
+                config.getMessageReporter().report("Debug: pattern " + p + " failed to match", rowNumber);
+            }
+        }
     }
 
 }

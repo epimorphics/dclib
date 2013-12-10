@@ -35,7 +35,7 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
 /**
  * An instance of a converter running on a specific data configuration.
  * Provides access to all the context information, data, mapping sources
- * and output configuration required.
+ * and output configuration required. Not thread safe.
  * 
  * @author <a href="mailto:dave@epimorphics.com">Dave Reynolds</a>
  */
@@ -57,6 +57,7 @@ public class ConverterProcess {
     protected boolean hasPreamble = false;
     protected String[] peekRow;
     protected int lineNumber = 0;
+    protected boolean debug = false;
     
     protected Template template;
     protected BindingEnv env;
@@ -92,6 +93,18 @@ public class ConverterProcess {
             close();
         }
     }
+    
+    /**
+     * Set to true to provide verbose output for all template matching
+     * to aid with debugging
+     */
+    public void setDebug(boolean debugOn) {
+        this.debug = debugOn;
+    }
+    
+    public boolean isDebugging() {
+        return debug;
+    }
 
     /**
      * Run the conversion process
@@ -116,7 +129,10 @@ public class ConverterProcess {
                 if (row != null) {
                     row.put(ROW_OBJECT_NAME, new Row(lineNumber));
                     try {
-                        template.convertRow(this, row, lineNumber);
+                        Node result = template.convertRow(this, row, lineNumber);
+                        if (result == null) {
+                            messageReporter.report("Warning: no templates matched line " + lineNumber, lineNumber);
+                        }
                     } catch (Exception e) {
                         messageReporter.report("Error: " + e, lineNumber);
                         messageReporter.failed();
