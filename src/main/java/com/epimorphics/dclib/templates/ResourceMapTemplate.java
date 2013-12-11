@@ -62,6 +62,7 @@ public class ResourceMapTemplate extends TemplateBase implements Template {
             int rowNumber) {
         super.convertRow(config, row, rowNumber);
         StreamRDF out = config.getOutputStream();
+        debugCheck(config, row, rowNumber, root);
         Node subject = root.evaluateAsURINode(row);
         if (subject == null) return subject;
         for (int i = 0; i < propPatterns.size(); i++) {
@@ -95,7 +96,7 @@ public class ResourceMapTemplate extends TemplateBase implements Template {
             try {
                 p.evaluate(row);
             } catch (Exception e) {
-                config.getMessageReporter().report("Debug: pattern " + p + " failed to match", rowNumber);
+                config.getMessageReporter().report("Debug: pattern " + p + " failed to match environment " + row, rowNumber);
             }
         }
     }

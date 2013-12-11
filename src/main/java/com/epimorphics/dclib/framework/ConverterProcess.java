@@ -134,11 +134,13 @@ public class ConverterProcess {
                             messageReporter.report("Warning: no templates matched line " + lineNumber, lineNumber);
                         }
                     } catch (Exception e) {
-                        messageReporter.report("Error: " + e, lineNumber);
-                        messageReporter.failed();
                         if (!(e instanceof NullResult)) {
-                            log.error("Error process line " + lineNumber, e);
+                            messageReporter.report("Error: " + e, lineNumber);
+                            log.error("Error processing line " + lineNumber, e);
+                        } else {
+                            messageReporter.report("Warning: no templates matched line " + lineNumber + ", " + e, lineNumber);
                         }
+                        messageReporter.failed();
                     }
                 } else {
                     break;

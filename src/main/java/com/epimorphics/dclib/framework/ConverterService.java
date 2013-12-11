@@ -104,16 +104,27 @@ public class ConverterService {
      * Problems/progress reporting live to given reporter
      * @throws IOException 
      */
-    public Model simpleConvert(String templateFile, String dataFile, ProgressReporter reporter) throws IOException {
+    public Model simpleConvert(String templateFile, String dataFile, ProgressReporter reporter, boolean debug) throws IOException {
         Template template = TemplateFactory.templateFrom(templateFile, dc);
         
         InputStream is = new FileInputStream(dataFile);
         ConverterProcess process = new ConverterProcess(dc, is);
+        process.setDebug(debug);
         process.setTemplate( template );
         process.setMessageReporter( reporter );
         boolean ok = process.process();
         
         return ok ?  process.getModel() : null;
+    }
+    
+    /**
+     * Simple invocation. Load template and data from a file, run process
+     * and return memory model containing results or null if there was a problem.
+     * Problems/progress reporting live to given reporter
+     * @throws IOException 
+     */
+    public Model simpleConvert(String templateFile, String dataFile, ProgressReporter reporter) throws IOException {
+        return simpleConvert(templateFile, dataFile, reporter, false);
     }
     
     /**

@@ -276,5 +276,25 @@ public class Pattern {
         }
     }
     
+    public String toString() {
+        StringBuilder str = new StringBuilder();
+        for (Object component : components) {
+            if (component instanceof String) {
+                str.append((String)component);
+            } else {
+                str.append("{");
+                str.append(component.toString());
+                str.append("}");
+            }
+        }
+        String out = str.toString();
+        if (isURI) {
+            out = "<" + out + ">";
+        }
+        if (isInverse) {
+            out = "^" + out;
+        }
+        return out;
+    }
 
 }

@@ -27,20 +27,28 @@ import com.hp.hpl.jena.vocabulary.RDF;
 public class Main {
     
     public static void main(String[] args) throws IOException {
-        if (args.length < 2) {
-            System.out.println("Usage:  java -jar dclib.jar  template.json data.ttl [split-directory]");
+        boolean debug = false;
+        
+        // TODO proper command line parsing
+        int argsOffset = 0;
+        if (args.length >= 3 && args[0].equals("--debug")) {
+            debug = true;
+            argsOffset = 1;
+        }
+        if (args.length - argsOffset < 2) {
+            System.out.println("Usage:  java -jar dclib.jar [--debug] template.json data.ttl [split-directory]");
             System.exit(1);
         }
-        String templateName = args[0];
-        String dataFile = args[1];
+        String templateName = args[argsOffset];
+        String dataFile = args[argsOffset + 1];
         String splitDir = null;
-        if (args.length > 2) {
-            splitDir = args[2];
+        if (args.length - argsOffset > 2) {
+            splitDir = args[argsOffset + 2];
         }
         
         ConverterService service = new ConverterService();
         SimpleProgressMonitor reporter = new SimpleProgressMonitor();
-        Model m = service.simpleConvert(templateName, dataFile, reporter);
+        Model m = service.simpleConvert(templateName, dataFile, reporter, debug);
         if (m != null) {
             if (splitDir == null) {
                 m.write(System.out, "Turtle");
