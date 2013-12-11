@@ -53,6 +53,7 @@ public class ParameterizedTemplate extends TemplateBase implements Template {
         BindingEnv env = new BindingEnv(row);
         for (Entry<String, Pattern> ent : parameters.entrySet()) {
             try {
+                config.debugCheck(row, rowNumber, ent.getValue());
                 Object value = ent.getValue().evaluate(row);
                 env.put(ent.getKey(), value);
             } catch (NullResult e) {

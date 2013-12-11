@@ -226,6 +226,20 @@ public class ConverterProcess {
         messageReporter.setState(TaskState.Terminated);
     }
     
+
+    /**
+     * Called by template implementations to test for pattern matching errors during debugging
+     */
+    public void debugCheck(BindingEnv row, int rowNumber, Pattern p) {
+        if (isDebugging()) {
+            try {
+                p.evaluate(row);
+            } catch (Exception e) {
+                getMessageReporter().report("Debug: pattern " + p + " failed to match environment " + row, rowNumber);
+            }
+        }
+    }
+    
     public Template getTemplate() {
         return template;
     }
