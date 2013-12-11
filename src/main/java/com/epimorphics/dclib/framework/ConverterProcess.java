@@ -78,7 +78,7 @@ public class ConverterProcess {
             String[] headerLine = dataSource.readNext();
             headers = new String[headerLine.length];
             for(int i = 0; i < headerLine.length; i++) {
-                headers[i] = NameUtils.safeVarName( headerLine[i] );
+                headers[i] = NameUtils.safeVarName( headerLine[i].trim() );
             }
             lineNumber++;
             if (headerLine.length > 1 && headerLine[0].equals("#")) {
