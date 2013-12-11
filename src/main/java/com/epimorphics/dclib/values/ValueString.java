@@ -42,7 +42,17 @@ public class ValueString extends ValueBase<String> implements Value {
         return ValueFactory.asValue(value);
     }
     
+    public Object trim() {
+        return new ValueString( value.trim() );
+    }
     
+    public Object substring(int offset) {
+        return new ValueString( value.substring(offset) );
+    }
+    
+    public Object substring(int start, int end) {
+        return new ValueString( value.substring(start, end) );
+    }
     
     // TODO implement string manipulation functions
 }
