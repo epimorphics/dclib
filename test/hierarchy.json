@@ -1,7 +1,7 @@
 {
-    "parent-link" : "<skos:broader>" ,
-    "child-link" : "<skos:narrower>" ,
-    "_0" : { "bind" : {"notation" : "{id1}"}, "template" : "simple-skos" },
-    "_1" : { "bind" : {"notation" : "{id2}"}, "template" : "simple-skos" },
-    "_2" : { "bind" : {"notation" : "{id3}"}, "template" : "simple-skos" }
+    "parentLink" : "<skos:broader>" ,
+    "childLink" : "<skos:narrower>" ,
+    "0" : { "bind" : {"notation" : "{id1}"}, "template" : "simple-skos" },
+    "1" : { "bind" : {"notation" : "{id2}"}, "template" : "simple-skos" },
+    "2" : { "bind" : {"notation" : "{id3}"}, "template" : "simple-skos" }
 }

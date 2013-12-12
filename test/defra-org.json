@@ -1,9 +1,9 @@
 [{
     "required" : ["label", "id1", "id2"],
-    "parent-link" : "<org:subOrganizationOf>" ,
-    "child-link" : "<org:hasSubOrganization>" ,
-    "_1" : { "bind" : {"id" : "{id1}"}, "template" : "basic-organization" },
-    "_2" : { "bind" : {"id" : "{id2}"}, "template" : "basic-organization" }
+    "parentLink" : "<org:subOrganizationOf>" ,
+    "childLink" : "<org:hasSubOrganization>" ,
+    "0" : { "bind" : {"id" : "{id1}"}, "template" : "basic-organization" },
+    "1" : { "bind" : {"id" : "{id2}"}, "template" : "basic-organization" }
 },
 {
     "name" : "basic-organization",

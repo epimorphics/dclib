@@ -1,10 +1,10 @@
 [
   {
-    "parent-link" : "<skos:broader>" ,
-    "child-link" : "<skos:narrower>" ,
-    "_0" : { "bind" : {"notation" : "{id1}"}, "template" : "skos" },
-    "_1" : { "bind" : {"notation" : "{id2}"}, "template" : "skos" },
-    "_2" : { "bind" : {"notation" : "{id3}"}, "template" : "skos" }
+    "parentLink" : "<skos:broader>" ,
+    "childLink" : "<skos:narrower>" ,
+    "0" : { "bind" : {"notation" : "{id1}"}, "template" : "skos" },
+    "1" : { "bind" : {"notation" : "{id2}"}, "template" : "skos" },
+    "2" : { "bind" : {"notation" : "{id3}"}, "template" : "skos" }
   }, {
     "name" : "skos",
     "description" : "Basic template for SKOS support notation, label and optional description fields",

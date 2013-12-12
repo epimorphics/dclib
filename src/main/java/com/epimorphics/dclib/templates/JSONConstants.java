@@ -18,11 +18,11 @@ public class JSONConstants {
     public static final String ID           = "@id";
     public static final String TEMPLATES    = "templates";
     public static final String TEMPLATE     = "template";
-    public static final String OPTIONAL     = "optional-templates";
-    public static final String PARENT       = "parent-link";
-    public static final String CHILD        = "child-link";
-    public static final String TOP          = "top-link";
-    public static final String INV_TOP      = "inv-top-link";
+    public static final String OPTIONAL     = "optionalTemplates";
+    public static final String PARENT       = "parentLink";
+    public static final String CHILD        = "childLink";
+    public static final String TOP          = "topLink";
+    public static final String INV_TOP      = "invTopLink";
     public static final String BIND         = "bind";
     
 }

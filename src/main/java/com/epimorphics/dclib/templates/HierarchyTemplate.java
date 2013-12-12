@@ -53,8 +53,8 @@ public class HierarchyTemplate extends TemplateBase implements Template {
             invTopLink = new Pattern( getRequiredField(JSONConstants.INV_TOP), dc );
         }
         for (String key : spec.keys()) {
-            if (key.startsWith("_")) {
-                int index = Integer.parseInt( key.substring(1) );
+            try {
+                int index = Integer.parseInt( key );
                 if (index >= levelTemplates.size()) {
                     for (int i = levelTemplates.size(); i < index; i++) {
                         levelTemplates.add( new TemplateRef("Filler template", dc) );
@@ -63,6 +63,8 @@ public class HierarchyTemplate extends TemplateBase implements Template {
                 } else {
                     levelTemplates.set(index, getTemplateRef(spec.get(key), dc));
                 }
+            } catch (NumberFormatException e) {
+                // Ignore and look for other keys
             }
         }
     }
