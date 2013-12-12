@@ -1,0 +1,25 @@
+
+<http://example.com/test>
+        a       <http://www.w3.org/2004/02/skos/core#Collection> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "A test collection" .
+
+<http://example.com/test/1>
+        a       <http://www.w3.org/2004/02/skos/core#Concept> ;
+        <http://purl.org/dc/terms/description>
+                "Description for 1" ;
+        <http://www.w3.org/2004/02/skos/core#inScheme>
+                <http://example.com/test> ;
+        <http://www.w3.org/2004/02/skos/core#notation>
+                "1" ;
+        <http://www.w3.org/2004/02/skos/core#prefLabel>
+                "Entry 1" .
+
+<http://example.com/test/2>
+        a       <http://www.w3.org/2004/02/skos/core#Concept> ;
+        <http://www.w3.org/2004/02/skos/core#inScheme>
+                <http://example.com/test> ;
+        <http://www.w3.org/2004/02/skos/core#notation>
+                "2" ;
+        <http://www.w3.org/2004/02/skos/core#prefLabel>
+                "Entry 2" .

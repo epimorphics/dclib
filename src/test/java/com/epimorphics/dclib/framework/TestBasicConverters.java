@@ -56,6 +56,11 @@ public class TestBasicConverters {
         checkAgainstExpected("test/hierarchy-complete-top-meta.json", "test/hierarchy1-meta.csv", "test/hierarchy-top-meta-result.ttl");
     }
 
+    @Test
+    public void testComposite() throws IOException {
+        checkAgainstExpected("test/top.json", "test/test-map.csv", "test/top.ttl");
+    }
+    
     public static void checkAgainstExpected(String templateFile, String dataFile, String resultFile) throws IOException {
         ConverterService service = new ConverterService();
         service.getDataContext().registerTemplate("test/simple-skos-template.json");

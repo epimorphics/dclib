@@ -128,6 +128,10 @@ public class TestConverterProcess {
         public boolean isApplicableTo(BindingEnv row) {
             return true;
         }
+
+        @Override
+        public void preamble(ConverterProcess config) {
+        }
         
     }
 }

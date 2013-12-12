@@ -29,8 +29,15 @@ public class DataContext {
     protected Map<String, Template> templates = new HashMap<String, Template>();
     protected PrefixMapping prefixes;
     protected BindingEnv env = new BindingEnv();
+    protected DataContext parent;
     
     public DataContext() {
+    }
+    
+    public DataContext(DataContext parent) {
+        this.parent = parent;
+        env = new BindingEnv( parent.getGlobalEnv() );
+        prefixes = parent.prefixes;
     }
     
     public void setPrefixes(PrefixMapping prefixes) {
@@ -83,6 +90,10 @@ public class DataContext {
      * Find a named template
      */
     public Template getTemplate(String name) {
-        return templates.get(name);
+        Template template = templates.get(name);
+        if (template == null && parent != null) {
+            template = parent.getTemplate(name);
+        }
+        return template;
     }
 }

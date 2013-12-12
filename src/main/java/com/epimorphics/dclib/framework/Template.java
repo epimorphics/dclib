@@ -37,6 +37,11 @@ public interface Template {
     public Node convertRow(ConverterProcess config, BindingEnv row, int rowNumber);
     
     /**
+     * Execute any one-off parts of the template
+     */
+    public void preamble(ConverterProcess config);
+    
+    /**
      * Return the name of this template, may be null
      */
     public String getName();

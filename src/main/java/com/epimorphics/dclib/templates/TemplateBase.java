@@ -9,6 +9,10 @@
 
 package com.epimorphics.dclib.templates;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import org.apache.jena.atlas.json.JsonObject;
 import org.apache.jena.atlas.json.JsonValue;
 
@@ -103,6 +107,15 @@ public class TemplateBase implements Template {
         }
         return null;
     }
+    
+    
+    /**
+     * Execute any one-off parts of the template
+     */
+    public void preamble(ConverterProcess config) {
+        // do nothing
+    }
+
 
     @Override
     public String getName() {
@@ -135,6 +148,22 @@ public class TemplateBase implements Template {
         } else {
             throw new EpiException("Template must be specified as a name or an embedded object: " + ref);
         }
+    }
+    
+    protected List<Template> getTemplates(JsonValue tspec, DataContext dc) {
+        List<Template> templates = new ArrayList<>();
+        if (tspec != null) {
+            if (tspec.isObject()) {
+                templates.add( TemplateFactory.templateFrom(tspec.getAsObject(), dc) );
+            } else if (tspec.isArray()) {
+                for (Iterator<JsonValue> i = tspec.getAsArray().iterator(); i.hasNext();) {
+                    templates.add( TemplateFactory.templateFrom(i.next(), dc) );
+                }
+            } else if (tspec.isString()) {
+                templates.add( new TemplateRef(tspec.getAsString().value(), dc) );
+            }
+        }
+        return templates;
     }
     
     // General RDF helper functions

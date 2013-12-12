@@ -1,0 +1,22 @@
+{       
+    "type"  : "Composite",
+    "bind" : {"$base" : "http://example.com/test"},
+    "oneOffs" : [{
+        "@id" : "<{$base}>",
+        "<rdf:type>" : "<skos:Collection>",
+        "<rdfs:label>" : "A test collection"
+    }],
+    "templates" : [{
+        "bind" : {"code" : "{notation}"},
+        "template" : "skos-test"
+    }],
+    "referenced" : [{
+        "name" : "skos-test",
+        "@id" : "<{$base}/{code}>",
+        "<rdf:type>" : "<skos:Concept>",
+        "<skos:notation>" : "{code.toString()}",
+        "<dct:description>" : "{description}",
+        "<skos:prefLabel>" : "{label}",
+        "<skos:inScheme>" : "{$dataset}"
+    }]
+}

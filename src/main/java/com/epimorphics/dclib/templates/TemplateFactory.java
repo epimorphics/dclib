@@ -56,10 +56,15 @@ public class TemplateFactory {
                 return new ParameterizedTemplate(jo, dc);
             } else if (HierarchyTemplate.isSpec(jo)) {
                 return new HierarchyTemplate(jo, dc);
+            } else if (CompositeTemplate.isSpec(jo)) {
+                return new CompositeTemplate(jo, dc);
             } else {
                 return null;
             }
+        } else if (json.isString()) {
+            return new TemplateRef( json.getAsString().value(), dc);
         } else {
+            
             throw new EpiException("Templates must be specified as a JSON object or an array of objects");
         }
     }

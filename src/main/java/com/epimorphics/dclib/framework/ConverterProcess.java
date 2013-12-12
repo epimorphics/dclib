@@ -67,12 +67,11 @@ public class ConverterProcess {
     protected Model  result;   // May not be used if the stream is set directly  
     
     public ConverterProcess(DataContext context, InputStream data) {
-        dataContext = context;
+        dataContext = new DataContext( context );
         
-        // Set of stable binding values - merge rather than chain since we'll be doing a lot of lookups
-        env = new BindingEnv( );
-        env.putAll( dataContext.getGlobalEnv() );
-        
+        // Could flatten env here to avoid chaining lookup
+        env = dataContext.getGlobalEnv();
+
         dataSource = new CSVReader( new InputStreamReader(data) );
         try {
             String[] headerLine = dataSource.readNext();
@@ -158,6 +157,8 @@ public class ConverterProcess {
     }
     
     private void preprocess() throws IOException {
+        getTemplate().preamble(this);
+        
         Node dataset = NodeFactory.createAnon();
         
         Object baseURI = env.get(BASE_OBJECT_NAME);

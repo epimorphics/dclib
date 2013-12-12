@@ -68,4 +68,9 @@ public class TemplateRef implements Template {
         return getTemplate().isApplicableTo(row);
     }
 
+    @Override
+    public void preamble(ConverterProcess config) {
+        getTemplate().preamble(config);
+    }
+
 }
