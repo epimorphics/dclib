@@ -50,12 +50,17 @@ public class TestFunctions {
         assertEquals("stub-a", values[0]);
         assertEquals("stub-b", values[1]);
         assertEquals("stub-c", values[2]);
+        assertEquals("12", eval("UK012", "{x.regex('UK0?([0-9]*)')}").toString() );
+        assertTrue( (Boolean)eval("UK012", "{x.matches('UK0?([0-9]*)')}") );
+        assertFalse( (Boolean)eval("UK0a", "{x.matches('UK0?([0-9]*)')}") );
+        assertEquals("12", eval("UK12", "{x.substring(2)}").toString() );
     }
     
     private Object eval(String value, String pattern) {
         DataContext dc = new DataContext();
         BindingEnv env = new BindingEnv();
         env.put("x", ValueFactory.asValue(value));
-        return new Pattern(pattern, dc).evaluate(env);
+        Object result = new Pattern(pattern, dc).evaluate(env);
+        return result;
     }
 }

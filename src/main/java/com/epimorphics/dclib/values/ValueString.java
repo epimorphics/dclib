@@ -9,6 +9,10 @@
 
 package com.epimorphics.dclib.values;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import com.epimorphics.dclib.framework.NullResult;
 import com.epimorphics.util.NameUtils;
 
 public class ValueString extends ValueBase<String> implements Value {
@@ -52,6 +56,23 @@ public class ValueString extends ValueBase<String> implements Value {
     
     public Object substring(int start, int end) {
         return new ValueString( value.substring(start, end) );
+    }
+    
+    public Object regex(String regex) {
+        Matcher m = Pattern.compile(regex).matcher(value);
+        if (m.matches()) {
+            if (m.groupCount() > 0) {
+                return new ValueString( m.group(1) );
+            } else {
+                return this;
+            }
+        } else {
+            throw new NullResult("Regex " + regex + " did not match");
+        }
+    }
+    
+    public boolean matches(String regex) {
+        return value.matches(regex);
     }
     
     // TODO implement string manipulation functions
