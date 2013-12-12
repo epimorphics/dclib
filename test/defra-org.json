@@ -1,4 +1,5 @@
 [{
+    "type" : "Hierarchy",
     "required" : ["label", "id1", "id2"],
     "parentLink" : "<org:subOrganizationOf>" ,
     "childLink" : "<org:hasSubOrganization>" ,

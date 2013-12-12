@@ -33,7 +33,11 @@ public class ParameterizedTemplate extends TemplateBase implements Template {
      * Test if a json object specifies on of these templates
      */
     public static boolean isSpec(JsonObject spec) {
-        return spec.hasKey( JSONConstants.BIND ) && spec.hasKey( JSONConstants.TEMPLATE );
+        if (spec.hasKey(JSONConstants.TYPE)) {
+            return  spec.get(JSONConstants.TYPE).getAsString().value().equals(JSONConstants.LET);
+        } else {
+            return spec.hasKey( JSONConstants.BIND ) && spec.hasKey( JSONConstants.TEMPLATE );
+        }
     }
 
     public ParameterizedTemplate(JsonObject spec, DataContext dc) {

@@ -1,4 +1,5 @@
 {
+    "type" : "Let",
     "bind" : { "notation" : "{code}", "label" : "{name}" },
     "template" : "simple-skos"
 }

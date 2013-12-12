@@ -1,4 +1,5 @@
 {
+    "type" : "Hierarchy",
     "parentLink" : "<skos:broader>" ,
     "childLink" : "<skos:narrower>" ,
     "0" : { "bind" : {"notation" : "{id1}", "label" : "{label1}"}, "template" : "simple-skos" },

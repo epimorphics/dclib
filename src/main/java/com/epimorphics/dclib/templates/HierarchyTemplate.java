@@ -34,7 +34,11 @@ public class HierarchyTemplate extends TemplateBase implements Template {
      * Test if a json object specifies on of these templates
      */
     public static boolean isSpec(JsonObject spec) {
-        return spec.hasKey( JSONConstants.PARENT ) || spec.hasKey( JSONConstants.CHILD );
+        if (spec.hasKey(JSONConstants.TYPE)) {
+            return spec.get(JSONConstants.TYPE).getAsString().value().equals(JSONConstants.HIERARCHY);
+        } else {
+            return spec.hasKey( JSONConstants.PARENT ) || spec.hasKey( JSONConstants.CHILD );
+        }
     }
  
     public HierarchyTemplate(JsonObject spec, DataContext dc) {

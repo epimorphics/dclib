@@ -1,5 +1,6 @@
 [
   {
+    "type" : "Hierarchy",
     "parentLink" : "<skos:broader>" ,
     "childLink" : "<skos:narrower>" ,
     "topLink" : "<skos:hasTopConcept>",
