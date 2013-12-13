@@ -1,0 +1,15 @@
+<http://example.com/2>
+        a       <http://www.w3.org/2004/02/skos/core#Concept> , <http://www.w3.org/2000/01/rdf-schema#Resource> ;
+        <http://www.w3.org/2004/02/skos/core#notation>
+                "2" ;
+        <http://www.w3.org/2004/02/skos/core#prefLabel>
+                "Entry 2" .
+
+<http://example.com/1>
+        a       <http://www.w3.org/2004/02/skos/core#Concept> , <http://www.w3.org/2000/01/rdf-schema#Resource> ;
+        <http://purl.org/dc/terms/description>
+                "Description for 1" ;
+        <http://www.w3.org/2004/02/skos/core#notation>
+                "1" ;
+        <http://www.w3.org/2004/02/skos/core#prefLabel>
+                "Entry 1" .
