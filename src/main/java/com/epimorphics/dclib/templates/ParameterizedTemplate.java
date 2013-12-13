@@ -58,7 +58,7 @@ public class ParameterizedTemplate extends TemplateBase implements Template {
         for (Entry<String, Pattern> ent : parameters.entrySet()) {
             try {
                 config.debugCheck(row, rowNumber, ent.getValue());
-                Object value = ent.getValue().evaluate(row);
+                Object value = ent.getValue().evaluate(row, config.getDataContext());
                 env.put(ent.getKey(), value);
             } catch (NullResult e) {
                 // TODO should this be a fatal error instead of an abort?

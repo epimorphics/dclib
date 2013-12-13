@@ -79,7 +79,7 @@ public class Pattern {
     /**
      * Interpret the pattern in some binding environment of variables.
      */
-    public Object evaluate(BindingEnv env) {
+    public Object evaluate(BindingEnv env, DataContext dc) {
         if (isConstant) {
             return components.get(0);
         } else if (components.size() == 1) {
@@ -95,14 +95,14 @@ public class Pattern {
                 if (result instanceof Value && ((Value)result).isMulti()) {
                     if (!multiValued) {
                         multiValued = true;
-                        ans = new ValueString( ansString.toString() );
+                        ans = new ValueString( ansString.toString(), dc );
                     }
                 }
                 if (multiValued) {
                     if (result instanceof Value) {
                         ans = ans.append( (Value)result );
                     } else {
-                        ans = ans.append( new ValueString(result.toString()) );
+                        ans = ans.append( new ValueString(result.toString(), dc) );
                     }
                 } else {
                     ansString.append( result.toString() );
@@ -111,7 +111,7 @@ public class Pattern {
             if (multiValued) {
                 return ans;
             } else {
-                return new ValueString(ansString.toString());
+                return new ValueString(ansString.toString(), dc);
             }
         }
     }
@@ -121,8 +121,8 @@ public class Pattern {
      * Interpret the pattern in some binding environment of variables.
      * Return the result converted to an RDF Node
      */
-    public Node evaluateAsNode(BindingEnv env) {
-        return asNode( evaluate(env) );
+    public Node evaluateAsNode(BindingEnv env, DataContext dc) {
+        return asNode( evaluate(env, dc) );
     }
 
     /**
@@ -130,8 +130,8 @@ public class Pattern {
      * Return the result converted to a resource Node or throw an
      * exception if this is not possible
      */
-    public Node evaluateAsURINode(BindingEnv env) {
-        return asNode( evaluate(env) );
+    public Node evaluateAsURINode(BindingEnv env, DataContext dc) {
+        return asNode( evaluate(env, dc) );
     }
 
     /**

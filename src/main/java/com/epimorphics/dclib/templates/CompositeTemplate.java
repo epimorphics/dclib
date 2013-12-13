@@ -66,6 +66,8 @@ public class CompositeTemplate extends TemplateBase implements Template {
     
     @Override
     public void preamble(ConverterProcess config) {
+        super.preamble(config);
+        
         DataContext dc = config.getDataContext();
         BindingEnv env = config.getEnv();
         
@@ -74,7 +76,7 @@ public class CompositeTemplate extends TemplateBase implements Template {
             JsonObject binding = spec.get(JSONConstants.BIND).getAsObject();
             for (Entry<String, JsonValue> ent : binding.entrySet()) {
                 Pattern p = new Pattern(ent.getValue().getAsString().value(), dc);
-                env.put(ent.getKey(), p.evaluate(env));
+                env.put(ent.getKey(), p.evaluate(env, dc));
             }
         }
         

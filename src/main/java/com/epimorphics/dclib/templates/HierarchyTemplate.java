@@ -109,7 +109,7 @@ public class HierarchyTemplate extends TemplateBase implements Template {
     protected void condLink(ConverterProcess config, BindingEnv row, Pattern link,
             Node resource, Node parent) {
         if (link != null) {
-            Node linkn = link.evaluateAsNode( row );
+            Node linkn = link.evaluateAsNode( row, config.getDataContext() );
             config.getOutputStream().triple( new Triple(resource, linkn, parent) );
         }
     }

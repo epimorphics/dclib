@@ -24,12 +24,11 @@ import com.hp.hpl.jena.shared.PrefixMapping;
  * @author <a href="mailto:dave@epimorphics.com">Dave Reynolds</a>
  */
 public class DataContext {
-    // TODO sources
-    
     protected Map<String, Template> templates = new HashMap<String, Template>();
     protected PrefixMapping prefixes;
     protected BindingEnv env = new BindingEnv();
     protected DataContext parent;
+    protected Map<String, MapSource> sources = new HashMap<>();
     
     public DataContext() {
     }
@@ -95,5 +94,28 @@ public class DataContext {
             template = parent.getTemplate(name);
         }
         return template;
+    }
+    
+    /**
+     * Register a new data source
+     */
+    public void registerSource(MapSource source) {
+        String name = source.getName();
+        if (name != null) {
+            sources.put(name, source);
+        } else {
+            throw new EpiException("Can't register a nameless source: " + source);
+        }
+    }
+    
+    /**
+     * Find a named source
+     */
+    public MapSource getSource(String name) {
+        MapSource source = sources.get(name);
+        if (source == null && parent != null) {
+            source = parent.getSource(name);
+        }
+        return source;
     }
 }

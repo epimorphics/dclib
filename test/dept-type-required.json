@@ -1,0 +1,16 @@
+{       
+    "type"  : "Composite",
+    "bind" : {"$base" : "http://example.com/test"},
+     "templates" : {
+        "@id" : "<{$base}/{label.toSegment()}>",
+        "<rdfs:label>" : "{label}",
+        "<rdf:type>" : "{type.map('dept-types', true)}"
+    },
+    "sources" : {
+        "type" : "CSV",
+        "name" : "dept-types",
+        "source" : "test/department-types.csv",
+        "key" : "label",
+        "value" : "id"
+    }
+}

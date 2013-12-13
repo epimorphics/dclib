@@ -23,9 +23,9 @@ public class TestPattern {
     DataContext dc = new DataContext();
 
     public TestPattern() {
-        env.set("a", ValueFactory.asValue("a string"));
-        env.set("b", ValueFactory.asValue("foo bar"));
-        env.set("i", ValueFactory.asValue("42"));
+        env.set("a", ValueFactory.asValue("a string", dc));
+        env.set("b", ValueFactory.asValue("foo bar", dc));
+        env.set("i", ValueFactory.asValue("42", dc));
         
         dc.setPrefixes( FileManager.get().loadModel("prefixes.ttl") );
     }
@@ -68,6 +68,6 @@ public class TestPattern {
     }
     
     private Object eval(String pattern) {
-        return new Pattern(pattern, dc).evaluate(env);
+        return new Pattern(pattern, dc).evaluate(env, dc);
     }
 }

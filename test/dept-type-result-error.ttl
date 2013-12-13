@@ -1,0 +1,18 @@
+<http://example.com/test/Rural_Payments_Agency>
+        a       <http://reference.data.gov.uk/def/central-government/ExecutiveAgency> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "Rural Payments Agency" .
+
+<http://example.com/test/Forestry_Commission>
+        a       <http://reference.data.gov.uk/def/central-government/NonMinisterialDepartment> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "Forestry Commission" .
+
+<http://example.com/test/Animal_Health_Veterinary_Laboratories_Agency>
+        a       <http://reference.data.gov.uk/def/central-government/ExecutiveAgency> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "Animal Health Veterinary Laboratories Agency" .
+
+<http://example.com/test/Department_for_Environment_Food_Rural_Affairs>
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "Department for Environment, Food & Rural Affairs" .

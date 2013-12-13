@@ -61,8 +61,8 @@ public class TestFunctions {
     private Object eval(String value, String pattern) {
         DataContext dc = new DataContext();
         BindingEnv env = new BindingEnv();
-        env.put("x", ValueFactory.asValue(value));
-        Object result = new Pattern(pattern, dc).evaluate(env);
+        env.put("x", ValueFactory.asValue(value, dc));
+        Object result = new Pattern(pattern, dc).evaluate(env, dc);
         return result;
     }
 }

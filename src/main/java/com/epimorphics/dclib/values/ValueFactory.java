@@ -12,6 +12,8 @@ package com.epimorphics.dclib.values;
 import java.math.BigDecimal;
 import java.util.regex.Pattern;
 
+import com.epimorphics.dclib.framework.DataContext;
+
 /**
  * Construct Objects suitable for scripting from string sources.
  * Implements default parsing rules for numbers and dates.
@@ -24,7 +26,7 @@ public class ValueFactory {
     protected static final Pattern DECIMAL_PATTERN = Pattern.compile("[0-9]+\\.[0-9]+");
     protected static final Pattern FLOAT_PATTERN = Pattern.compile("[0-9]+(\\.[0-9]+)?[eE][-+][0-9]+(\\.[0-9]+)?");
     
-    public static Object asValue(String string) {
+    public static Object asValue(String string, DataContext dc) {
         if (string == null || string.isEmpty()) {
             return new ValueNull();
         } else if (INTEGER_PATTERN.matcher(string).matches()) {
@@ -35,7 +37,7 @@ public class ValueFactory {
             return new BigDecimal(string);
         } else {
             // TODO handle dates
-            return new ValueString(string);
+            return new ValueString(string, dc);
         }
     }
 }

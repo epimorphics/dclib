@@ -1,0 +1,10 @@
+Label,ID
+Public Body,http://reference.data.gov.uk/def/central-government/PublicBody
+Advisory NDPB,http://reference.data.gov.uk/def/central-government/AdvisoryNDPB
+NonMinisterial Department,http://reference.data.gov.uk/def/central-government/NonMinisterialDepartment
+Non-Departmental Public Body,http://reference.data.gov.uk/def/central-government/NonDepartmentalPublicBody
+Ministerial Department,http://reference.data.gov.uk/def/central-government/MinisterialDepartment
+Executive NDPB,http://reference.data.gov.uk/def/central-government/ExecutiveNDPB
+Tribunal NDPB,http://reference.data.gov.uk/def/central-government/TribunalNDPB
+Monitoring NDPB,http://reference.data.gov.uk/def/central-government/MonitoringNDPB
+Executive Agency,http://reference.data.gov.uk/def/central-government/ExecutiveAgency

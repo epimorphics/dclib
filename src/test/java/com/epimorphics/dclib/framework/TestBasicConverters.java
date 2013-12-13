@@ -62,11 +62,24 @@ public class TestBasicConverters {
         checkAgainstExpected("test/top.json", "test/test-map.csv", "test/top.ttl");
     }
     
-    public static void checkAgainstExpected(String templateFile, String dataFile, String resultFile) throws IOException {
+    @Test
+    public void testMapping() throws IOException {
+        checkAgainstExpected("test/dept-type.json", "test/dept-type-data.csv", "test/dept-type-result.ttl");
+        checkAgainstExpected("test/dept-type.json", "test/dept-type-data-error.csv", "test/dept-type-result-error.ttl");
+        // Next one should fail but current doesn't
+        checkAgainstExpected("test/dept-type-required.json", "test/dept-type-data-error.csv", "test/dept-type-result-error.ttl");
+    }
+    
+    public static Model convert(String templateFile, String dataFile) throws IOException {
         ConverterService service = new ConverterService();
         service.getDataContext().registerTemplate("test/simple-skos-template.json");
         service.put("$base", "http://example.com/");
         Model m = service.simpleConvert(templateFile, dataFile);
+        return m;
+    }
+    
+    public static void checkAgainstExpected(String templateFile, String dataFile, String resultFile) throws IOException {
+        Model m = convert(templateFile, dataFile);
         assertNotNull(m);
         String DUMMY = "http://example.com/DONOTUSE/";
         Model expected = FileManager.get().loadModel(resultFile, DUMMY, "Turtle");

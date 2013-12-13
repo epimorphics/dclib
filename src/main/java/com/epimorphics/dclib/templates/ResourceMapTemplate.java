@@ -72,9 +72,10 @@ public class ResourceMapTemplate extends TemplateBase implements Template {
     public Node convertRow(ConverterProcess config, BindingEnv row,
             int rowNumber) {
         super.convertRow(config, row, rowNumber);
+        DataContext dc = config.getDataContext();
         StreamRDF out = config.getOutputStream();
         config.debugCheck(row, rowNumber, root);
-        Node subject = root.evaluateAsURINode(row);
+        Node subject = root.evaluateAsURINode(row, dc);
         if (subject == null) return subject;
         for (Map.Entry<Pattern, Pattern> entry : patterns.entrySet()) {
             Pattern propPattern = entry.getKey();
@@ -82,8 +83,8 @@ public class ResourceMapTemplate extends TemplateBase implements Template {
             Pattern valPattern = entry.getValue();
             config.debugCheck(row, rowNumber, valPattern);
             try {
-                Node prop = propPattern.evaluateAsNode(row);
-                Object value = valPattern.evaluate(row);
+                Node prop = propPattern.evaluateAsNode(row, dc);
+                Object value = valPattern.evaluate(row, dc);
                 if (value instanceof ValueStringArray) {
                     for (Object v : ((ValueStringArray) value).getValues()) {
                         out.triple(asTriple(propPattern, valPattern, subject,

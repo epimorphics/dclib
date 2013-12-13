@@ -9,6 +9,8 @@
 
 package com.epimorphics.dclib.values;
 
+import com.epimorphics.dclib.framework.DataContext;
+
 /**
  * Wraps an array of strings, e.g. from a split operation. This allows
  * a pattern to return multiple results.
@@ -17,8 +19,8 @@ package com.epimorphics.dclib.values;
  */
 public class ValueStringArray extends ValueBase<String[]> implements Value {
     
-    public ValueStringArray(String[] values) {
-        super(values);
+    public ValueStringArray(String[] values, DataContext dc) {
+        super(values, dc);
     }
 
     @Override
@@ -47,13 +49,13 @@ public class ValueStringArray extends ValueBase<String[]> implements Value {
                     results[i*len + j] = value[i] + apps[j];
                 }
             }
-            return new ValueStringArray(results);
+            return new ValueStringArray(results, dc);
         } else {
             String[] results = new String[value.length];
             for (int i = 0; i < value.length; i++) {
                 results[i] = value[i] + app.toString();
             }
-            return new ValueStringArray(results);
+            return new ValueStringArray(results, dc);
         }
     }
 

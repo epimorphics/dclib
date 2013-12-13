@@ -12,18 +12,21 @@ package com.epimorphics.dclib.values;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.epimorphics.dclib.framework.DataContext;
+import com.epimorphics.dclib.framework.MatchFailed;
 import com.epimorphics.dclib.framework.NullResult;
 import com.epimorphics.rdfutil.RDFUtil;
 import com.epimorphics.util.NameUtils;
+import com.hp.hpl.jena.graph.Node;
 
 public class ValueString extends ValueBase<String> implements Value {
-
-    public ValueString(String value) {
-        super(value);
+    
+    public ValueString(String value, DataContext dc) {
+        super(value, dc);
     }
 
     public ValueStringArray split(String pattern) {
-        return new ValueStringArray( value.split(pattern) );
+        return new ValueStringArray( value.split(pattern), dc );
     }
     
     @Override
@@ -44,26 +47,26 @@ public class ValueString extends ValueBase<String> implements Value {
     }
     
     public Object toNumber() {
-        return ValueFactory.asValue(value);
+        return ValueFactory.asValue(value, dc);
     }
     
     public Object trim() {
-        return new ValueString( value.trim() );
+        return new ValueString( value.trim(), dc );
     }
     
     public Object substring(int offset) {
-        return new ValueString( value.substring(offset) );
+        return new ValueString( value.substring(offset), dc );
     }
     
     public Object substring(int start, int end) {
-        return new ValueString( value.substring(start, end) );
+        return new ValueString( value.substring(start, end), dc );
     }
     
     public Object regex(String regex) {
         Matcher m = Pattern.compile(regex).matcher(value);
         if (m.matches()) {
             if (m.groupCount() > 0) {
-                return new ValueString( m.group(1) );
+                return new ValueString( m.group(1), dc );
             } else {
                 return this;
             }
@@ -77,8 +80,28 @@ public class ValueString extends ValueBase<String> implements Value {
     }
     
     public Object lastSegment() {
-        return new ValueString( RDFUtil.getLocalname( value ) );
+        return new ValueString( RDFUtil.getLocalname( value ), dc );
     }
     
-    // TODO implement string manipulation functions
+    public Node map(String mapsource, boolean matchRequried) {
+        Node n = dc.getSource(mapsource).lookup(value);
+        if (n == null) {
+            String msg = "Value '" + value + "' not found in source " + mapsource;
+            if (matchRequried) {
+                throw new MatchFailed(msg);
+            } else {
+                throw new NullResult(msg);
+            }
+        }
+        return n;
+    }
+    
+    public Node map(String mapsource) {
+        Node n = dc.getSource(mapsource).lookup(value);
+        if (n == null) {
+            throw new MatchFailed("Value '" + value + "' not found in source " + mapsource);
+        }
+        return n;
+    }
+    
 }

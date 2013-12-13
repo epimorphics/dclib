@@ -11,21 +11,19 @@ package com.epimorphics.dclib.framework;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.util.Map.Entry;
 
 import org.apache.jena.riot.system.StreamRDF;
 import org.apache.jena.riot.system.StreamRDFLib;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import au.com.bytecode.opencsv.CSVReader;
-
+import com.epimorphics.dclib.sources.CSVInput;
 import com.epimorphics.dclib.values.Row;
 import com.epimorphics.dclib.values.ValueFactory;
 import com.epimorphics.tasks.ProgressReporter;
 import com.epimorphics.tasks.SimpleProgressMonitor;
 import com.epimorphics.tasks.TaskState;
-import com.epimorphics.util.NameUtils;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.NodeFactory;
 import com.hp.hpl.jena.graph.Triple;
@@ -52,11 +50,8 @@ public class ConverterProcess {
     protected DataContext dataContext;
     protected ProgressReporter messageReporter = new SimpleProgressMonitor();
     
-    protected String[] headers;
-    protected CSVReader dataSource;
-    protected boolean hasPreamble = false;
-    protected String[] peekRow;
-    protected int lineNumber = 0;
+    protected CSVInput dataSource;
+
     protected boolean debug = false;
     
     protected Template template;
@@ -72,17 +67,9 @@ public class ConverterProcess {
         // Could flatten env here to avoid chaining lookup
         env = dataContext.getGlobalEnv();
 
-        dataSource = new CSVReader( new InputStreamReader(data) );
         try {
-            String[] headerLine = dataSource.readNext();
-            headers = new String[headerLine.length];
-            for(int i = 0; i < headerLine.length; i++) {
-                headers[i] = NameUtils.safeVarName( headerLine[i].trim() );
-            }
-            lineNumber++;
-            if (headerLine.length > 1 && headerLine[0].equals("#")) {
-                hasPreamble = true;
-            }
+            dataSource = new CSVInput( data );
+
             // Default is to converter into an in-memory model, can override by setting explicit StreamRDF dest
             setModel( ModelFactory.createDefaultModel() );
             
@@ -121,6 +108,7 @@ public class ConverterProcess {
             messageReporter.setState( TaskState.Running );
     
             while(true) {
+                int lineNumber = dataSource.getLineNumber();
                 if (lineNumber % BATCH_SIZE == 0) {
                     messageReporter.report("Processing row " + lineNumber);
                 }
@@ -144,7 +132,6 @@ public class ConverterProcess {
                 } else {
                     break;
                 }
-                lineNumber++;
             }
         } catch (IOException e) {
             messageReporter.report("Problem reading next line of source");
@@ -154,6 +141,16 @@ public class ConverterProcess {
         close();
         
         return messageReporter.succeeded();
+    }
+    
+    private BindingEnv nextRow() throws IOException {
+        BindingEnv row = dataSource.nextRow();
+        if (row == null) return null;
+        BindingEnv wrapped = new BindingEnv(env);
+        for (Entry<String, Object> entry : row.entrySet()) {
+            wrapped.put(entry.getKey(), ValueFactory.asValue(entry.getValue().toString(), dataContext));
+        }
+        return wrapped;
     }
     
     private void preprocess() throws IOException {
@@ -168,10 +165,9 @@ public class ConverterProcess {
         }
 
         // Check for linkedcsv-style preamble
-        if (hasPreamble) {
+        if (dataSource.hasPreamble()) {
             while (true) {
-                peekRow = dataSource.readNext();
-                lineNumber++;
+                String[] peekRow = dataSource.peekRow();
                 if (peekRow == null || peekRow.length == 0 || peekRow[0].isEmpty()) {
                     break;
                 }
@@ -184,45 +180,25 @@ public class ConverterProcess {
                             env.put(DATASET_OBJECT_NAME, dataset);
                         } else {
                             try {
-                                Node prop = new Pattern(peekRow[1], dataContext).evaluateAsURINode(env);
-                                Node value = new Pattern(peekRow[2], dataContext).evaluateAsNode(env);
+                                Node prop = new Pattern(peekRow[1], dataContext).evaluateAsURINode(env, dataContext);
+                                Node value = new Pattern(peekRow[2], dataContext).evaluateAsNode(env, dataContext);
                                 getOutputStream().triple( new Triple(dataset, prop, value) );
                             } catch (Exception e) {
-                                messageReporter.report("Failed to process metadata row: " + e, lineNumber);
+                                messageReporter.report("Failed to process metadata row: " + e, dataSource.getLineNumber());
                             }
                         }
                     } else {
-                        messageReporter.report("Badly formed metadata row", lineNumber);
+                        messageReporter.report("Badly formed metadata row", dataSource.getLineNumber());
                     }
                 } else {
-                    messageReporter.report("Unrecognized preamble row: " + peekRow[0], lineNumber);
+                    messageReporter.report("Unrecognized preamble row: " + peekRow[0], dataSource.getLineNumber());
                 }
             }
         }
     }
     
-    private BindingEnv nextRow() throws IOException {
-        if (dataSource != null) {
-            String[] rowValues = (peekRow != null) ? peekRow : dataSource.readNext(); 
-            peekRow = null;
-            if (rowValues == null || rowValues.length == 0) {
-                return null;
-            }
-            BindingEnv row = new BindingEnv( env );
-            for (int i = 0; i < headers.length; i++) {
-                row.put(headers[i], ValueFactory.asValue(rowValues[i]));
-            }
-            return row;
-        }
-        return null;
-    }
-
     private void close() {
-        try {
-            dataSource.close();
-        } catch (IOException e) {
-            // Ignore
-        }
+        dataSource.close();
         dataSource = null;
         messageReporter.setState(TaskState.Terminated);
     }
@@ -234,7 +210,7 @@ public class ConverterProcess {
     public void debugCheck(BindingEnv row, int rowNumber, Pattern p) {
         if (isDebugging()) {
             try {
-                p.evaluate(row);
+                p.evaluate(row, dataContext);
             } catch (Exception e) {
                 getMessageReporter().report("Debug: pattern " + p + " failed to match environment " + row, rowNumber);
             }
@@ -274,10 +250,10 @@ public class ConverterProcess {
     }
 
     public String[] getHeaders() {
-        return headers;
+        return dataSource.getHeaders();
     }
 
-    public CSVReader getDataSource() {
+    public CSVInput getDataSource() {
         return dataSource;
     }
 

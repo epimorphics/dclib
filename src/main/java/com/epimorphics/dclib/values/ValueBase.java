@@ -9,16 +9,20 @@
 
 package com.epimorphics.dclib.values;
 
+import com.epimorphics.dclib.framework.DataContext;
+
 /**
  * A simple packaged value.
  * 
  * @author <a href="mailto:dave@epimorphics.com">Dave Reynolds</a>
  */
 public class ValueBase<T> implements Value {
+    protected DataContext dc;
     protected T value;
     
-    public ValueBase(T value) {
+    public ValueBase(T value, DataContext dc) {
         this.value = value;
+        this.dc = dc;
     }
 
     @Override
@@ -50,9 +54,9 @@ public class ValueBase<T> implements Value {
             for (int i = 0; i < values.length; i++) {
                 results[i] = base + values[i];
             }
-            return new ValueStringArray(results);
+            return new ValueStringArray(results, dc);
         } else {
-            return new ValueString(base + val.toString());
+            return new ValueString(base + val.toString(), dc);
         }
     }
 

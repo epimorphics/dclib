@@ -9,6 +9,7 @@
 
 package com.epimorphics.dclib.templates;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -19,8 +20,10 @@ import org.apache.jena.atlas.json.JsonValue;
 import com.epimorphics.dclib.framework.BindingEnv;
 import com.epimorphics.dclib.framework.ConverterProcess;
 import com.epimorphics.dclib.framework.DataContext;
+import com.epimorphics.dclib.framework.MapSource;
 import com.epimorphics.dclib.framework.Pattern;
 import com.epimorphics.dclib.framework.Template;
+import com.epimorphics.dclib.sources.MapSourceFactory;
 import com.epimorphics.dclib.values.ValueNull;
 import com.epimorphics.util.EpiException;
 import com.epimorphics.util.NameUtils;
@@ -109,12 +112,38 @@ public class TemplateBase implements Template {
         return null;
     }
     
-    
     /**
      * Execute any one-off parts of the template
      */
     public void preamble(ConverterProcess config) {
-        // do nothing
+        if (spec.hasKey(JSONConstants.SOURCES)) {
+            JsonValue sspec = spec.get(JSONConstants.SOURCES);
+            if (sspec != null) {
+                if (sspec.isObject()) {
+                    processSourceSpec(sspec, config);
+                } else if (sspec.isArray()) {
+                    for (Iterator<JsonValue> i = sspec.getAsArray().iterator(); i.hasNext();) {
+                        processSourceSpec(i.next(), config);
+                    }
+                }
+            }
+        }
+    }
+    
+    private void processSourceSpec(JsonValue spec, ConverterProcess config) {
+        try {
+            MapSource source = null;
+            if (spec.isObject()) {
+                source = MapSourceFactory.sourceFrom(spec.getAsObject(), config);
+            }
+            if (source == null) {
+                throw new EpiException("Failed to instantiate mapping source: " + spec);
+            } else {
+                config.getDataContext().registerSource(source);
+            }
+        } catch (IOException e) {
+            throw new EpiException(e);
+        }
     }
 
 
