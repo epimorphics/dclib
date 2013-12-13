@@ -54,6 +54,8 @@ public class TestFunctions {
         assertTrue( (Boolean)eval("UK012", "{x.matches('UK0?([0-9]*)')}") );
         assertFalse( (Boolean)eval("UK0a", "{x.matches('UK0?([0-9]*)')}") );
         assertEquals("12", eval("UK12", "{x.substring(2)}").toString() );
+        assertEquals("baz", eval("http://foo/bar/baz", "{x.lastSegment()}").toString() );
+        assertEquals("baz", eval("http://foo/bar#baz", "{x.lastSegment()}").toString() );
     }
     
     private Object eval(String value, String pattern) {

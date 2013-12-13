@@ -13,6 +13,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.epimorphics.dclib.framework.NullResult;
+import com.epimorphics.rdfutil.RDFUtil;
 import com.epimorphics.util.NameUtils;
 
 public class ValueString extends ValueBase<String> implements Value {
@@ -73,6 +74,10 @@ public class ValueString extends ValueBase<String> implements Value {
     
     public boolean matches(String regex) {
         return value.matches(regex);
+    }
+    
+    public Object lastSegment() {
+        return new ValueString( RDFUtil.getLocalname( value ) );
     }
     
     // TODO implement string manipulation functions

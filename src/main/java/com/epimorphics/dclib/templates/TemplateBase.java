@@ -100,7 +100,8 @@ public class TemplateBase implements Template {
     public Node convertRow(ConverterProcess config, BindingEnv row, int rowNumber) {
         if (requiredColumns != null) {
             for (String required : requiredColumns) {
-                if (!row.containsKey(required)) {
+                Object binding = row.get(required);
+                if (binding == null || binding instanceof ValueNull) {
                     throw new EpiException("Missing parameter '" + required + "' required for template " + getName());
                 }
             }
