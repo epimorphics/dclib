@@ -52,20 +52,20 @@ public class ParameterizedTemplate extends TemplateBase implements Template {
     }
 
     @Override
-    public Node convertRow(ConverterProcess config, BindingEnv row, int rowNumber) {
-        super.convertRow(config, row, rowNumber);
+    public Node convertRow(ConverterProcess proc, BindingEnv row, int rowNumber) {
+        super.convertRow(proc, row, rowNumber);
         BindingEnv env = new BindingEnv(row);
         for (Entry<String, Pattern> ent : parameters.entrySet()) {
             try {
-                config.debugCheck(row, rowNumber, ent.getValue());
-                Object value = ent.getValue().evaluate(row, config.getDataContext());
+                proc.debugCheck(row, rowNumber, ent.getValue());
+                Object value = ent.getValue().evaluate(row, proc);
                 env.put(ent.getKey(), value);
             } catch (NullResult e) {
                 // TODO should this be a fatal error instead of an abort?
                 throw new NullResult("Failed to bind variable " + ent.getKey());
             }
         }
-        return template.convertRow(config, env, rowNumber);
+        return template.convertRow(proc, env, rowNumber);
     }    
 
 }

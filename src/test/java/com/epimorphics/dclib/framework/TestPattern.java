@@ -21,11 +21,12 @@ import static org.junit.Assert.*;
 public class TestPattern {
     BindingEnv env = new BindingEnv();
     DataContext dc = new DataContext();
+    ConverterProcess proc = new ConverterProcess(dc, null);
 
     public TestPattern() {
-        env.set("a", ValueFactory.asValue("a string", dc));
-        env.set("b", ValueFactory.asValue("foo bar", dc));
-        env.set("i", ValueFactory.asValue("42", dc));
+        env.set("a", ValueFactory.asValue("a string", proc));
+        env.set("b", ValueFactory.asValue("foo bar", proc));
+        env.set("i", ValueFactory.asValue("42", proc));
         
         dc.setPrefixes( FileManager.get().loadModel("prefixes.ttl") );
     }
@@ -68,6 +69,6 @@ public class TestPattern {
     }
     
     private Object eval(String pattern) {
-        return new Pattern(pattern, dc).evaluate(env, dc);
+        return new Pattern(pattern, dc).evaluate(env, proc);
     }
 }

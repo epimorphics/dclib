@@ -73,29 +73,29 @@ public class HierarchyTemplate extends TemplateBase implements Template {
         }
     }
     
-    public Node convertRow(ConverterProcess config, BindingEnv row, int rowNumber) {
-        super.convertRow(config, row, rowNumber);
-        Node[] state = (Node[]) config.getState();
+    public Node convertRow(ConverterProcess proc, BindingEnv row, int rowNumber) {
+        super.convertRow(proc, row, rowNumber);
+        Node[] state = (Node[]) proc.getState();
         if (state == null) {
             state = new Node[ levelTemplates.size() ];
-            config.setState(state);
+            proc.setState(state);
         }
         
         Node resource = null;
         for (int i = 0; i < state.length; i++) {
             try {
-                resource = levelTemplates.get(i).convertRow(config, row, rowNumber);
+                resource = levelTemplates.get(i).convertRow(proc, row, rowNumber);
                 if (resource != null) {
                     state[i] = resource;
                     if (i > 0 && state[i-1] != null) {
                         Node parent = state[i-1];
-                        condLink(config, row, parentLink, resource, parent);
-                        condLink(config, row, childLink, parent, resource);
+                        condLink(proc, row, parentLink, resource, parent);
+                        condLink(proc, row, childLink, parent, resource);
                     } else if (i == 0) {
                         Node dataset = (Node) row.get(ConverterProcess.DATASET_OBJECT_NAME);
                         if (dataset != null) {
-                            condLink(config, row, topLink, dataset, resource);
-                            condLink(config, row, invTopLink, resource, dataset);
+                            condLink(proc, row, topLink, dataset, resource);
+                            condLink(proc, row, invTopLink, resource, dataset);
                         }
                     }
                 }
@@ -106,11 +106,11 @@ public class HierarchyTemplate extends TemplateBase implements Template {
         return resource;
     }
 
-    protected void condLink(ConverterProcess config, BindingEnv row, Pattern link,
+    protected void condLink(ConverterProcess proc, BindingEnv row, Pattern link,
             Node resource, Node parent) {
         if (link != null) {
-            Node linkn = link.evaluateAsNode( row, config.getDataContext() );
-            config.getOutputStream().triple( new Triple(resource, linkn, parent) );
+            Node linkn = link.evaluateAsNode( row, proc );
+            proc.getOutputStream().triple( new Triple(resource, linkn, parent) );
         }
     }
     

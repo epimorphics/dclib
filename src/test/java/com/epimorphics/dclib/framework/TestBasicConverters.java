@@ -66,8 +66,7 @@ public class TestBasicConverters {
     public void testMapping() throws IOException {
         checkAgainstExpected("test/dept-type.json", "test/dept-type-data.csv", "test/dept-type-result.ttl");
         checkAgainstExpected("test/dept-type.json", "test/dept-type-data-error.csv", "test/dept-type-result-error.ttl");
-        // Next one should fail but current doesn't
-        checkAgainstExpected("test/dept-type-required.json", "test/dept-type-data-error.csv", "test/dept-type-result-error.ttl");
+        assertNull( convert("test/dept-type-required.json", "test/dept-type-data-error.csv") );
     }
     
     public static Model convert(String templateFile, String dataFile) throws IOException {

@@ -68,7 +68,10 @@ public class ConverterProcess {
         env = dataContext.getGlobalEnv();
 
         try {
-            dataSource = new CSVInput( data );
+            if (data != null) {
+                // This is the normal path, null input is normally only used in testing
+                dataSource = new CSVInput( data );
+            }
 
             // Default is to converter into an in-memory model, can override by setting explicit StreamRDF dest
             setModel( ModelFactory.createDefaultModel() );
@@ -148,7 +151,7 @@ public class ConverterProcess {
         if (row == null) return null;
         BindingEnv wrapped = new BindingEnv(env);
         for (Entry<String, Object> entry : row.entrySet()) {
-            wrapped.put(entry.getKey(), ValueFactory.asValue(entry.getValue().toString(), dataContext));
+            wrapped.put(entry.getKey(), ValueFactory.asValue(entry.getValue().toString(), this));
         }
         return wrapped;
     }
@@ -180,8 +183,8 @@ public class ConverterProcess {
                             env.put(DATASET_OBJECT_NAME, dataset);
                         } else {
                             try {
-                                Node prop = new Pattern(peekRow[1], dataContext).evaluateAsURINode(env, dataContext);
-                                Node value = new Pattern(peekRow[2], dataContext).evaluateAsNode(env, dataContext);
+                                Node prop = new Pattern(peekRow[1], dataContext).evaluateAsURINode(env, this);
+                                Node value = new Pattern(peekRow[2], dataContext).evaluateAsNode(env, this);
                                 getOutputStream().triple( new Triple(dataset, prop, value) );
                             } catch (Exception e) {
                                 messageReporter.report("Failed to process metadata row: " + e, dataSource.getLineNumber());
@@ -210,7 +213,7 @@ public class ConverterProcess {
     public void debugCheck(BindingEnv row, int rowNumber, Pattern p) {
         if (isDebugging()) {
             try {
-                p.evaluate(row, dataContext);
+                p.evaluate(row, this);
             } catch (Exception e) {
                 getMessageReporter().report("Debug: pattern " + p + " failed to match environment " + row, rowNumber);
             }

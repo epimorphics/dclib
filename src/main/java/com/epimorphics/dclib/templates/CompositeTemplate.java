@@ -51,12 +51,12 @@ public class CompositeTemplate extends TemplateBase implements Template {
     }
 
     @Override
-    public Node convertRow(ConverterProcess config, BindingEnv row, int rowNumber) {
-        super.convertRow(config, row, rowNumber);
+    public Node convertRow(ConverterProcess proc, BindingEnv row, int rowNumber) {
+        super.convertRow(proc, row, rowNumber);
         
         Node result = null;
         for (Template template : templates) {
-            Node n = template.convertRow(config, row, rowNumber);
+            Node n = template.convertRow(proc, row, rowNumber);
             if (result == null && n != null) {
                 result = n;
             }
@@ -65,25 +65,25 @@ public class CompositeTemplate extends TemplateBase implements Template {
     }
     
     @Override
-    public void preamble(ConverterProcess config) {
-        super.preamble(config);
+    public void preamble(ConverterProcess proc) {
+        super.preamble(proc);
         
-        DataContext dc = config.getDataContext();
-        BindingEnv env = config.getEnv();
+        DataContext dc = proc.getDataContext();
+        BindingEnv env = proc.getEnv();
         
         // Instantiate any global bindings
         if (spec.hasKey(JSONConstants.BIND)) {
             JsonObject binding = spec.get(JSONConstants.BIND).getAsObject();
             for (Entry<String, JsonValue> ent : binding.entrySet()) {
                 Pattern p = new Pattern(ent.getValue().getAsString().value(), dc);
-                env.put(ent.getKey(), p.evaluate(env, dc));
+                env.put(ent.getKey(), p.evaluate(env, proc));
             }
         }
         
         // Process any one-offs
         for (Template t : getTemplates(spec.get(JSONConstants.ONE_OFFS), dc)) {
-            t.preamble(config);
-            t.convertRow(config, env, 0);
+            t.preamble(proc);
+            t.convertRow(proc, env, 0);
         }
     }
 }

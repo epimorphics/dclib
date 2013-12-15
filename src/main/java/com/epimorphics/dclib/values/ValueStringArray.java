@@ -9,7 +9,7 @@
 
 package com.epimorphics.dclib.values;
 
-import com.epimorphics.dclib.framework.DataContext;
+import com.epimorphics.dclib.framework.ConverterProcess;
 
 /**
  * Wraps an array of strings, e.g. from a split operation. This allows
@@ -19,8 +19,8 @@ import com.epimorphics.dclib.framework.DataContext;
  */
 public class ValueStringArray extends ValueBase<String[]> implements Value {
     
-    public ValueStringArray(String[] values, DataContext dc) {
-        super(values, dc);
+    public ValueStringArray(String[] values, ConverterProcess proc) {
+        super(values, proc);
     }
 
     @Override
@@ -49,13 +49,13 @@ public class ValueStringArray extends ValueBase<String[]> implements Value {
                     results[i*len + j] = value[i] + apps[j];
                 }
             }
-            return new ValueStringArray(results, dc);
+            return new ValueStringArray(results, proc);
         } else {
             String[] results = new String[value.length];
             for (int i = 0; i < value.length; i++) {
                 results[i] = value[i] + app.toString();
             }
-            return new ValueStringArray(results, dc);
+            return new ValueStringArray(results, proc);
         }
     }
 

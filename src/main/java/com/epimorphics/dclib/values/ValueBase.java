@@ -9,7 +9,7 @@
 
 package com.epimorphics.dclib.values;
 
-import com.epimorphics.dclib.framework.DataContext;
+import com.epimorphics.dclib.framework.ConverterProcess;
 
 /**
  * A simple packaged value.
@@ -17,12 +17,12 @@ import com.epimorphics.dclib.framework.DataContext;
  * @author <a href="mailto:dave@epimorphics.com">Dave Reynolds</a>
  */
 public class ValueBase<T> implements Value {
-    protected DataContext dc;
+    protected ConverterProcess proc;
     protected T value;
     
-    public ValueBase(T value, DataContext dc) {
+    public ValueBase(T value, ConverterProcess config) {
         this.value = value;
-        this.dc = dc;
+        this.proc = config;
     }
 
     @Override
@@ -54,9 +54,9 @@ public class ValueBase<T> implements Value {
             for (int i = 0; i < values.length; i++) {
                 results[i] = base + values[i];
             }
-            return new ValueStringArray(results, dc);
+            return new ValueStringArray(results, proc);
         } else {
-            return new ValueString(base + val.toString(), dc);
+            return new ValueString(base + val.toString(), proc);
         }
     }
 

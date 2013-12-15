@@ -79,7 +79,7 @@ public class Pattern {
     /**
      * Interpret the pattern in some binding environment of variables.
      */
-    public Object evaluate(BindingEnv env, DataContext dc) {
+    public Object evaluate(BindingEnv env, ConverterProcess proc) {
         if (isConstant) {
             return components.get(0);
         } else if (components.size() == 1) {
@@ -95,14 +95,14 @@ public class Pattern {
                 if (result instanceof Value && ((Value)result).isMulti()) {
                     if (!multiValued) {
                         multiValued = true;
-                        ans = new ValueString( ansString.toString(), dc );
+                        ans = new ValueString( ansString.toString(), proc );
                     }
                 }
                 if (multiValued) {
                     if (result instanceof Value) {
                         ans = ans.append( (Value)result );
                     } else {
-                        ans = ans.append( new ValueString(result.toString(), dc) );
+                        ans = ans.append( new ValueString(result.toString(), proc) );
                     }
                 } else {
                     ansString.append( result.toString() );
@@ -111,18 +111,18 @@ public class Pattern {
             if (multiValued) {
                 return ans;
             } else {
-                return new ValueString(ansString.toString(), dc);
+                return new ValueString(ansString.toString(), proc);
             }
         }
     }
 
 
     /**
-     * Interpret the pattern in some binding environment of variables.
+     * Interpret the pattern in some processing context.
      * Return the result converted to an RDF Node
      */
-    public Node evaluateAsNode(BindingEnv env, DataContext dc) {
-        return asNode( evaluate(env, dc) );
+    public Node evaluateAsNode(BindingEnv env, ConverterProcess proc) {
+        return asNode( evaluate(env, proc) );
     }
 
     /**
@@ -130,8 +130,8 @@ public class Pattern {
      * Return the result converted to a resource Node or throw an
      * exception if this is not possible
      */
-    public Node evaluateAsURINode(BindingEnv env, DataContext dc) {
-        return asNode( evaluate(env, dc) );
+    public Node evaluateAsURINode(BindingEnv env, ConverterProcess proc) {
+        return asNode( evaluate(env, proc) );
     }
 
     /**

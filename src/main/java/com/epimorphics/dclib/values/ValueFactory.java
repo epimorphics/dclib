@@ -12,7 +12,7 @@ package com.epimorphics.dclib.values;
 import java.math.BigDecimal;
 import java.util.regex.Pattern;
 
-import com.epimorphics.dclib.framework.DataContext;
+import com.epimorphics.dclib.framework.ConverterProcess;
 
 /**
  * Construct Objects suitable for scripting from string sources.
@@ -26,7 +26,7 @@ public class ValueFactory {
     protected static final Pattern DECIMAL_PATTERN = Pattern.compile("[0-9]+\\.[0-9]+");
     protected static final Pattern FLOAT_PATTERN = Pattern.compile("[0-9]+(\\.[0-9]+)?[eE][-+][0-9]+(\\.[0-9]+)?");
     
-    public static Object asValue(String string, DataContext dc) {
+    public static Object asValue(String string, ConverterProcess proc) {
         if (string == null || string.isEmpty()) {
             return new ValueNull();
         } else if (INTEGER_PATTERN.matcher(string).matches()) {
@@ -37,7 +37,7 @@ public class ValueFactory {
             return new BigDecimal(string);
         } else {
             // TODO handle dates
-            return new ValueString(string, dc);
+            return new ValueString(string, proc);
         }
     }
 }

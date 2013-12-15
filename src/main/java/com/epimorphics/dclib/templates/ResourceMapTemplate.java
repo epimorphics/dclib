@@ -69,22 +69,21 @@ public class ResourceMapTemplate extends TemplateBase implements Template {
     }
 
     @Override
-    public Node convertRow(ConverterProcess config, BindingEnv row,
+    public Node convertRow(ConverterProcess proc, BindingEnv row,
             int rowNumber) {
-        super.convertRow(config, row, rowNumber);
-        DataContext dc = config.getDataContext();
-        StreamRDF out = config.getOutputStream();
-        config.debugCheck(row, rowNumber, root);
-        Node subject = root.evaluateAsURINode(row, dc);
+        super.convertRow(proc, row, rowNumber);
+        StreamRDF out = proc.getOutputStream();
+        proc.debugCheck(row, rowNumber, root);
+        Node subject = root.evaluateAsURINode(row, proc);
         if (subject == null) return subject;
         for (Map.Entry<Pattern, Pattern> entry : patterns.entrySet()) {
             Pattern propPattern = entry.getKey();
-            config.debugCheck(row, rowNumber, propPattern);
+            proc.debugCheck(row, rowNumber, propPattern);
             Pattern valPattern = entry.getValue();
-            config.debugCheck(row, rowNumber, valPattern);
+            proc.debugCheck(row, rowNumber, valPattern);
             try {
-                Node prop = propPattern.evaluateAsNode(row, dc);
-                Object value = valPattern.evaluate(row, dc);
+                Node prop = propPattern.evaluateAsNode(row, proc);
+                Object value = valPattern.evaluate(row, proc);
                 if (value instanceof ValueStringArray) {
                     for (Object v : ((ValueStringArray) value).getValues()) {
                         out.triple(asTriple(propPattern, valPattern, subject,

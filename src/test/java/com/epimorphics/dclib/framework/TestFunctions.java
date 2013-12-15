@@ -60,9 +60,10 @@ public class TestFunctions {
     
     private Object eval(String value, String pattern) {
         DataContext dc = new DataContext();
+        ConverterProcess proc = new ConverterProcess(dc, null);
         BindingEnv env = new BindingEnv();
-        env.put("x", ValueFactory.asValue(value, dc));
-        Object result = new Pattern(pattern, dc).evaluate(env, dc);
+        env.put("x", ValueFactory.asValue(value, proc));
+        Object result = new Pattern(pattern, dc).evaluate(env, proc);
         return result;
     }
 }
