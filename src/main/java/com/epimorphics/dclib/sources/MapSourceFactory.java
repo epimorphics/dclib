@@ -18,9 +18,11 @@ import com.epimorphics.dclib.framework.MapSource;
 
 public class MapSourceFactory {
 
-    public static MapSource sourceFrom(JsonObject spec, ConverterProcess config) throws IOException {
+    public static MapSource sourceFrom(JsonObject spec, ConverterProcess proc) throws IOException {
         if (CSVMapSource.isSpec(spec)) {
-            return new CSVMapSource(spec, config);
+            return new CSVMapSource(spec, proc);
+        } else if (RDFMapSource.isSpec(spec)) {
+            return new RDFMapSource(spec, proc);
         }
         return null;
     }

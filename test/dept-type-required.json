@@ -7,7 +7,7 @@
         "<rdf:type>" : "{type.map('dept-types', true)}"
     },
     "sources" : {
-        "type" : "CSV",
+        "sourceType" : "CSV",
         "name" : "dept-types",
         "source" : "test/department-types.csv",
         "key" : "label",

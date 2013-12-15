@@ -1,0 +1,11 @@
+<http://example.com/map/value3>
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "test 3" .
+
+<http://example.com/map/value2>
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "test 2" .
+
+<http://example.com/map/value1>
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "test 1" .

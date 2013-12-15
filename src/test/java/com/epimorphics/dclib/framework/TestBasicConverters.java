@@ -69,6 +69,12 @@ public class TestBasicConverters {
         assertNull( convert("test/dept-type-required.json", "test/dept-type-data-error.csv") );
     }
     
+    @Test
+    public void testRDFMapping() throws IOException {
+        checkAgainstExpected("test/map-rdf-test-root.json", "test/map-rdf-test.csv", "test/map-rdf-root-result.ttl");
+        checkAgainstExpected("test/map-rdf-test.json", "test/map-rdf-test.csv", "test/map-rdf-result.ttl");
+    }
+    
     public static Model convert(String templateFile, String dataFile) throws IOException {
         ConverterService service = new ConverterService();
         service.getDataContext().registerTemplate("test/simple-skos-template.json");

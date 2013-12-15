@@ -32,8 +32,8 @@ public class CSVMapSource extends MapSourceBase implements MapSource {
      */
     public static boolean isSpec(JsonObject spec) {
         if (spec.hasKey(JSONConstants.SOURCE)) {
-            if (spec.hasKey(JSONConstants.TYPE)) {
-                return spec.get(JSONConstants.TYPE).getAsString().value().equals(JSONConstants.CSV);
+            if (spec.hasKey(JSONConstants.SOURCE_TYPE)) {
+                return spec.get(JSONConstants.SOURCE_TYPE).getAsString().value().equals(JSONConstants.CSV);
             }
         }
         return false;
