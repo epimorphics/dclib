@@ -23,6 +23,7 @@ import org.junit.Test;
 import com.epimorphics.tasks.ProgressMessage;
 import com.epimorphics.tasks.ProgressMonitor;
 import com.epimorphics.tasks.SimpleProgressMonitor;
+import com.epimorphics.util.EpiException;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.NodeFactory;
 import com.hp.hpl.jena.graph.Triple;
@@ -105,7 +106,7 @@ public class TestConverterProcess {
                 Object value = row.get(key);
                 if (value instanceof Number) {
                     if ( ((Number)value).intValue() > 20) {
-                        throw new NullResult("Value exceeds test threshold of 20");
+                        throw new EpiException("Value exceeds test threshold of 20");
                     }
                 }
                 Node vnode = NodeFactory.createLiteral( value.toString() );
