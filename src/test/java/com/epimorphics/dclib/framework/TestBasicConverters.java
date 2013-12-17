@@ -73,6 +73,7 @@ public class TestBasicConverters {
     public void testRDFMapping() throws IOException {
         checkAgainstExpected("test/map-rdf-test-root.json", "test/map-rdf-test.csv", "test/map-rdf-root-result.ttl");
         checkAgainstExpected("test/map-rdf-test.json", "test/map-rdf-test.csv", "test/map-rdf-result.ttl");
+        checkAgainstExpected("test/map-rdf-test-type.json", "test/map-rdf-test.csv", "test/map-rdf-result.ttl");
     }
     
     public static Model convert(String templateFile, String dataFile) throws IOException {

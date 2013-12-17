@@ -1,0 +1,16 @@
+{       
+    "type"  : "Composite",
+    "bind" : {"$base" : "http://example.com/test"},
+     "templates" : {
+        "@id" : "{key.map('test-map-rdf')}",
+        "<rdfs:label>" : "{label}"
+    },
+    "sources" : {
+        "sourceType" : "RDF",
+        "name" : "test-map-rdf",
+        "source" : "test/map-rdf-type.ttl",
+        "key" : "skos:notation",
+        "value" : "<rdf:value>",
+        "type" : "<http://example.com/map/OK>"
+    }
+}

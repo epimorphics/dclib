@@ -151,7 +151,7 @@ public class ConverterProcess {
         if (row == null) return null;
         BindingEnv wrapped = new BindingEnv(env);
         for (Entry<String, Object> entry : row.entrySet()) {
-            wrapped.put(entry.getKey(), ValueFactory.asValue(entry.getValue().toString(), this));
+            wrapped.put(entry.getKey(), ValueFactory.asValue(entry.getValue().toString().trim(), this));
         }
         return wrapped;
     }

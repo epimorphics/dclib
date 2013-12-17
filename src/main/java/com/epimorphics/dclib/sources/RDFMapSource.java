@@ -20,10 +20,12 @@ import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.RDFNode;
+import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.ResourceFactory;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.util.FileManager;
+import com.hp.hpl.jena.vocabulary.RDF;
 
 /**
  * A mapping source derived from an RDF file. The RDF will loaded into memory
@@ -50,6 +52,7 @@ public class RDFMapSource extends MapSourceBase implements MapSource {
         super(spec);
         Property keyProp = asProperty( getField(JSONConstants.KEY), proc);
         Property valueProp = asProperty( getField(JSONConstants.VALUE), proc);
+        Resource type = asResource( getField(JSONConstants.TYPE), proc);
         
         String sourceFile = getRequiredField(JSONConstants.SOURCE);
         Model rdf = FileManager.get().loadModel(sourceFile);
@@ -57,22 +60,32 @@ public class RDFMapSource extends MapSourceBase implements MapSource {
         for (StmtIterator i = rdf.listStatements(null,  keyProp, (RDFNode)null); i.hasNext();) {
             Statement s = i.next();
             RDFNode keyNode = s.getObject();
-            String key = keyNode.isLiteral() ? keyNode.asLiteral().getLexicalForm() : keyNode.asResource().getURI();
-            Node value = s.getSubject().asNode();
-            if (valueProp != null) {
-                value = s.getSubject().getRequiredProperty(valueProp).getObject().asNode();
+            if (type == null ||  s.getSubject().hasProperty(RDF.type, type)) {
+                String key = keyNode.isLiteral() ? keyNode.asLiteral().getLexicalForm() : keyNode.asResource().getURI();
+                Node value = s.getSubject().asNode();
+                if (valueProp != null) {
+                    value = s.getSubject().getRequiredProperty(valueProp).getObject().asNode();
+                }
+                put(key, value);
             }
-            put(key, value);
         }
     }
     
     private Property asProperty(String val, ConverterProcess proc) {
+        return (val == null)  ? null : ResourceFactory.createProperty( asURI(val, proc) );
+    }
+    
+    private Resource asResource(String val, ConverterProcess proc) {
+        return (val == null)  ? null : ResourceFactory.createResource( asURI(val, proc) );
+    }
+
+    private String asURI(String val, ConverterProcess proc) {
         if (val == null) return null;
         if (val.startsWith("<") && val.endsWith(">")) {
             val = val.substring(1, val.length() - 1);
         }
         String uri = proc.getDataContext().expandURI(val);
-        return ResourceFactory.createProperty(uri);
+        return uri;
     }
  
 }
