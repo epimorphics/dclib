@@ -88,14 +88,8 @@ public class TemplateBase implements Template {
     
     @Override
     public boolean isApplicableTo(BindingEnv row) {
-        if (requiredColumns != null) {
-            for (String required : requiredColumns) {
-                Object binding = row.get(required);
-                if (binding == null || binding instanceof ValueNull) {
-                    return false;
-                }
-            }
-        }
+        // Option for subclasses to do specific checks but removed the global check
+        // since most templates allow individual patterns within them to fail
         return true;
     }
 
