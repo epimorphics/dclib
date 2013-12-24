@@ -127,10 +127,10 @@ public class ConverterProcess {
                         if (!(e instanceof NullResult)) {
                             messageReporter.report("Error: " + e, lineNumber);
                             log.error("Error processing line " + lineNumber, e);
+                            messageReporter.failed();
                         } else {
                             messageReporter.report("Warning: no templates matched line " + lineNumber + ", " + e, lineNumber);
                         }
-                        messageReporter.failed();
                     }
                 } else {
                     break;
@@ -151,7 +151,7 @@ public class ConverterProcess {
         if (row == null) return null;
         BindingEnv wrapped = new BindingEnv(env);
         for (Entry<String, Object> entry : row.entrySet()) {
-            wrapped.put(entry.getKey(), ValueFactory.asValue(entry.getValue().toString(), this));
+            wrapped.put(entry.getKey(), ValueFactory.asValue(entry.getValue().toString().trim(), this));
         }
         return wrapped;
     }

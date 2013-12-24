@@ -49,7 +49,7 @@ public class TestConverterProcess {
         ConverterProcess process = setUp("test/test-fail.csv");
         process.setMessageReporter(monitor);
         boolean ok = process.process();
-        assertFalse(ok);
+//        assertFalse(ok);  - failed row convert no longer itself fatal
         assertTrue( contains(process, "1", "a", "10") );
         assertTrue( contains(process, "2", "b", "20") );
         assertTrue( contains(process, "4", "d", "10") );
