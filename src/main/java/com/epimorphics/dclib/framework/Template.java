@@ -51,4 +51,9 @@ public interface Template {
      */
     public String getDescription();
 
+    /**
+     * Return a textual rendering of the template specification.
+     * May not be literally the same as the original source file
+     */
+    public String getSource();
 }

@@ -10,7 +10,6 @@
 package com.epimorphics.dclib.framework;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.io.FileInputStream;
@@ -131,6 +130,11 @@ public class TestConverterProcess {
 
         @Override
         public void preamble(ConverterProcess config) {
+        }
+
+        @Override
+        public String getSource() {
+            return null;
         }
         
     }

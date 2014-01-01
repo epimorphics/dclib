@@ -17,7 +17,7 @@ import com.epimorphics.util.EpiException;
 import com.hp.hpl.jena.graph.Node;
 
 /**
- * An indirect point to a template that allows for late binding of template names
+ * An indirect pointref to a template that allows for late binding of template names
  * to actual templates. Used internally.
  * 
  * @author <a href="mailto:dave@epimorphics.com">Dave Reynolds</a>
@@ -71,6 +71,11 @@ public class TemplateRef implements Template {
     @Override
     public void preamble(ConverterProcess config) {
         getTemplate().preamble(config);
+    }
+
+    @Override
+    public String getSource() {
+        return template.getSource();
     }
 
 }

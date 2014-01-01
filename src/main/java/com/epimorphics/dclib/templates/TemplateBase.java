@@ -200,4 +200,9 @@ public class TemplateBase implements Template {
         }
     }
 
+    @Override
+    public String getSource() {
+        return spec.toString();
+    }
+
 }
