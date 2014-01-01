@@ -10,7 +10,11 @@
 package com.epimorphics.dclib.framework;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.epimorphics.dclib.templates.TemplateFactory;
@@ -94,6 +98,24 @@ public class DataContext {
             template = parent.getTemplate(name);
         }
         return template;
+    }
+    
+    /**
+     * Return a list of all known templates, ordered by name
+     */
+    public List<Template> listTemplates() {
+        List<Template> results = new ArrayList<>();
+        results.addAll( templates.values() );
+        if (parent != null) {
+            results.addAll( parent.listTemplates() );
+        }
+        Collections.sort(results, new Comparator<Template>() {
+            @Override
+            public int compare(Template o1, Template o2) {
+                return o1.getName().compareTo(o2.getName());
+            }
+        });
+        return results;
     }
     
     /**
