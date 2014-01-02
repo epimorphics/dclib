@@ -156,15 +156,20 @@ public class ConverterProcess {
         return wrapped;
     }
     
-    private void preprocess() throws IOException {
-        getTemplate().preamble(this);
-        
+    private void preprocess() throws IOException {        
         Node dataset = NodeFactory.createAnon();
         
         Object baseURI = env.get(BASE_OBJECT_NAME);
         if (baseURI != null) {
             dataset = NodeFactory.createURI(baseURI.toString());
             env.put(DATASET_OBJECT_NAME, dataset);
+        }
+        
+        try {
+            getTemplate().preamble(this);
+        } catch (Exception e) {
+            messageReporter.report("Problem with one-off preprocessing of template: " + e);
+            messageReporter.failed();
         }
 
         // Check for linkedcsv-style preamble
