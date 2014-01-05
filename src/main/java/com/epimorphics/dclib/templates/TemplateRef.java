@@ -9,6 +9,8 @@
 
 package com.epimorphics.dclib.templates;
 
+import java.util.List;
+
 import com.epimorphics.dclib.framework.BindingEnv;
 import com.epimorphics.dclib.framework.ConverterProcess;
 import com.epimorphics.dclib.framework.DataContext;
@@ -76,6 +78,16 @@ public class TemplateRef implements Template {
     @Override
     public String getSource() {
         return template.getSource();
+    }
+
+    @Override
+    public List<String> required() {
+        return template.required();
+    }
+
+    @Override
+    public List<String> optional() {
+        return template.optional();
     }
 
 }

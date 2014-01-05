@@ -136,6 +136,16 @@ public class TestConverterProcess {
         public String getSource() {
             return null;
         }
+
+        @Override
+        public List<String> required() {
+            return null;
+        }
+
+        @Override
+        public List<String> optional() {
+            return null;
+        }
         
     }
 }

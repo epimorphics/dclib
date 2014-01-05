@@ -40,6 +40,7 @@ public class TemplateBase implements Template {
     protected JsonObject spec;
     
     protected String[] requiredColumns;
+    protected String[] optionalColumns;
     
     public TemplateBase(JsonObject spec) {
         this.spec = spec;
@@ -47,14 +48,20 @@ public class TemplateBase implements Template {
     }
     
     protected void init() {
-        if (spec.hasKey(JSONConstants.REQUIRED)) {
-            Object[] required = spec.get(JSONConstants.REQUIRED).getAsArray().toArray();
-            requiredColumns = new String[ required.length ];
+        requiredColumns = getList( JSONConstants.REQUIRED );
+        optionalColumns = getList( JSONConstants.OPTIONAL );
+    }
+    
+    private String[] getList(String key) {
+        if (spec.hasKey(key)) {
+            Object[] required = spec.get(key).getAsArray().toArray();
+            String[] result = new String[ required.length ];
             for (int i = 0; i < required.length; i++) {
-                requiredColumns[i] = NameUtils.safeVarName( ((JsonValue)required[i]).getAsString().value() );
-                
+                result[i] = NameUtils.safeVarName( ((JsonValue)required[i]).getAsString().value() );
             }
+            return result;
         }
+        return null;
     }
     
     protected String getRequiredField(String name) {
@@ -203,6 +210,24 @@ public class TemplateBase implements Template {
     @Override
     public String getSource() {
         return spec.toString();
+    }
+
+    @Override
+    public List<String> required() {
+        return asList(requiredColumns);
+    }
+
+    @Override
+    public List<String> optional() {
+        return asList(optionalColumns);
+    }
+    
+    private List<String> asList(String[] array) {
+        List<String> result = new ArrayList<>( array.length );
+        for (String s : array) {
+            result.add(s);
+        }
+        return result;
     }
 
 }

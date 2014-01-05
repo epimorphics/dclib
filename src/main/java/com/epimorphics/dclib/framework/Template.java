@@ -9,6 +9,8 @@
 
 package com.epimorphics.dclib.framework;
 
+import java.util.List;
+
 import com.hp.hpl.jena.graph.Node;
 
 /**
@@ -56,4 +58,17 @@ public interface Template {
      * May not be literally the same as the original source file
      */
     public String getSource();
+    
+    /**
+     * Return a list of column names that should be present for the template to be applicable.
+     * Provided for documentation and UI purposes, no operational.
+     */
+    public List<String> required();
+    
+    /**
+     * Return a list of column names that will also be used if present.
+     * Provided for documentation and UI purposes, no operational.
+     */
+    public List<String> optional();
+    
 }

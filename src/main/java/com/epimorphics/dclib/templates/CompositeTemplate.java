@@ -21,6 +21,7 @@ import com.epimorphics.dclib.framework.DataContext;
 import com.epimorphics.dclib.framework.Pattern;
 import com.epimorphics.dclib.framework.Template;
 import com.hp.hpl.jena.graph.Node;
+import com.hp.hpl.jena.graph.NodeFactory;
 
 public class CompositeTemplate extends TemplateBase implements Template {
     protected JsonObject spec;
@@ -78,6 +79,14 @@ public class CompositeTemplate extends TemplateBase implements Template {
                 Pattern p = new Pattern(ent.getValue().getAsString().value(), dc);
                 env.put(ent.getKey(), p.evaluate(env, proc));
             }
+            
+            // Fix up dataset binding incase the BIND has changed the $base (which it typically does)
+            Object baseURI = env.get(ConverterProcess.BASE_OBJECT_NAME);
+            if (baseURI != null) {
+                Node dataset = NodeFactory.createURI(baseURI.toString());
+                env.put(ConverterProcess.DATASET_OBJECT_NAME, dataset);
+            }
+
         }
         
         // Process any one-offs

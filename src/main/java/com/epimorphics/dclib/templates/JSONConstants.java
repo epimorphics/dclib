@@ -14,12 +14,13 @@ public class JSONConstants {
     public static final String NAME         = "name";
     public static final String DESCRIPTION  = "description";
     public static final String REQUIRED     = "required";
+    public static final String OPTIONAL     = "optional";
     public static final String SOURCES      = "sources";
     public static final String ID           = "@id";
     public static final String BIND         = "bind";
     public static final String TEMPLATES    = "templates";
     public static final String TEMPLATE     = "template";
-    public static final String OPTIONAL     = "optionalTemplates";
+    public static final String OPTIONAL_TEMPLATES     = "optionalTemplates";
     public static final String PARENT       = "parentLink";
     public static final String CHILD        = "childLink";
     public static final String TOP          = "topLink";
