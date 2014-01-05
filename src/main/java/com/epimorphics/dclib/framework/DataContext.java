@@ -76,6 +76,14 @@ public class DataContext {
             throw new EpiException("Can't register a nameless template: " + template);
         }
     }
+    
+    /**
+     * Register a new template
+     */
+    public void registerTemplate(String name, Template template) {
+        templates.put(name, template);
+
+    }
 
     /**
      * Register a template from a file

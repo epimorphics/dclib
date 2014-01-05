@@ -41,6 +41,7 @@ public class TemplateBase implements Template {
     
     protected String[] requiredColumns;
     protected String[] optionalColumns;
+    protected String name;
     
     public TemplateBase(JsonObject spec) {
         this.spec = spec;
@@ -50,6 +51,10 @@ public class TemplateBase implements Template {
     protected void init() {
         requiredColumns = getList( JSONConstants.REQUIRED );
         optionalColumns = getList( JSONConstants.OPTIONAL );
+        name = getJsonString(JSONConstants.NAME);
+        if (name == null) {
+            name = "anon";
+        }
     }
     
     private String[] getList(String key) {
@@ -150,7 +155,7 @@ public class TemplateBase implements Template {
 
     @Override
     public String getName() {
-        return getJsonString(JSONConstants.NAME);
+        return name;
     }
 
     @Override
@@ -223,11 +228,15 @@ public class TemplateBase implements Template {
     }
     
     private List<String> asList(String[] array) {
-        List<String> result = new ArrayList<>( array.length );
-        for (String s : array) {
-            result.add(s);
+        if (array != null) {
+            List<String> result = new ArrayList<>( array.length );
+            for (String s : array) {
+                result.add(s);
+            }
+            return result;
+        } else {
+            return new ArrayList<>();
         }
-        return result;
     }
 
 }
