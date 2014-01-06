@@ -71,4 +71,9 @@ public class DirectoryFileStore implements FileStore {
         return new FileOutputStream(new File(root, path), append);
     }
 
+    @Override
+    public void deleteFolder(String path) throws IOException {
+        FileUtil.deleteDirectory( new File(root,path) );
+    }
+
 }

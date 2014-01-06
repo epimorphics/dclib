@@ -47,6 +47,11 @@ public interface FileStore {
     public void makeFolder(String path) throws IOException;
     
     /**
+     * Delete a folder
+     */
+    public void deleteFolder(String path) throws IOException;
+    
+    /**
      * Create a new file/object for writing. Replaces any existing file
      */
     public OutputStream write(String path) throws IOException;
