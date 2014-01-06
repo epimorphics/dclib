@@ -31,6 +31,7 @@ public class DirectoryFileStore implements FileStore {
     
     public void setRoot(String rootDir) {
         root = new File(rootDir);
+        FileUtil.ensureDir(rootDir);
         if ( ! (root.exists() && root.canRead() && root.canWrite()) ) {
             throw new EpiException("Can't access file store root: " + rootDir);
         }
