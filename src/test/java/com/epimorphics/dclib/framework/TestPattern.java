@@ -122,6 +122,11 @@ public class TestPattern {
     }
     
     @Test
+    public void testFormatting() {
+       assertEquals("00042", eval("{i.format('%05d')}").toString());
+    }
+    
+    @Test
     public void testErrorInConversion() {
         eval("{a.asNumber()}");
         assertFalse( proc.getMessageReporter().succeeded() );

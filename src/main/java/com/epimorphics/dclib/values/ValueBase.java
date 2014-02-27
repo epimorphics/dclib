@@ -85,5 +85,9 @@ public abstract class ValueBase<T> implements Value {
         }
         return NodeFactory.createLiteral(toString(), TypeMapper.getInstance().getSafeTypeByName(typeURI));
     }
+    
+    public Object format(String fmtstr) {
+        return new ValueString(String.format(fmtstr, value), proc);
+    }
 
 }

@@ -80,5 +80,4 @@ public class ValueNumber extends ValueBase<Number> implements Value {
         return NameUtils.safeName(toString());
     }
     
-    
 }
