@@ -44,16 +44,20 @@ public class ValueString extends ValueBase<String> implements Value {
         return new ValueNumber(value, proc);
     }
     
-    public String toLowerCase() {
-        return value.toLowerCase();
+    private ValueString wrap(String s) {
+        return new ValueString(s, proc);
     }
     
-    public String toUpperCase() {
-        return value.toUpperCase();
+    public ValueString toLowerCase() {
+        return wrap(value.toLowerCase());
     }
     
-    public String toSegment() {
-        return NameUtils.safeName(value);
+    public ValueString toUpperCase() {
+        return wrap(value.toUpperCase());
+    }
+    
+    public ValueString toSegment() {
+        return wrap( NameUtils.safeName(value) );
     }
     
     public Object toNumber() {
@@ -61,11 +65,11 @@ public class ValueString extends ValueBase<String> implements Value {
     }
     
     public Object trim() {
-        return new ValueString( value.trim(), proc );
+        return wrap( value.trim() );
     }
     
     public Object substring(int offset) {
-        return new ValueString( value.substring(offset), proc );
+        return wrap( value.substring(offset) );
     }
     
     public Object substring(int start, int end) {
@@ -76,7 +80,7 @@ public class ValueString extends ValueBase<String> implements Value {
         Matcher m = Pattern.compile(regex).matcher(value);
         if (m.matches()) {
             if (m.groupCount() > 0) {
-                return new ValueString( m.group(1), proc );
+                return wrap( m.group(1));
             } else {
                 return this;
             }

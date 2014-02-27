@@ -14,6 +14,7 @@ import java.math.BigInteger;
 import java.util.regex.Pattern;
 
 import com.epimorphics.dclib.framework.ConverterProcess;
+import com.epimorphics.util.NameUtils;
 
 public class ValueNumber extends ValueBase<Number> implements Value {
     protected static final Pattern INTEGER_PATTERN = Pattern.compile("[0-9]+");
@@ -74,4 +75,10 @@ public class ValueNumber extends ValueBase<Number> implements Value {
             return value.toString();
         }
     }
+    
+    public String toSegment() {
+        return NameUtils.safeName(toString());
+    }
+    
+    
 }
