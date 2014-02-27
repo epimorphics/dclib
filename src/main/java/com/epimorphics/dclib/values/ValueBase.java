@@ -90,4 +90,15 @@ public abstract class ValueBase<T> implements Value {
         return new ValueString(String.format(fmtstr, value), proc);
     }
 
+    public boolean isString() {
+        return false;
+    }
+
+    public boolean isNumber() {
+        return false;
+    }
+
+    public boolean isDate() {
+        return false;
+    }
 }

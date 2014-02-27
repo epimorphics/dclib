@@ -9,6 +9,8 @@
 
 package com.epimorphics.dclib.values;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -19,6 +21,7 @@ import com.epimorphics.rdfutil.RDFUtil;
 import com.epimorphics.util.NameUtils;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.NodeFactory;
+import com.hp.hpl.jena.vocabulary.XSD;
 
 public class ValueString extends ValueBase<String> implements Value {
     
@@ -131,4 +134,25 @@ public class ValueString extends ValueBase<String> implements Value {
         return NodeFactory.createLiteral(value, lang, false);
     }
     
+    @Override
+    public boolean isString() {
+        return true;
+    }
+
+    @Override
+    public Node asNode() {
+        return NodeFactory.createLiteral( value );
+    }
+
+    @Override
+    public String datatype() {
+        return XSD.xstring.getURI();
+    }
+    
+    public ValueDate asDate(String format) {
+//        Date date = new SimpleDateFormat(format).parse(value);
+        // TODO in progress
+        return null;
+    }
+
 }

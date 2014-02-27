@@ -20,13 +20,14 @@ import com.epimorphics.dclib.framework.ConverterProcess;
  */
 public class ValueFactory {
     
-    public static Object asValue(String string, ConverterProcess proc) {
+    public static Value asValue(String string, ConverterProcess proc) {
         if (string == null || string.isEmpty()) {
             return new ValueNull();
         } else if (ValueNumber.isNumber(string)) {
             return new ValueNumber(string, proc);
+        } else if (ValueDate.isDate(string)) {
+            return new ValueDate(string, proc);
         } else {
-            // TODO handle dates
             return new ValueString(string, proc);
         }
     }

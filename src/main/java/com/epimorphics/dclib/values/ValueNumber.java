@@ -15,6 +15,10 @@ import java.util.regex.Pattern;
 
 import com.epimorphics.dclib.framework.ConverterProcess;
 import com.epimorphics.util.NameUtils;
+import com.hp.hpl.jena.datatypes.RDFDatatype;
+import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
+import com.hp.hpl.jena.graph.Node;
+import com.hp.hpl.jena.graph.NodeFactory;
 
 public class ValueNumber extends ValueBase<Number> implements Value {
     protected static final Pattern INTEGER_PATTERN = Pattern.compile("[0-9]+");
@@ -78,6 +82,38 @@ public class ValueNumber extends ValueBase<Number> implements Value {
     
     public String toSegment() {
         return NameUtils.safeName(toString());
+    }
+
+    @Override
+    public boolean isNumber() {
+        return true;
+    }
+
+    @Override
+    public Node asNode() {
+        return nodeFromNumber(value);
+    }
+    
+    public static Node nodeFromNumber(Number result) {
+        return NodeFactory.createUncachedLiteral(result, typeFromNumber(result));
+    }
+    
+    public static RDFDatatype typeFromNumber(Number result) {
+        if (result instanceof BigDecimal) {
+            return XSDDatatype.XSDdecimal;
+        } else if (result instanceof BigInteger) {
+            return XSDDatatype.XSDinteger;
+        } else if (result instanceof Double) {
+            return XSDDatatype.XSDdouble;
+        } else {
+            return XSDDatatype.XSDinteger;
+        }
+        
+    }
+
+    @Override
+    public String datatype() {
+        return typeFromNumber(value).getURI();
     }
     
 }

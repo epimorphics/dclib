@@ -9,6 +9,8 @@
 
 package com.epimorphics.dclib.values;
 
+import com.hp.hpl.jena.graph.Node;
+
 /**
  * Represents a wrapped value during pattern processing. Some values may be represented
  * by their java native type and may not be wrapped. Subclasses can implement methods
@@ -37,6 +39,12 @@ public interface Value {
     
     /** Return all the raw values of a multi-valued value */
     public Object[] getValues();
+    
+    /** Convert the value to an RDF node */
+    public Node asNode();
+    
+    /** The datatype corresponding to the node value, may be null */
+    public String datatype();
     
     /**
      * Concatenate two values. Typically just String concatenation

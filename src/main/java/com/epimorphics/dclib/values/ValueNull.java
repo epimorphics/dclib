@@ -9,6 +9,8 @@
 
 package com.epimorphics.dclib.values;
 
+import com.hp.hpl.jena.graph.Node;
+
 /**
  * Represent a missing value. Will typically get changed into a simple java null
  * before processing by a template.
@@ -51,6 +53,16 @@ public class ValueNull implements Value
     @Override
     public Value asString() {
         return getString();
+    }
+
+    @Override
+    public Node asNode() {
+        return null;
+    }
+
+    @Override
+    public String datatype() {
+        return null;
     }
 
 }

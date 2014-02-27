@@ -9,8 +9,6 @@
 
 package com.epimorphics.dclib.framework;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +20,6 @@ import com.epimorphics.dclib.values.Value;
 import com.epimorphics.dclib.values.ValueNumber;
 import com.epimorphics.dclib.values.ValueString;
 import com.epimorphics.util.EpiException;
-import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.NodeFactory;
 import com.hp.hpl.jena.graph.impl.LiteralLabelFactory;
@@ -163,30 +160,16 @@ public class Pattern {
             return (Node) result;
         } else if (result instanceof String) {
             return NodeFactory.createLiteral( (String)result );
-        } else if (result instanceof ValueString) {
-            return NodeFactory.createLiteral( ((ValueString)result).toString() );
-        } else if (result instanceof ValueNumber) {
-            return nodeFromNumber( ((ValueNumber)result).toNumber() );
         } else if (result instanceof Number) {
-            return nodeFromNumber( (Number)result );
+            return ValueNumber.nodeFromNumber( (Number)result );
         } else if (result instanceof Boolean) {
             return NodeFactory.createLiteral( LiteralLabelFactory.create(result) );
+        } else if (result instanceof Value) {
+            return ((Value)result).asNode();
         } else {
             // TODO handle dates
         }                
         return null;
-    }
-    
-    private Node nodeFromNumber(Number result) {
-        if (result instanceof BigDecimal) {
-            return NodeFactory.createUncachedLiteral(result, XSDDatatype.XSDdecimal);
-        } else if (result instanceof BigInteger) {
-            return NodeFactory.createUncachedLiteral(result, XSDDatatype.XSDinteger);
-        } else if (result instanceof Double) {
-            return NodeFactory.createUncachedLiteral(result, XSDDatatype.XSDdouble);
-        } else {
-            return NodeFactory.createUncachedLiteral(((Number)result).intValue(), XSDDatatype.XSDinteger);
-        }
     }
     
     protected Object evaluateComponent(int i, BindingEnv env) {

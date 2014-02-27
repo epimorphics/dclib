@@ -10,6 +10,7 @@
 package com.epimorphics.dclib.values;
 
 import com.epimorphics.dclib.framework.ConverterProcess;
+import com.hp.hpl.jena.graph.Node;
 
 /**
  * Wraps an array of strings, e.g. from a split operation. This allows
@@ -62,6 +63,16 @@ public class ValueStringArray extends ValueBase<String[]> implements Value {
     @Override
     public Value asString() {
         return this;
+    }
+
+    @Override
+    public Node asNode() {
+        return null;
+    }
+
+    @Override
+    public String datatype() {
+        return null;
     }
 
 }
