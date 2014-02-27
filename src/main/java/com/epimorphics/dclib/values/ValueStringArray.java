@@ -59,4 +59,9 @@ public class ValueStringArray extends ValueBase<String[]> implements Value {
         }
     }
 
+    @Override
+    public Value asString() {
+        return this;
+    }
+
 }

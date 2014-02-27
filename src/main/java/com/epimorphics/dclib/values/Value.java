@@ -23,8 +23,11 @@ public interface Value {
     /** Return an underlying Java native value */
     public Object getValue();
     
-    /** Convert to a string */
-    public String getString();
+    /** Convert to a wrapped string */
+    public Value getString();
+
+    /** Convert to a wrapped string */
+    public Value asString();
     
     /** Convert to a string */
     public String toString();

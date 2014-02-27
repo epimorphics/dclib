@@ -19,6 +19,7 @@ import java.util.List;
 
 import org.junit.Test;
 
+import com.epimorphics.dclib.values.ValueNumber;
 import com.epimorphics.tasks.ProgressMessage;
 import com.epimorphics.tasks.ProgressMonitor;
 import com.epimorphics.tasks.SimpleProgressMonitor;
@@ -102,8 +103,8 @@ public class TestConverterProcess {
             for (String key : row.keySet()) {
                 Node property = NodeFactory.createURI( BASE + key );
                 Object value = row.get(key);
-                if (value instanceof Number) {
-                    if ( ((Number)value).intValue() > 20) {
+                if (value instanceof ValueNumber) {
+                    if ( ((ValueNumber)value).toNumber().intValue() > 20) {
                         throw new NullResult("Value exceeds test threshold of 20");
                     }
                 }

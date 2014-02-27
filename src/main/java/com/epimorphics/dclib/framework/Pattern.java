@@ -162,7 +162,7 @@ public class Pattern {
         } else if (result instanceof String) {
             return NodeFactory.createLiteral( (String)result );
         } else if (result instanceof ValueString) {
-            return NodeFactory.createLiteral( ((ValueString)result).getString() );
+            return NodeFactory.createLiteral( ((ValueString)result).toString() );
         } else if (result instanceof Number) {
             if (result instanceof BigDecimal) {
                 return NodeFactory.createUncachedLiteral(result, XSDDatatype.XSDdecimal);

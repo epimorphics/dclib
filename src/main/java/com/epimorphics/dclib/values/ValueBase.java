@@ -16,7 +16,7 @@ import com.epimorphics.dclib.framework.ConverterProcess;
  * 
  * @author <a href="mailto:dave@epimorphics.com">Dave Reynolds</a>
  */
-public class ValueBase<T> implements Value {
+public abstract class ValueBase<T> implements Value {
     protected ConverterProcess proc;
     protected T value;
     
@@ -36,18 +36,13 @@ public class ValueBase<T> implements Value {
     }
 
     @Override
-    public String getString() {
-        return value == null ? "null" : value.toString();
-    }
-
-    @Override
-    public String toString() {
-        return getString();
+    public Value getString() {
+        return asString();
     }
     
     @Override
     public Value append(Value val) {
-        String base = getString();
+        String base = toString();
         if (val.isMulti()) {
             Object[] values = val.getValues();
             String[] results = new String[values.length];

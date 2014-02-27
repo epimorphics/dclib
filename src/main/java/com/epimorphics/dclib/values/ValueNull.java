@@ -29,8 +29,8 @@ public class ValueNull implements Value
     }
 
     @Override
-    public String getString() {
-        return "null";
+    public Value getString() {
+        return new ValueString("null", null);
     }
 
     @Override
@@ -46,6 +46,11 @@ public class ValueNull implements Value
     @Override
     public Value append(Value val) {
         return null;
+    }
+
+    @Override
+    public Value asString() {
+        return getString();
     }
 
 }

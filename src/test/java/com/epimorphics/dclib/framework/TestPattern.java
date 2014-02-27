@@ -27,6 +27,7 @@ public class TestPattern {
         env.set("a", ValueFactory.asValue("a string", proc));
         env.set("b", ValueFactory.asValue("foo bar", proc));
         env.set("i", ValueFactory.asValue("42", proc));
+        env.set("big", ValueFactory.asValue("05501000000000000000000000000000", proc));
         
         dc.setPrefixes( FileManager.get().loadModel("prefixes.ttl") );
     }
@@ -49,9 +50,9 @@ public class TestPattern {
     public void testSimpleSubstitution() {
         assertEquals("this is a string", eval("this is {a}").toString());
         assertEquals("this is 42", eval("this is {i}").toString());
-        assertEquals("this is 40", eval("this is {i-2}").toString());
+        assertEquals("this is 40", eval("this is {i.value - 2}").toString());
         assertEquals("bar = 42", eval("{b.value.split(' ').1} = {i}").toString());
-        assertEquals("big", eval("{i > 10 ? 'big' : 'little'}"));
+        assertEquals("big", eval("{i.value > 10 ? 'big' : 'little'}"));
     }
     
     @Test
@@ -66,6 +67,11 @@ public class TestPattern {
     @Test
     public void testScripts() {
         assertEquals("foo bar", eval("{={a;b}}").toString());
+    }
+    
+    @Test
+    public void testBigNum() {
+        assertEquals("Number 05501000000000000000000000000000", eval("Number {big}").toString());
     }
     
     private Object eval(String pattern) {

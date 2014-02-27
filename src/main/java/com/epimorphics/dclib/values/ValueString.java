@@ -34,6 +34,15 @@ public class ValueString extends ValueBase<String> implements Value {
     public String toString() {
         return value;
     }
+
+    @Override
+    public Value asString() {
+        return this;
+    }
+    
+    public Value asNumber() {
+        return new ValueNumber(value, proc);
+    }
     
     public String toLowerCase() {
         return value.toLowerCase();
