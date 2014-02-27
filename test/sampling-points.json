@@ -1,0 +1,31 @@
+[ { name                : "sampling-points",
+    type     : "Composite",
+    required : ["smpt_user_reference" ],
+    bind : { "$samplingpoints"    : "http://environment.data.gov.uk/water-quality/so/sampling-point",
+             "$respParties"       : "http://environment.data.gov.uk/water-quality/id/responsible-parties",
+             "$vocab"             : "http://environment.data.gov.uk/water-quality/def/sampling-points",
+             "$position"          : "http://environment.data.gov.uk/water-quality/point" ,
+             "$sp_status"         : "http://environment.data.gov.uk/water-quality/def/sampling-point-status",
+             "$sides"             : "http://environment.data.gov.uk/water-quality/def/sides",          
+             "$eaorg"             : "http://environment.data.gov.uk/water-quality/def/ea/organization",
+             "$regions"           : "http://environment.data.gov.uk/water-quality/def/ea/regions",
+             "$areas"             : "http://environment.data.gov.uk/water-quality/def/ea/areas",
+             "$subarea"           : "http://environment.data.gov.uk/water-quality/def/ea/subareas",
+             "$sr"                : "http://data.ordnancesurvey.co.uk/ontology/spatialrelations",
+             "$geometry"          : "http://location.data.gov.uk/inspire/gcm/def/geometry" ,
+             "$gcm"               : "http://location.data.gov.uk/inspire/gcm/def/core",
+             "$admingeo"          : "http://data.ordnancesurvey.co.uk/ontology/admingeo",
+             "$version"           : "1" },
+    templates : [{ 
+         "@id"                               : "<{$samplingpoints}/region-{smpt_user_reference}:{$version}>" ,
+         "<{$admingeo}/inDistrict>"          : "{smpt_dc_ref != null ? smpt_dc_ref.asString().map('dc') : null }"
+       }],
+   sources : [{
+   	    name       : "dc",
+   		sourceType : "CSV",
+ 		source     : "test/districts.csv",
+ 		key        : "DC_REF",
+ 		value      : "DC_LNAME"   		
+   	   }]
+  }
+]

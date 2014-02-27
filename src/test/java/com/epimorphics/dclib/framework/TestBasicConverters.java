@@ -70,12 +70,18 @@ public class TestBasicConverters {
     }
     
     @Test
+    public void testNumericMapping() throws IOException {
+        checkAgainstExpected("test/sampling-points.json", "test/sampling-points.csv", "test/sampling-points.ttl");
+    }
+    
+    @Test
     public void testRDFMapping() throws IOException {
         checkAgainstExpected("test/map-rdf-test-root.json", "test/map-rdf-test.csv", "test/map-rdf-root-result.ttl");
         checkAgainstExpected("test/map-rdf-test.json", "test/map-rdf-test.csv", "test/map-rdf-result.ttl");
         checkAgainstExpected("test/map-rdf-test-type.json", "test/map-rdf-test.csv", "test/map-rdf-result.ttl");
     }
     
+
     public static Model convert(String templateFile, String dataFile) throws IOException {
         ConverterService service = new ConverterService();
         service.getDataContext().registerTemplate("test/simple-skos-template.json");

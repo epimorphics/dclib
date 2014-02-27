@@ -1,0 +1,8 @@
+<http://environment.data.gov.uk/water-quality/so/sampling-point/region-70111010:1>
+        <http://data.ordnancesurvey.co.uk/ontology/admingeo/inDistrict>
+                <WS> .
+
+<http://environment.data.gov.uk/water-quality/so/sampling-point/region-70111015:1>
+        <http://data.ordnancesurvey.co.uk/ontology/admingeo/inDistrict>
+                <GL> .
+                
