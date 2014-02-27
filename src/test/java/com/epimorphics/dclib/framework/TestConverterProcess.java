@@ -82,9 +82,9 @@ public class TestConverterProcess {
     }
     
     public static void printMessages(ProgressMonitor monitor) {
-        System.out.println(String.format("State: %s (%d%%)", monitor.getState(), monitor.getProgress()));
+        System.err.println(String.format("State: %s (%d%%)", monitor.getState(), monitor.getProgress()));
         for (ProgressMessage message : monitor.getMessages()) {
-            System.out.println("  " + message);
+            System.err.println("  " + message);
         }
     }
 

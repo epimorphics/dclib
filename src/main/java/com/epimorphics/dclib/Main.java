@@ -36,7 +36,7 @@ public class Main {
             argsOffset = 1;
         }
         if (args.length - argsOffset < 2) {
-            System.out.println("Usage:  java -jar dclib.jar [--debug] template.json data.csv [split-directory]");
+            System.err.println("Usage:  java -jar dclib.jar [--debug] template.json data.csv [split-directory]");
             System.exit(1);
         }
         String templateName = args[argsOffset];
