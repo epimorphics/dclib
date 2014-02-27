@@ -44,6 +44,10 @@ public class ValueString extends ValueBase<String> implements Value {
         return new ValueNumber(value, proc);
     }
     
+    public Boolean asBoolean() {
+        return Boolean.valueOf(value);
+    }
+    
     private ValueString wrap(String s) {
         return new ValueString(s, proc);
     }

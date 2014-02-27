@@ -19,11 +19,13 @@ import org.apache.commons.jexl2.JexlEngine;
 import org.apache.commons.jexl2.Script;
 
 import com.epimorphics.dclib.values.Value;
+import com.epimorphics.dclib.values.ValueNumber;
 import com.epimorphics.dclib.values.ValueString;
 import com.epimorphics.util.EpiException;
 import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.NodeFactory;
+import com.hp.hpl.jena.graph.impl.LiteralLabelFactory;
 
 /**
  * Represents a string pattern in a Template, e.g. for constructing property values.
@@ -163,22 +165,29 @@ public class Pattern {
             return NodeFactory.createLiteral( (String)result );
         } else if (result instanceof ValueString) {
             return NodeFactory.createLiteral( ((ValueString)result).toString() );
+        } else if (result instanceof ValueNumber) {
+            return nodeFromNumber( ((ValueNumber)result).toNumber() );
         } else if (result instanceof Number) {
-            if (result instanceof BigDecimal) {
-                return NodeFactory.createUncachedLiteral(result, XSDDatatype.XSDdecimal);
-            } else if (result instanceof BigInteger) {
-                return NodeFactory.createUncachedLiteral(result, XSDDatatype.XSDinteger);
-            } else if (result instanceof Double) {
-                return NodeFactory.createUncachedLiteral(result, XSDDatatype.XSDdouble);
-            } else {
-                return NodeFactory.createUncachedLiteral(((Number)result).intValue(), XSDDatatype.XSDinteger);
-            }
+            return nodeFromNumber( (Number)result );
+        } else if (result instanceof Boolean) {
+            return NodeFactory.createLiteral( LiteralLabelFactory.create(result) );
         } else {
             // TODO handle dates
         }                
         return null;
     }
     
+    private Node nodeFromNumber(Number result) {
+        if (result instanceof BigDecimal) {
+            return NodeFactory.createUncachedLiteral(result, XSDDatatype.XSDdecimal);
+        } else if (result instanceof BigInteger) {
+            return NodeFactory.createUncachedLiteral(result, XSDDatatype.XSDinteger);
+        } else if (result instanceof Double) {
+            return NodeFactory.createUncachedLiteral(result, XSDDatatype.XSDdouble);
+        } else {
+            return NodeFactory.createUncachedLiteral(((Number)result).intValue(), XSDDatatype.XSDinteger);
+        }
+    }
     
     protected Object evaluateComponent(int i, BindingEnv env) {
         Object component = components.get(i);

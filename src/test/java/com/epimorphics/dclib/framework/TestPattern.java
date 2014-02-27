@@ -13,6 +13,9 @@ import org.junit.Test;
 
 import com.epimorphics.dclib.values.ValueFactory;
 import com.epimorphics.dclib.values.ValueStringArray;
+import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
+import com.hp.hpl.jena.graph.Node;
+import com.hp.hpl.jena.graph.NodeFactory;
 import com.hp.hpl.jena.util.FileManager;
 import com.hp.hpl.jena.vocabulary.RDF;
 
@@ -30,6 +33,8 @@ public class TestPattern {
         env.set("j", ValueFactory.asValue("042", proc));
         env.set("big", ValueFactory.asValue("05501000000000000000000000000000", proc));
         env.set("A", ValueFactory.asValue("A String", proc));
+        env.set("u", ValueFactory.asValue("http://example.com/foo", proc));
+        env.set("t", ValueFactory.asValue("true", proc));
         
         dc.setPrefixes( FileManager.get().loadModel("prefixes.ttl") );
     }
@@ -88,11 +93,22 @@ public class TestPattern {
         assertEquals("a_string", eval("{A.toSegment().toLowerCase()}").toString());
         assertEquals("A_String", eval("{A.toSegment().toSegment()}").toString());
         assertEquals("a_string", eval("{A.asString().toSegment().toLowerCase()}").toString());
-        
-//        assertEquals("", eval("{a}").toString());
     }
     
     private Object eval(String pattern) {
         return new Pattern(pattern, dc).evaluate(env, proc);
+    }
+    
+    @Test
+    public void testNodeValues() {
+        assertEquals(NodeFactory.createURI("http://example.com/foo"), evalNode("<{u}>"));
+        assertEquals(NodeFactory.createLiteral("42", XSDDatatype.XSDinteger), evalNode("{i}"));
+        assertEquals(NodeFactory.createLiteral("true", XSDDatatype.XSDboolean), evalNode("{true}"));
+        assertEquals(NodeFactory.createLiteral("false", XSDDatatype.XSDboolean), evalNode("{false}"));
+        assertEquals(NodeFactory.createLiteral("true", XSDDatatype.XSDboolean), evalNode("{t.asBoolean()}"));
+    }
+    
+    private Node evalNode(String pattern) {
+        return new Pattern(pattern, dc).evaluateAsNode(env, proc);
     }
 }
