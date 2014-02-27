@@ -18,6 +18,7 @@ import com.epimorphics.dclib.framework.NullResult;
 import com.epimorphics.rdfutil.RDFUtil;
 import com.epimorphics.util.NameUtils;
 import com.hp.hpl.jena.graph.Node;
+import com.hp.hpl.jena.graph.NodeFactory;
 
 public class ValueString extends ValueBase<String> implements Value {
     
@@ -124,6 +125,10 @@ public class ValueString extends ValueBase<String> implements Value {
             throw new MatchFailed("Value '" + value + "' not found in source " + mapsource);
         }
         return n;
+    }
+    
+    public Node lang(String lang) {
+        return NodeFactory.createLiteral(value, lang, false);
     }
     
 }

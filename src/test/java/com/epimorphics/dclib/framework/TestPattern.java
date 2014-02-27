@@ -119,6 +119,8 @@ public class TestPattern {
         assertEquals(NodeFactory.createLiteral("42", XSDDatatype.XSDstring), evalNode("{i.datatype('xsd:string')}"));
         assertEquals(NodeFactory.createLiteral("42"), evalNode("{i.asString()}"));
         
+        assertEquals(NodeFactory.createLiteral("a string", "en", false), evalNode("{a.lang('en')}"));
+        
     }
     
     @Test
