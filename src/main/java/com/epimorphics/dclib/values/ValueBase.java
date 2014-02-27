@@ -10,6 +10,10 @@
 package com.epimorphics.dclib.values;
 
 import com.epimorphics.dclib.framework.ConverterProcess;
+import com.epimorphics.tasks.ProgressReporter;
+import com.hp.hpl.jena.datatypes.TypeMapper;
+import com.hp.hpl.jena.graph.NodeFactory;
+import com.hp.hpl.jena.vocabulary.XSD;
 
 /**
  * A simple packaged value.
@@ -63,6 +67,23 @@ public abstract class ValueBase<T> implements Value {
     @Override
     public Object[] getValues() {
         return new Object[]{value};
+    }
+    
+    protected void reportError(String msg) {
+        ProgressReporter reporter = proc.getMessageReporter();
+        reporter.report(msg);
+        reporter.failed();
+    }
+    
+    // Value methods applicable to any type
+    
+    public Object datatype(String typeURI) {
+        typeURI = proc.getDataContext().expandURI(typeURI);
+        if (typeURI.startsWith("xsd:")) {
+            // Hardwired xsd: even if the prefix mapping doesn't have it
+            typeURI = typeURI.replace("xsd:", XSD.getURI());
+        }
+        return NodeFactory.createLiteral(toString(), TypeMapper.getInstance().getSafeTypeByName(typeURI));
     }
 
 }

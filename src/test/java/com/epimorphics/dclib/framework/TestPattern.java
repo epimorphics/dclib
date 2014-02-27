@@ -9,6 +9,7 @@
 
 package com.epimorphics.dclib.framework;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import com.epimorphics.dclib.values.ValueFactory;
@@ -22,11 +23,18 @@ import com.hp.hpl.jena.vocabulary.RDF;
 import static org.junit.Assert.*;
 
 public class TestPattern {
-    BindingEnv env = new BindingEnv();
     DataContext dc = new DataContext();
-    ConverterProcess proc = new ConverterProcess(dc, null);
+    BindingEnv env;
+    ConverterProcess proc;
 
     public TestPattern() {
+    }
+    
+    @Before
+    public void setUp() {
+        proc = new ConverterProcess(dc, null);
+        
+        env = new BindingEnv();
         env.set("a", ValueFactory.asValue("a string", proc));
         env.set("b", ValueFactory.asValue("foo bar", proc));
         env.set("i", ValueFactory.asValue("42", proc));
@@ -106,6 +114,17 @@ public class TestPattern {
         assertEquals(NodeFactory.createLiteral("true", XSDDatatype.XSDboolean), evalNode("{true}"));
         assertEquals(NodeFactory.createLiteral("false", XSDDatatype.XSDboolean), evalNode("{false}"));
         assertEquals(NodeFactory.createLiteral("true", XSDDatatype.XSDboolean), evalNode("{t.asBoolean()}"));
+        
+        assertEquals(NodeFactory.createLiteral("42", XSDDatatype.XSDshort), evalNode("{i.datatype('xsd:short')}"));
+        assertEquals(NodeFactory.createLiteral("42", XSDDatatype.XSDstring), evalNode("{i.datatype('xsd:string')}"));
+        assertEquals(NodeFactory.createLiteral("42"), evalNode("{i.asString()}"));
+        
+    }
+    
+    @Test
+    public void testErrorInConversion() {
+        eval("{a.asNumber()}");
+        assertFalse( proc.getMessageReporter().succeeded() );
     }
     
     private Node evalNode(String pattern) {

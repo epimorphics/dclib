@@ -16,7 +16,6 @@ import com.epimorphics.dclib.framework.ConverterProcess;
 import com.epimorphics.dclib.framework.MatchFailed;
 import com.epimorphics.dclib.framework.NullResult;
 import com.epimorphics.rdfutil.RDFUtil;
-import com.epimorphics.tasks.ProgressReporter;
 import com.epimorphics.util.NameUtils;
 import com.hp.hpl.jena.graph.Node;
 
@@ -41,7 +40,11 @@ public class ValueString extends ValueBase<String> implements Value {
     }
     
     public Value asNumber() {
-        return new ValueNumber(value, proc);
+        ValueNumber v = new ValueNumber(value, proc);
+        if (v.isNull()) {
+            reportError("Could not convert " + value + " to a number");
+        }
+        return v;
     }
     
     public Boolean asBoolean() {
@@ -107,9 +110,7 @@ public class ValueString extends ValueBase<String> implements Value {
             String msg = "Value '" + value + "' not found in source " + mapsource;
             if (matchRequried) {
                 // Can't thow an exception passed the execution context so have to report directly
-                ProgressReporter reporter = proc.getMessageReporter();
-                reporter.report(msg);
-                reporter.failed();
+                reportError(msg);
             } else {
                 throw new NullResult(msg);
             }
