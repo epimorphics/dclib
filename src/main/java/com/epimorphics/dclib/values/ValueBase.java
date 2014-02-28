@@ -11,6 +11,7 @@ package com.epimorphics.dclib.values;
 
 import com.epimorphics.dclib.framework.ConverterProcess;
 import com.epimorphics.tasks.ProgressReporter;
+import com.hp.hpl.jena.datatypes.RDFDatatype;
 import com.hp.hpl.jena.datatypes.TypeMapper;
 import com.hp.hpl.jena.graph.NodeFactory;
 import com.hp.hpl.jena.vocabulary.XSD;
@@ -78,12 +79,20 @@ public abstract class ValueBase<T> implements Value {
     // Value methods applicable to any type
     
     public Object datatype(String typeURI) {
+        return NodeFactory.createLiteral(toString(), typeFor(typeURI));
+    }
+    
+    protected RDFDatatype typeFor(String typeURI) {
+        return TypeMapper.getInstance().getSafeTypeByName( expandTypeURI(typeURI) );
+    }
+    
+    protected String expandTypeURI(String typeURI) {
         typeURI = proc.getDataContext().expandURI(typeURI);
         if (typeURI.startsWith("xsd:")) {
             // Hardwired xsd: even if the prefix mapping doesn't have it
             typeURI = typeURI.replace("xsd:", XSD.getURI());
         }
-        return NodeFactory.createLiteral(toString(), TypeMapper.getInstance().getSafeTypeByName(typeURI));
+        return typeURI;
     }
     
     public Object format(String fmtstr) {

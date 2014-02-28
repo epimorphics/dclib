@@ -19,8 +19,12 @@ import com.epimorphics.dclib.framework.MatchFailed;
 import com.epimorphics.dclib.framework.NullResult;
 import com.epimorphics.rdfutil.RDFUtil;
 import com.epimorphics.util.NameUtils;
+import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
+import com.hp.hpl.jena.datatypes.xsd.XSDDateTime;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.NodeFactory;
+import com.hp.hpl.jena.graph.impl.LiteralLabel;
+import com.hp.hpl.jena.graph.impl.LiteralLabelFactory;
 import com.hp.hpl.jena.vocabulary.XSD;
 
 public class ValueString extends ValueBase<String> implements Value {
@@ -150,8 +154,12 @@ public class ValueString extends ValueBase<String> implements Value {
     }
     
     public ValueDate asDate(String format) {
+        // TODO scrap and replace with Yoda time constructs
+        // Parse, extract timezone if any, create lexical form for xsd, create literal
 //        Date date = new SimpleDateFormat(format).parse(value);
-        // TODO in progress
+//        Calendar.
+//        Object value = new XSDDateTime(cal);
+//        LiteralLabel ll = LiteralLabelFactory.create(value, "", XSDDatatype.XSDdateTime);
         return null;
     }
 
