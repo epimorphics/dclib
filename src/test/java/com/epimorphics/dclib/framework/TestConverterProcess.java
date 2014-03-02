@@ -48,6 +48,7 @@ public class TestConverterProcess {
         SimpleProgressMonitor monitor = new SimpleProgressMonitor();
         ConverterProcess process = setUp("test/test-fail.csv");
         process.setMessageReporter(monitor);
+        @SuppressWarnings("unused")
         boolean ok = process.process();
 //        assertFalse(ok);  - failed row convert no longer itself fatal
         assertTrue( contains(process, "1", "a", "10") );

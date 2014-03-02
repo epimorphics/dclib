@@ -18,7 +18,7 @@
              "$version"           : "1" },
     templates : [{ 
          "@id"                               : "<{$samplingpoints}/region-{smpt_user_reference}:{$version}>" ,
-         "<{$admingeo}/inDistrict>"          : "{smpt_dc_ref != null ? smpt_dc_ref.map('dc') : null }"
+         "<{$admingeo}/inDistrict>"          : "{smpt_dc_ref != null ? smpt_dc_ref.asString().map('dc').map('chain') : null }"
        }],
    sources : [{
    	    name       : "dc",
@@ -26,6 +26,14 @@
  		source     : "test/districts.csv",
  		key        : "dc_ref",
  		value      : "dc_lname"   		
-   	   }]
+   	   },
+   	   {
+        name       : "chain",
+        sourceType : "CSV",
+        source     : "test/chained-map.csv",
+        key        : "key",
+        value      : "value",
+        makeURI    : false        
+       }]
   }
 ]

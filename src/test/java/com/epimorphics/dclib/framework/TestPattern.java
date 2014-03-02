@@ -101,6 +101,7 @@ public class TestPattern {
         assertEquals("a_string", eval("{A.toSegment().toLowerCase()}").toString());
         assertEquals("A_String", eval("{A.toSegment().toSegment()}").toString());
         assertEquals("a_string", eval("{A.asString().toSegment().toLowerCase()}").toString());
+        assertEquals("a_string", eval("{A.asString().toSegment() \n\r .toLowerCase()}").toString());
     }
     
     private Object eval(String pattern) {

@@ -32,6 +32,13 @@ public class TestBasicConverters {
         checkAgainstExpected("test/template-multi-value.json", "test/test-map.csv", "test/test-map-result-multi.ttl");
     }
 
+    
+    // Multiline templates not supported
+    // @Test
+    public void testMultiLineTemplates() throws IOException {
+        checkAgainstExpected("test/multi-line-skos-template.json", "test/test-map.csv", "test/test-map-result.ttl");
+    }
+
     @Test
     public void testParameterized() throws IOException {
         checkAgainstExpected("test/parameterized-template.json", "test/test-parameterized.csv", "test/test-map-result.ttl");
@@ -88,6 +95,7 @@ public class TestBasicConverters {
     @Test
     public void testNumericMapping() throws IOException {
         checkAgainstExpected("test/sampling-points.json", "test/sampling-points.csv", "test/sampling-points.ttl");
+        checkAgainstExpected("test/sampling-points-chained.json", "test/sampling-points.csv", "test/sampling-points-chained.ttl");
     }
     
     @Test
