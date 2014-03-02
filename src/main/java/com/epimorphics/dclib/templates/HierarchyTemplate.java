@@ -89,13 +89,13 @@ public class HierarchyTemplate extends TemplateBase implements Template {
                     state[i] = resource;
                     if (i > 0 && state[i-1] != null) {
                         Node parent = state[i-1];
-                        condLink(proc, row, parentLink, resource, parent);
-                        condLink(proc, row, childLink, parent, resource);
+                        condLink(proc, row, parentLink, resource, parent, rowNumber);
+                        condLink(proc, row, childLink, parent, resource, rowNumber);
                     } else if (i == 0) {
                         Node dataset = (Node) row.get(ConverterProcess.DATASET_OBJECT_NAME);
                         if (dataset != null) {
-                            condLink(proc, row, topLink, dataset, resource);
-                            condLink(proc, row, invTopLink, resource, dataset);
+                            condLink(proc, row, topLink, dataset, resource, rowNumber);
+                            condLink(proc, row, invTopLink, resource, dataset, rowNumber);
                         }
                     }
                 }
@@ -107,9 +107,9 @@ public class HierarchyTemplate extends TemplateBase implements Template {
     }
 
     protected void condLink(ConverterProcess proc, BindingEnv row, Pattern link,
-            Node resource, Node parent) {
+            Node resource, Node parent, int rowNumber) {
         if (link != null) {
-            Node linkn = link.evaluateAsNode( row, proc );
+            Node linkn = link.evaluateAsNode( row, proc, rowNumber );
             proc.getOutputStream().triple( new Triple(resource, linkn, parent) );
         }
     }

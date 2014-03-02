@@ -188,8 +188,8 @@ public class ConverterProcess {
                             env.put(DATASET_OBJECT_NAME, dataset);
                         } else {
                             try {
-                                Node prop = new Pattern(peekRow[1], dataContext).evaluateAsURINode(env, this);
-                                Node value = new Pattern(peekRow[2], dataContext).evaluateAsNode(env, this);
+                                Node prop = new Pattern(peekRow[1], dataContext).evaluateAsURINode(env, this, -1);
+                                Node value = new Pattern(peekRow[2], dataContext).evaluateAsNode(env, this, -1);
                                 getOutputStream().triple( new Triple(dataset, prop, value) );
                             } catch (Exception e) {
                                 messageReporter.report("Failed to process metadata row: " + e, dataSource.getLineNumber());
@@ -218,7 +218,7 @@ public class ConverterProcess {
     public void debugCheck(BindingEnv row, int rowNumber, Pattern p) {
         if (isDebugging()) {
             try {
-                p.evaluate(row, this);
+                p.evaluate(row, this, rowNumber);
             } catch (Exception e) {
                 getMessageReporter().report("Debug: pattern " + p + " failed to match environment " + row, rowNumber);
             }

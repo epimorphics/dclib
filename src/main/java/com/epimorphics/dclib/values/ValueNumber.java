@@ -14,7 +14,6 @@ import java.math.BigInteger;
 import java.util.regex.Pattern;
 
 import com.epimorphics.dclib.framework.ConverterProcess;
-import com.epimorphics.util.NameUtils;
 import com.hp.hpl.jena.datatypes.RDFDatatype;
 import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
 import com.hp.hpl.jena.graph.Node;
@@ -67,11 +66,6 @@ public class ValueNumber extends ValueBase<Number> implements Value {
     }
     
     @Override
-    public Value asString() {
-       return new ValueString(toString(), proc); 
-    }
-    
-    @Override
     public String toString() {
         if (lexical != null) {
             return lexical;
@@ -80,10 +74,6 @@ public class ValueNumber extends ValueBase<Number> implements Value {
         }
     }
     
-    public String toSegment() {
-        return NameUtils.safeName(toString());
-    }
-
     @Override
     public boolean isNumber() {
         return true;
@@ -112,7 +102,7 @@ public class ValueNumber extends ValueBase<Number> implements Value {
     }
 
     @Override
-    public String datatype() {
+    public String getDatatype() {
         return typeFromNumber(value).getURI();
     }
     

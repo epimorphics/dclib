@@ -24,6 +24,11 @@ public class ValueNull implements Value
     public boolean isNull() {
         return true;
     }
+    
+    @Override
+    public boolean isError() {
+        return false;
+    }
 
     @Override
     public Object getValue() {
@@ -61,7 +66,7 @@ public class ValueNull implements Value
     }
 
     @Override
-    public String datatype() {
+    public String getDatatype() {
         return null;
     }
 

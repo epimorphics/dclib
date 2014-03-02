@@ -104,7 +104,7 @@ public class TestPattern {
     }
     
     private Object eval(String pattern) {
-        return new Pattern(pattern, dc).evaluate(env, proc);
+        return new Pattern(pattern, dc).evaluate(env, proc, 0);
     }
     
     @Test
@@ -135,6 +135,6 @@ public class TestPattern {
     }
     
     private Node evalNode(String pattern) {
-        return new Pattern(pattern, dc).evaluateAsNode(env, proc);
+        return new Pattern(pattern, dc).evaluateAsNode(env, proc, 0);
     }
 }

@@ -77,7 +77,7 @@ public class CompositeTemplate extends TemplateBase implements Template {
             JsonObject binding = spec.get(JSONConstants.BIND).getAsObject();
             for (Entry<String, JsonValue> ent : binding.entrySet()) {
                 Pattern p = new Pattern(ent.getValue().getAsString().value(), dc);
-                env.put(ent.getKey(), p.evaluate(env, proc));
+                env.put(ent.getKey(), p.evaluate(env, proc, -1));
             }
             
             // Fix up dataset binding incase the BIND has changed the $base (which it typically does)

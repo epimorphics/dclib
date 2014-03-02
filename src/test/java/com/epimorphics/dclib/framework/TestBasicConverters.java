@@ -9,12 +9,18 @@
 
 package com.epimorphics.dclib.framework;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
 import java.io.IOException;
 
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 import com.epimorphics.rdfutil.RDFUtil;
+import com.epimorphics.tasks.SimpleProgressMonitor;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.util.FileManager;
 
@@ -67,6 +73,16 @@ public class TestBasicConverters {
         checkAgainstExpected("test/dept-type.json", "test/dept-type-data.csv", "test/dept-type-result.ttl");
         checkAgainstExpected("test/dept-type.json", "test/dept-type-data-error.csv", "test/dept-type-result-error.ttl");
         assertNull( convert("test/dept-type-required.json", "test/dept-type-data-error.csv") );
+        
+        // Check map error reporting
+        ConverterService service = new ConverterService();
+        service.getDataContext().registerTemplate("test/simple-skos-template.json");
+        service.put("$base", "http://example.com/");
+        SimpleProgressMonitor monitor = new SimpleProgressMonitor();
+        service.simpleConvert("test/dept-type-required.json", "test/dept-type-data-error.csv", monitor);
+        assertFalse( monitor.succeeded() );
+        assertEquals(1, monitor.getMessages().size());
+//        System.out.println(monitor.getMessages().get(0));
     }
     
     @Test
@@ -86,7 +102,8 @@ public class TestBasicConverters {
         ConverterService service = new ConverterService();
         service.getDataContext().registerTemplate("test/simple-skos-template.json");
         service.put("$base", "http://example.com/");
-        Model m = service.simpleConvert(templateFile, dataFile);
+        SimpleProgressMonitor monitor = new SimpleProgressMonitor();
+        Model m = service.simpleConvert(templateFile, dataFile, monitor);
         return m;
     }
     

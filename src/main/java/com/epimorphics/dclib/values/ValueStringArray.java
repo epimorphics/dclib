@@ -71,7 +71,7 @@ public class ValueStringArray extends ValueBase<String[]> implements Value {
     }
 
     @Override
-    public String datatype() {
+    public String getDatatype() {
         return null;
     }
 

@@ -17,8 +17,10 @@ import org.apache.commons.jexl2.JexlEngine;
 import org.apache.commons.jexl2.Script;
 
 import com.epimorphics.dclib.values.Value;
+import com.epimorphics.dclib.values.ValueError;
 import com.epimorphics.dclib.values.ValueNumber;
 import com.epimorphics.dclib.values.ValueString;
+import com.epimorphics.tasks.ProgressReporter;
 import com.epimorphics.util.EpiException;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.NodeFactory;
@@ -78,11 +80,13 @@ public class Pattern {
     /**
      * Interpret the pattern in some binding environment of variables.
      */
-    public Object evaluate(BindingEnv env, ConverterProcess proc) {
+    public Object evaluate(BindingEnv env, ConverterProcess proc, int rowNumber) {
         if (isConstant) {
             return components.get(0);
         } else if (components.size() == 1) {
-            return evaluateComponent(0, env);
+            Object result = evaluateComponent(0, env);
+            checkForError(result, proc, rowNumber);
+            return result;
         } else {
             // Multiple components concatenated a strings
             boolean multiValued = false;
@@ -91,6 +95,7 @@ public class Pattern {
             Value ans = null;
             for (int i = 0; i < len; i++) {
                 Object result = evaluateComponent(i, env);
+                checkForError(result, proc, rowNumber);
                 if (result instanceof Value && ((Value)result).isMulti()) {
                     if (!multiValued) {
                         multiValued = true;
@@ -114,14 +119,26 @@ public class Pattern {
             }
         }
     }
+    
+    private void checkForError(Object result, ConverterProcess proc, int rowNumber) {
+        if (result instanceof ValueError) {
+            ValueError err = (ValueError)result;
+            ProgressReporter reporter = proc.getMessageReporter();
+            reporter.report(err.getErrorMessage(), rowNumber);
+            if (err.isFatal()) {
+                reporter.failed();
+            }
+            throw new NullResult(err.getErrorMessage());
+        }        
+    }
 
 
     /**
      * Interpret the pattern in some processing context.
      * Return the result converted to an RDF Node
      */
-    public Node evaluateAsNode(BindingEnv env, ConverterProcess proc) {
-        return asNode( evaluate(env, proc) );
+    public Node evaluateAsNode(BindingEnv env, ConverterProcess proc, int rowNumber) {
+        return asNode( evaluate(env, proc, rowNumber) );
     }
 
     /**
@@ -129,8 +146,8 @@ public class Pattern {
      * Return the result converted to a resource Node or throw an
      * exception if this is not possible
      */
-    public Node evaluateAsURINode(BindingEnv env, ConverterProcess proc) {
-        return asNode( evaluate(env, proc) );
+    public Node evaluateAsURINode(BindingEnv env, ConverterProcess proc, int rowNumber) {
+        return asNode( evaluate(env, proc, rowNumber) );
     }
 
     /**

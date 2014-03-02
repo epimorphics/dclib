@@ -63,7 +63,7 @@ public class TestFunctions {
         ConverterProcess proc = new ConverterProcess(dc, null);
         BindingEnv env = new BindingEnv();
         env.put("x", ValueFactory.asValue(value, proc));
-        Object result = new Pattern(pattern, dc).evaluate(env, proc);
+        Object result = new Pattern(pattern, dc).evaluate(env, proc, 0);
         return result;
     }
 }

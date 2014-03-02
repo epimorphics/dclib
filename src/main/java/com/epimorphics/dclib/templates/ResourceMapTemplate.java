@@ -74,7 +74,7 @@ public class ResourceMapTemplate extends TemplateBase implements Template {
         super.convertRow(proc, row, rowNumber);
         StreamRDF out = proc.getOutputStream();
         proc.debugCheck(row, rowNumber, root);
-        Node subject = root.evaluateAsURINode(row, proc);
+        Node subject = root.evaluateAsURINode(row, proc, rowNumber);
         if (subject == null) return subject;
         for (Map.Entry<Pattern, Pattern> entry : patterns.entrySet()) {
             Pattern propPattern = entry.getKey();
@@ -82,8 +82,8 @@ public class ResourceMapTemplate extends TemplateBase implements Template {
             Pattern valPattern = entry.getValue();
             proc.debugCheck(row, rowNumber, valPattern);
             try {
-                Node prop = propPattern.evaluateAsNode(row, proc);
-                Object value = valPattern.evaluate(row, proc);
+                Node prop = propPattern.evaluateAsNode(row, proc, rowNumber);
+                Object value = valPattern.evaluate(row, proc, rowNumber);
                 if (value instanceof ValueStringArray) {
                     for (Object v : ((ValueStringArray) value).getValues()) {
                         out.triple(asTriple(propPattern, valPattern, subject,

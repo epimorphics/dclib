@@ -24,8 +24,8 @@
    	    name       : "dc",
    		sourceType : "CSV",
  		source     : "test/districts.csv",
- 		key        : "DC_REF",
- 		value      : "DC_LNAME"   		
+ 		key        : "dc_ref",
+ 		value      : "dc_lname"   		
    	   }]
   }
 ]
