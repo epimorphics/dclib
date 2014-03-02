@@ -14,6 +14,7 @@ import java.io.IOException;
 
 import com.epimorphics.dclib.framework.ConverterService;
 import com.epimorphics.rdfutil.RDFUtil;
+import com.epimorphics.tasks.LiveProgressMonitor;
 import com.epimorphics.tasks.ProgressMessage;
 import com.epimorphics.tasks.SimpleProgressMonitor;
 import com.epimorphics.util.FileUtil;
@@ -47,7 +48,7 @@ public class Main {
         }
         
         ConverterService service = new ConverterService();
-        SimpleProgressMonitor reporter = new SimpleProgressMonitor();
+        SimpleProgressMonitor reporter = new LiveProgressMonitor();
         Model m = service.simpleConvert(templateName, dataFile, reporter, debug);
         if (m != null) {
             if (splitDir == null) {
