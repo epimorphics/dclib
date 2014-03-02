@@ -123,7 +123,7 @@ public class TestPattern {
         assertEquals(NodeFactory.createLiteral("a string", "en", false), evalNode("{a.lang('en')}"));
         
     }
-    
+  
     @Test
     public void testFormatting() {
        assertEquals("00042", eval("{i.format('%05d')}").toString());

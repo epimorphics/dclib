@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.regex.Matcher;
 
 import org.apache.jena.atlas.json.JsonObject;
 import org.apache.jena.atlas.json.JsonValue;
@@ -20,6 +21,7 @@ import org.apache.jena.atlas.json.JsonValue;
 import com.epimorphics.dclib.framework.BindingEnv;
 import com.epimorphics.dclib.framework.ConverterProcess;
 import com.epimorphics.dclib.framework.DataContext;
+import com.epimorphics.dclib.framework.EvalFailed;
 import com.epimorphics.dclib.framework.MapSource;
 import com.epimorphics.dclib.framework.Pattern;
 import com.epimorphics.dclib.framework.Template;
@@ -205,10 +207,14 @@ public class TemplateBase implements Template {
     // General RDF helper functions
     
     protected Triple asTriple(Pattern propPattern, Pattern valPattern, Node subject, Node prop, Object v) {
+        validateNode(prop);
+        validateNode(subject);
+        Node so = propPattern.isInverse() ? valPattern.asURINode(v) : valPattern.asNode(v);
+        validateNode(so);
         if (propPattern.isInverse()) {
-            return new Triple( valPattern.asURINode(v), prop, subject);
+            return new Triple( so, prop, subject);
         } else {
-            return new Triple(subject, prop, valPattern.asNode(v));
+            return new Triple(subject, prop, so);
         }
     }
 
@@ -238,5 +244,33 @@ public class TemplateBase implements Template {
             return new ArrayList<>();
         }
     }
+    
+    /**
+     * Check for things like unsubstituted URIs
+     */
+    public static void validateNode(Node n) {
+        if (n.isLiteral()) {
+            if (n.getLiteralValue() == null) {  // throws exception of the datatype is ill-formed
+                throw new EvalFailed("Illegal or null literal node");
+            }
+        } else if (n.isURI()) {
+            String uri = n.getURI();
+            if (BAD_CHARS.matcher(uri).find()) {
+                throw new EvalFailed("Generated URI contains suspect chars: " + uri);
+            }
+            Matcher m =  PREFIX.matcher(uri);
+            if (m.matches()) {
+                String prefix = m.group(1).toLowerCase();
+                if (prefix.equals("http") || prefix.equals("https") || prefix.equals("urn")) {
+                    // OK
+                } else {
+                    throw new EvalFailed("Looks like unexpanded prefix in URI: " + uri);
+                }
+            }
+        }
+    }
+    
+    static final java.util.regex.Pattern BAD_CHARS = java.util.regex.Pattern.compile("[{}<>]");
+    static final java.util.regex.Pattern PREFIX = java.util.regex.Pattern.compile("([^/]+):.*");
 
 }

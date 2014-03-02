@@ -12,6 +12,7 @@ package com.epimorphics.dclib.templates;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.regex.Matcher;
 
 import org.apache.commons.jexl2.JexlException;
 import org.apache.jena.atlas.json.JsonObject;
@@ -21,6 +22,7 @@ import org.apache.jena.riot.system.StreamRDF;
 import com.epimorphics.dclib.framework.BindingEnv;
 import com.epimorphics.dclib.framework.ConverterProcess;
 import com.epimorphics.dclib.framework.DataContext;
+import com.epimorphics.dclib.framework.EvalFailed;
 import com.epimorphics.dclib.framework.NullResult;
 import com.epimorphics.dclib.framework.Pattern;
 import com.epimorphics.dclib.framework.Template;
@@ -83,7 +85,11 @@ public class ResourceMapTemplate extends TemplateBase implements Template {
             proc.debugCheck(row, rowNumber, valPattern);
             try {
                 Node prop = propPattern.evaluateAsNode(row, proc, rowNumber);
+                validateNode(prop);
                 Object value = valPattern.evaluate(row, proc, rowNumber);
+                if (value instanceof Node) {
+                    validateNode((Node)value);
+                }
                 if (value instanceof ValueStringArray) {
                     for (Object v : ((ValueStringArray) value).getValues()) {
                         out.triple(asTriple(propPattern, valPattern, subject,

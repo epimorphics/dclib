@@ -105,6 +105,13 @@ public class TestBasicConverters {
         checkAgainstExpected("test/map-rdf-test-type.json", "test/map-rdf-test.csv", "test/map-rdf-result.ttl");
     }
     
+    @Test
+    public void testBadURIs() throws IOException {
+        expectError("test/baduris-template1.json", "test/test-map.csv");
+        expectError("test/baduris-template2.json", "test/test-map.csv");
+        expectError("test/baduris-template3.json", "test/test-map.csv");
+    }
+    
 
     public static Model convert(String templateFile, String dataFile) throws IOException {
         ConverterService service = new ConverterService();
@@ -113,6 +120,18 @@ public class TestBasicConverters {
         SimpleProgressMonitor monitor = new SimpleProgressMonitor();
         Model m = service.simpleConvert(templateFile, dataFile, monitor);
         return m;
+    }
+
+    public static void expectError(String templateFile, String dataFile) throws IOException {
+        ConverterService service = new ConverterService();
+        service.getDataContext().registerTemplate("test/simple-skos-template.json");
+        service.put("$base", "http://example.com/");
+        SimpleProgressMonitor monitor = new SimpleProgressMonitor();
+        Model m = service.simpleConvert(templateFile, dataFile, monitor);
+        assertNull(m);
+        assertTrue(!monitor.succeeded());
+        assertTrue(monitor.getMessages().size() > 1);
+//        System.out.println(monitor.getMessages().get(0));
     }
     
     public static void checkAgainstExpected(String templateFile, String dataFile, String resultFile) throws IOException {
