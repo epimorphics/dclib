@@ -18,6 +18,7 @@ import org.apache.jena.atlas.json.JsonValue;
 import com.epimorphics.dclib.framework.BindingEnv;
 import com.epimorphics.dclib.framework.ConverterProcess;
 import com.epimorphics.dclib.framework.DataContext;
+import com.epimorphics.dclib.framework.NullResult;
 import com.epimorphics.dclib.framework.Pattern;
 import com.epimorphics.dclib.framework.Template;
 import com.hp.hpl.jena.graph.Node;
@@ -63,6 +64,8 @@ public class CompositeTemplate extends TemplateBase implements Template {
                     if (result == null && n != null) {
                         result = n;
                     }
+                } catch (NullResult e) {
+                    // Silently ignore null results
                 } catch (Exception e) {
                     proc.getMessageReporter().report("Warning: template applied but failed: " + e, rowNumber);
                 }
