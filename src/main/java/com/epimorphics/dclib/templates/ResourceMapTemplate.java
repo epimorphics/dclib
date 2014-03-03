@@ -12,7 +12,6 @@ package com.epimorphics.dclib.templates;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.regex.Matcher;
 
 import org.apache.commons.jexl2.JexlException;
 import org.apache.jena.atlas.json.JsonObject;
@@ -22,7 +21,6 @@ import org.apache.jena.riot.system.StreamRDF;
 import com.epimorphics.dclib.framework.BindingEnv;
 import com.epimorphics.dclib.framework.ConverterProcess;
 import com.epimorphics.dclib.framework.DataContext;
-import com.epimorphics.dclib.framework.EvalFailed;
 import com.epimorphics.dclib.framework.NullResult;
 import com.epimorphics.dclib.framework.Pattern;
 import com.epimorphics.dclib.framework.Template;

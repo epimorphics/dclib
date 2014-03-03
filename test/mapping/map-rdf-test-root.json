@@ -8,7 +8,7 @@
     "sources" : {
         "sourceType" : "RDF",
         "name" : "test-map-rdf",
-        "source" : "test/map-rdf.ttl",
+        "source" : "test/mapping/map-rdf.ttl",
         "key" : "skos:notation"
     }
 }

@@ -23,7 +23,7 @@
    sources : [{
    	    name       : "dc",
    		sourceType : "CSV",
- 		source     : "test/districts.csv",
+ 		source     : "test/mapping/districts.csv",
  		key        : "dc_ref",
  		value      : "dc_lname"   		
    	   }]

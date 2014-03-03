@@ -20,6 +20,7 @@ import java.io.IOException;
 import org.junit.Test;
 
 import com.epimorphics.rdfutil.RDFUtil;
+import com.epimorphics.tasks.ProgressMessage;
 import com.epimorphics.tasks.SimpleProgressMonitor;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.util.FileManager;
@@ -49,26 +50,26 @@ public class TestBasicConverters {
     
     @Test
     public void testHierarchy() throws IOException {
-        checkAgainstExpected("test/hierarchy.json", "test/hierarchy1.csv", "test/hierarchy-result.ttl");
-        checkAgainstExpected("test/hierarchy2.json", "test/hierarchy2.csv", "test/hierarchy-result.ttl");
-        checkAgainstExpected("test/hierarchy2.json", "test/hierarchy2b.csv", "test/hierarchy-result.ttl");
+        checkAgainstExpected("test/hierarchy/hierarchy.json", "test/hierarchy/hierarchy1.csv", "test/hierarchy/hierarchy-result.ttl");
+        checkAgainstExpected("test/hierarchy/hierarchy2.json", "test/hierarchy/hierarchy2.csv", "test/hierarchy/hierarchy-result.ttl");
+        checkAgainstExpected("test/hierarchy/hierarchy2.json", "test/hierarchy/hierarchy2b.csv", "test/hierarchy/hierarchy-result.ttl");
     }
     
     @Test
     public void testTemplateInclusion() throws IOException {
-        checkAgainstExpected("test/hierarchy-complete.json", "test/hierarchy1.csv", "test/hierarchy-result.ttl");
+        checkAgainstExpected("test/hierarchy/hierarchy-complete.json", "test/hierarchy/hierarchy1.csv", "test/hierarchy/hierarchy-result.ttl");
     }
     
     @Test
     public void testDatasetReference() throws IOException {
         checkAgainstExpected("test/skos-collection.json", "test/test-map.csv", "test/skos-collection-result.ttl");
         checkAgainstExpected("test/skos-collection-with-member.json", "test/test-map.csv", "test/skos-collection-result-with-member.ttl");
-        checkAgainstExpected("test/hierarchy-complete-top.json", "test/hierarchy1.csv", "test/hierarchy-top-result.ttl");
+        checkAgainstExpected("test/hierarchy/hierarchy-complete-top.json", "test/hierarchy/hierarchy1.csv", "test/hierarchy/hierarchy-top-result.ttl");
     }
     
     @Test
     public void testMetadata() throws IOException {
-        checkAgainstExpected("test/hierarchy-complete-top-meta.json", "test/hierarchy1-meta.csv", "test/hierarchy-top-meta-result.ttl");
+        checkAgainstExpected("test/hierarchy/hierarchy-complete-top-meta.json", "test/hierarchy/hierarchy1-meta.csv", "test/hierarchy/hierarchy-top-meta-result.ttl");
     }
 
     @Test
@@ -78,45 +79,50 @@ public class TestBasicConverters {
     
     @Test
     public void testMapping() throws IOException {
-        checkAgainstExpected("test/dept-type.json", "test/dept-type-data.csv", "test/dept-type-result.ttl");
-        checkAgainstExpected("test/dept-type.json", "test/dept-type-data-error.csv", "test/dept-type-result-error.ttl");
-        assertNull( convert("test/dept-type-required.json", "test/dept-type-data-error.csv") );
+        checkAgainstExpected("test/mapping/dept-type.json", "test/mapping/dept-type-data.csv", "test/mapping/dept-type-result.ttl");
+        checkAgainstExpected("test/mapping/dept-type.json", "test/mapping/dept-type-data-error.csv", "test/mapping/dept-type-result-error.ttl");
+        assertNull( convert("test/mapping/dept-type-required.json", "test/mapping/dept-type-data-error.csv") );
         
         // Check map error reporting
         ConverterService service = new ConverterService();
         service.getDataContext().registerTemplate("test/simple-skos-template.json");
         service.put("$base", "http://example.com/");
         SimpleProgressMonitor monitor = new SimpleProgressMonitor();
-        service.simpleConvert("test/dept-type-required.json", "test/dept-type-data-error.csv", monitor);
+        service.simpleConvert("test/mapping/dept-type-required.json", "test/mapping/dept-type-data-error.csv", monitor);
         assertFalse( monitor.succeeded() );
         assertEquals(1, monitor.getMessages().size());
 //        System.out.println(monitor.getMessages().get(0));
 
         // Non-sensical example to provide test of asNodeURI in situ
-        convert("test/dept-type-inv.json", "test/dept-type-data.csv");
+        convert("test/mapping/dept-type-inv.json", "test/mapping/dept-type-data.csv");
 
     }
     
     @Test
     public void testNumericMapping() throws IOException {
-        checkAgainstExpected("test/sampling-points.json", "test/sampling-points.csv", "test/sampling-points.ttl");
-        checkAgainstExpected("test/sampling-points-chained.json", "test/sampling-points.csv", "test/sampling-points-chained.ttl");
+        checkAgainstExpected("test/mapping/sampling-points.json", "test/mapping/sampling-points.csv", "test/mapping/sampling-points.ttl");
+        checkAgainstExpected("test/mapping/sampling-points-chained.json", "test/mapping/sampling-points.csv", "test/mapping/sampling-points-chained.ttl");
     }
     
     @Test
     public void testRDFMapping() throws IOException {
-        checkAgainstExpected("test/map-rdf-test-root.json", "test/map-rdf-test.csv", "test/map-rdf-root-result.ttl");
-        checkAgainstExpected("test/map-rdf-test.json", "test/map-rdf-test.csv", "test/map-rdf-result.ttl");
-        checkAgainstExpected("test/map-rdf-test-type.json", "test/map-rdf-test.csv", "test/map-rdf-result.ttl");
+        checkAgainstExpected("test/mapping/map-rdf-test-root.json", "test/mapping/map-rdf-test.csv", "test/mapping/map-rdf-root-result.ttl");
+        checkAgainstExpected("test/mapping/map-rdf-test.json", "test/mapping/map-rdf-test.csv", "test/mapping/map-rdf-result.ttl");
+        checkAgainstExpected("test/mapping/map-rdf-test-type.json", "test/mapping/map-rdf-test.csv", "test/mapping/map-rdf-result.ttl");
     }
     
     @Test
     public void testBadURIs() throws IOException {
-        expectError("test/baduris-template1.json", "test/test-map.csv");
-        expectError("test/baduris-template2.json", "test/test-map.csv");
-        expectError("test/baduris-template3.json", "test/test-map.csv");
+        expectError("test/validation/baduris-template1.json", "test/test-map.csv");
+        expectError("test/validation/baduris-template2.json", "test/test-map.csv");
+        expectError("test/validation/baduris-template3.json", "test/test-map.csv");
     }
     
+    @Test
+    public void testConditionalComposites() throws IOException {
+        checkAgainstExpected("test/composite/cond-composite.json", "test/test-map.csv", "test/test-map-result.ttl");
+        checkAgainstExpected("test/composite/cond-composite-err.json", "test/test-map.csv", "test/test-map-result.ttl");
+    }
 
     public static Model convert(String templateFile, String dataFile) throws IOException {
         ConverterService service = new ConverterService();
@@ -124,6 +130,7 @@ public class TestBasicConverters {
         service.put("$base", "http://example.com/");
         SimpleProgressMonitor monitor = new SimpleProgressMonitor();
         Model m = service.simpleConvert(templateFile, dataFile, monitor);
+//        for (ProgressMessage message : monitor.getMessages()) System.err.println(message.toString());
         return m;
     }
 

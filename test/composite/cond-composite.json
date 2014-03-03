@@ -1,0 +1,23 @@
+{       
+    "type"  : "Composite",
+    "bind" : {"$base" : "http://example.com"},
+     "templates" : [
+       {
+        "required" : ["notation", "foobar"],
+        "@id" : "<{$base}/{notation}>",
+        "<rdf:value>" : "{foobar}"
+       },
+       {
+        "required" : ["notation", "label"],
+        "@id" : "<{$base}/{notation}>",
+        "<rdf:type>" : "<skos:Concept>",
+        "<skos:notation>" : "{notation.asString()}",
+        "<skos:prefLabel>" : "{label}"
+       },
+       {
+        "required" : ["notation", "description"],
+        "@id" : "<{$base}/{notation}>",
+        "<dct:description>" : "{description}"
+       }
+    ]
+}

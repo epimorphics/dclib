@@ -57,9 +57,15 @@ public class CompositeTemplate extends TemplateBase implements Template {
         
         Node result = null;
         for (Template template : templates) {
-            Node n = template.convertRow(proc, row, rowNumber);
-            if (result == null && n != null) {
-                result = n;
+            if (template.isApplicableTo(row)) {
+                try {
+                    Node n = template.convertRow(proc, row, rowNumber);
+                    if (result == null && n != null) {
+                        result = n;
+                    }
+                } catch (Exception e) {
+                    proc.getMessageReporter().report("Warning: template applied but failed: " + e, rowNumber);
+                }
             }
         }
         return result;

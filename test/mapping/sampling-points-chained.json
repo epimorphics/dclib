@@ -23,14 +23,14 @@
    sources : [{
    	    name       : "dc",
    		sourceType : "CSV",
- 		source     : "test/districts.csv",
+ 		source     : "test/mapping/districts.csv",
  		key        : "dc_ref",
  		value      : "dc_lname"   		
    	   },
    	   {
         name       : "chain",
         sourceType : "CSV",
-        source     : "test/chained-map.csv",
+        source     : "test/mapping/chained-map.csv",
         key        : "key",
         value      : "value",
         makeURI    : false        

@@ -9,7 +9,7 @@
     "sources" : {
         "sourceType" : "CSV",
         "name" : "dept-types",
-        "source" : "test/department-types.csv",
+        "source" : "test/mapping/department-types.csv",
         "key" : "label",
         "value" : "id"
     }

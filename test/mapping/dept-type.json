@@ -4,12 +4,12 @@
      "templates" : {
         "@id" : "<{$base}/{label.toSegment()}>",
         "<rdfs:label>" : "{label}",
-        "<rdf:type>" : "{type.map('dept-types', true)}"
+        "<rdf:type>" : "{type.map('dept-types')}"
     },
     "sources" : {
         "sourceType" : "CSV",
         "name" : "dept-types",
-        "source" : "test/department-types.csv",
+        "source" : "test/mapping/department-types.csv",
         "key" : "label",
         "value" : "id"
     }
