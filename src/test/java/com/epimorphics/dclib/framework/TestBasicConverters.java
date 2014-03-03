@@ -62,6 +62,7 @@ public class TestBasicConverters {
     @Test
     public void testDatasetReference() throws IOException {
         checkAgainstExpected("test/skos-collection.json", "test/test-map.csv", "test/skos-collection-result.ttl");
+        checkAgainstExpected("test/skos-collection-with-member.json", "test/test-map.csv", "test/skos-collection-result-with-member.ttl");
         checkAgainstExpected("test/hierarchy-complete-top.json", "test/hierarchy1.csv", "test/hierarchy-top-result.ttl");
     }
     
@@ -90,6 +91,10 @@ public class TestBasicConverters {
         assertFalse( monitor.succeeded() );
         assertEquals(1, monitor.getMessages().size());
 //        System.out.println(monitor.getMessages().get(0));
+
+        // Non-sensical example to provide test of asNodeURI in situ
+        convert("test/dept-type-inv.json", "test/dept-type-data.csv");
+
     }
     
     @Test

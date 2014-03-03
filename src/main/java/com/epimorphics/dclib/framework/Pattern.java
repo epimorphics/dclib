@@ -157,11 +157,15 @@ public class Pattern {
     public Node asURINode(Object result) {
         if (result instanceof String || result instanceof ValueString) {
             return NodeFactory.createURI( result.toString() );
+        } 
+        Node n = null;
+        if (result instanceof Value) {
+            n = ((Value)result).asNode();
         } else if (result instanceof Node) {
-            Node n = (Node)result;
-            if (n.isBlank() || n.isURI()) {
-                return n;
-            }
+            n = (Node) result;
+        }
+        if (n.isBlank() || n.isURI()) {
+            return n;
         }
         throw new EpiException("Found " + result + " when expecting a URI");
     }
