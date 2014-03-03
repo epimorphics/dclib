@@ -67,7 +67,7 @@ public class CompositeTemplate extends TemplateBase implements Template {
                 } catch (NullResult e) {
                     // Silently ignore null results
                 } catch (Exception e) {
-                    proc.getMessageReporter().report("Warning: template applied but failed: " + e, rowNumber);
+                    proc.getMessageReporter().report("Warning: template " + template.getName() + " applied but failed: " + e, rowNumber);
                 }
             }
         }
