@@ -123,6 +123,11 @@ public class TestBasicConverters {
         checkAgainstExpected("test/composite/cond-composite.json", "test/test-map.csv", "test/test-map-result.ttl");
         checkAgainstExpected("test/composite/cond-composite-err.json", "test/test-map.csv", "test/test-map-result.ttl");
     }
+    
+    @Test
+    public void testDateHandling() throws IOException {
+        checkAgainstExpected("test/dates/date.json", "test/dates/date.csv", "test/dates/date.ttl");
+    }
 
     public static Model convert(String templateFile, String dataFile) throws IOException {
         ConverterService service = new ConverterService();

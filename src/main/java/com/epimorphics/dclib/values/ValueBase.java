@@ -105,7 +105,9 @@ public abstract class ValueBase<T> implements Value {
     }
     
     protected String expandTypeURI(String typeURI) {
-        typeURI = proc.getDataContext().expandURI(typeURI);
+        if (proc != null) {
+            typeURI = proc.getDataContext().expandURI(typeURI);
+        }
         if (typeURI.startsWith("xsd:")) {
             // Hardwired xsd: even if the prefix mapping doesn't have it
             typeURI = typeURI.replace("xsd:", XSD.getURI());
@@ -163,11 +165,11 @@ public abstract class ValueBase<T> implements Value {
     }
     
     public Value asDate(String format, String typeURI) {
-        return ValueDate.parse(toString(), format, typeURI, proc);
+        return ValueDate.parse(toString(), format, expandTypeURI(typeURI), proc);
     }
     
     public Value asDate(String typeURI) {
-        return ValueDate.parse(toString(), typeURI, proc);
+        return ValueDate.parse(toString(), expandTypeURI(typeURI), proc);
     }
 
     
