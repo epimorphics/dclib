@@ -1,0 +1,13 @@
+<http://example.com/2>
+        a       <http://www.w3.org/2004/02/skos/core#Concept> ;
+        <http://example.com/def/foo#label>
+                "Entry 2" ;
+        <http://example.com/def/foo2#label>
+                "Entry 2" .
+
+<http://example.com/1>
+        a       <http://www.w3.org/2004/02/skos/core#Concept> ;
+        <http://example.com/def/foo#label>
+                "Entry 1" ;
+        <http://example.com/def/foo2#label>
+                "Entry 1" .

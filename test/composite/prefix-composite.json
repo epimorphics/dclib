@@ -1,0 +1,16 @@
+{       
+    "type"  : "Composite",
+    "bind" : {"$base" : "http://example.com"},
+    "prefixes" : {
+        "foo" : "http://example.com/def/foo#",
+        "foo2" : "http://example.com/def/foo2#" },
+     "templates" : [
+       {
+        "required" : [ "label"],
+        "@id" : "<{$base}/{notation}>",
+        "<rdf:type>" : "<skos:Concept>",
+        "<foo:label>" : "{label}",
+        "<foo2:label>" : "{label}"
+       }
+    ]
+}

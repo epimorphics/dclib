@@ -128,6 +128,11 @@ public class TestBasicConverters {
     public void testDateHandling() throws IOException {
         checkAgainstExpected("test/dates/date.json", "test/dates/date.csv", "test/dates/date.ttl");
     }
+    
+    @Test
+    public void testPrefixDeclaration() throws IOException {
+        checkAgainstExpected("test/composite/prefix-composite.json", "test/test-map.csv", "test/composite/prefix-composite-expected.ttl");
+    }
 
     public static Model convert(String templateFile, String dataFile) throws IOException {
         ConverterService service = new ConverterService();
@@ -135,7 +140,7 @@ public class TestBasicConverters {
         service.put("$base", "http://example.com/");
         SimpleProgressMonitor monitor = new SimpleProgressMonitor();
         Model m = service.simpleConvert(templateFile, dataFile, monitor);
-//        for (ProgressMessage message : monitor.getMessages()) System.err.println(message.toString());
+        for (ProgressMessage message : monitor.getMessages()) System.err.println(message.toString());
         return m;
     }
 

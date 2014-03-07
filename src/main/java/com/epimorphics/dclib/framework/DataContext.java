@@ -20,6 +20,7 @@ import java.util.Map;
 import com.epimorphics.dclib.templates.TemplateFactory;
 import com.epimorphics.util.EpiException;
 import com.hp.hpl.jena.shared.PrefixMapping;
+import com.hp.hpl.jena.shared.impl.PrefixMappingImpl;
 
 /**
  * Packages access to the background context of reference data, templates and
@@ -29,7 +30,7 @@ import com.hp.hpl.jena.shared.PrefixMapping;
  */
 public class DataContext {
     protected Map<String, Template> templates = new HashMap<String, Template>();
-    protected PrefixMapping prefixes;
+    protected PrefixMapping prefixes = new PrefixMappingImpl();
     protected BindingEnv env = new BindingEnv();
     protected DataContext parent;
     protected Map<String, MapSource> sources = new HashMap<>();
@@ -44,7 +45,11 @@ public class DataContext {
     }
     
     public void setPrefixes(PrefixMapping prefixes) {
-        this.prefixes = prefixes;
+         this.prefixes.setNsPrefixes(prefixes);
+    }
+    
+    public void setPrefix(String prefix, String uri) {
+         this.prefixes.setNsPrefix(prefix, uri);
     }
     
     /**

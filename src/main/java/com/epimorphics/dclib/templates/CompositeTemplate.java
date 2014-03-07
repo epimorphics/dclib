@@ -21,6 +21,7 @@ import com.epimorphics.dclib.framework.DataContext;
 import com.epimorphics.dclib.framework.NullResult;
 import com.epimorphics.dclib.framework.Pattern;
 import com.epimorphics.dclib.framework.Template;
+import com.epimorphics.util.EpiException;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.NodeFactory;
 
@@ -42,6 +43,18 @@ public class CompositeTemplate extends TemplateBase implements Template {
     public CompositeTemplate(JsonObject spec, DataContext dc) {
         super(spec);
         this.spec = spec;
+        
+        // Extract any prefixes
+        if (spec.get(JSONConstants.PREFIXES) != null) {
+            try {
+                JsonObject prefixes = spec.get(JSONConstants.PREFIXES).getAsObject();
+                for (Entry<String, JsonValue> pentry : prefixes.entrySet()) {
+                    dc.setPrefix(pentry.getKey(), pentry.getValue().getAsString().value());
+                }
+            } catch (Exception e) {
+                throw new EpiException("Couldn't parse prefix declaration in composite template", e);
+            }
+        }
         
         // Extract the list of to level templates to run
         templates = getTemplates(spec.get(JSONConstants.TEMPLATES), dc);
