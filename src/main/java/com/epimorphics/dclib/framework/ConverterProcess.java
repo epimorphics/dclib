@@ -121,7 +121,8 @@ public class ConverterProcess {
                     try {
                         Node result = template.convertRow(this, row, lineNumber);
                         if (result == null) {
-                            messageReporter.report("Warning: no templates matched line " + lineNumber, lineNumber);
+                            messageReporter.report("Error: no templates matched line " + lineNumber, lineNumber);
+                            messageReporter.failed();
                         }
                     } catch (Exception e) {
                         if (!(e instanceof NullResult)) {
@@ -130,6 +131,7 @@ public class ConverterProcess {
                             messageReporter.failed();
                         } else {
                             messageReporter.report("Warning: no templates matched line " + lineNumber + ", " + e, lineNumber);
+                            messageReporter.failed();
                         }
                     }
                 } else {
