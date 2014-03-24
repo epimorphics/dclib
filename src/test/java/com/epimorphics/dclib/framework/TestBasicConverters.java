@@ -133,6 +133,11 @@ public class TestBasicConverters {
     public void testPrefixDeclaration() throws IOException {
         checkAgainstExpected("test/composite/prefix-composite.json", "test/test-map.csv", "test/composite/prefix-composite-expected.ttl");
     }
+    
+    @Test
+    public void testRawColumns() throws IOException {
+        checkAgainstExpected("test/composite/cond-composite.json", "test/rawColumns/test1.csv", "test/rawColumns/expected.ttl");
+    }
 
     public static Model convert(String templateFile, String dataFile) throws IOException {
         ConverterService service = new ConverterService();

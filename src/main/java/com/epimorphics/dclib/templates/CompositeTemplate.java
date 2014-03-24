@@ -10,10 +10,12 @@
 package com.epimorphics.dclib.templates;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.jena.atlas.json.JsonObject;
 import org.apache.jena.atlas.json.JsonValue;
+import org.apache.jena.riot.system.StreamRDF;
 
 import com.epimorphics.dclib.framework.BindingEnv;
 import com.epimorphics.dclib.framework.ConverterProcess;
@@ -21,9 +23,12 @@ import com.epimorphics.dclib.framework.DataContext;
 import com.epimorphics.dclib.framework.NullResult;
 import com.epimorphics.dclib.framework.Pattern;
 import com.epimorphics.dclib.framework.Template;
+import com.epimorphics.dclib.values.Value;
+import com.epimorphics.dclib.values.ValueFactory;
 import com.epimorphics.util.EpiException;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.NodeFactory;
+import com.hp.hpl.jena.graph.Triple;
 
 public class CompositeTemplate extends TemplateBase implements Template {
     protected JsonObject spec;
@@ -84,7 +89,57 @@ public class CompositeTemplate extends TemplateBase implements Template {
                 }
             }
         }
+        processRawColumns(result, proc, row, rowNumber);
         return result;
+    }
+    
+    /**
+     * Check for any columns of form "<url>" and extract those directly.
+     */
+    private void processRawColumns(Node resource, ConverterProcess proc, BindingEnv row, int rowNumber) {
+        StreamRDF out = proc.getOutputStream();
+        for (Map.Entry<String, Object> entry : row.entrySet()) {
+            String col = entry.getKey();
+            if (isURI(col)) {
+                String p = proc.getDataContext().expandURI( asURI(col) );
+                Node predicate = NodeFactory.createURI(p);
+                Object v = entry.getValue();
+                Node obj = null;
+                if (v instanceof Value) {
+                    Value val = (Value)v;
+                    Object o = val.getValue();
+                    if (o instanceof String) {
+                        String s = (String)o;
+                        if ( isURI(s) ) {
+                            obj = NodeFactory.createURI( asURI(s) );
+                        }
+                    }
+                    if (obj == null) {
+                        obj = val.asNode();
+                    }
+                } else if (v instanceof String) {
+                    String s = (String)v;
+                    if ( isURI(s) ) {
+                        obj = NodeFactory.createURI( asURI(s) );
+                    } else {
+                        obj = ValueFactory.asValue(s, proc).asNode();
+                    }
+                } else if (v instanceof Node) {
+                    obj = (Node) v;
+                } else {
+                    proc.getMessageReporter().report("Warning: ould not interpret raw column value: " + v, rowNumber);
+                }
+                out.triple( new Triple(resource, predicate, obj) );
+            }
+        }
+    }
+    
+    private boolean isURI(String s) {
+        return s.startsWith("<") && s.endsWith(">");
+    }
+    
+    private String asURI(String s) {
+        return s.substring(1, s.length() - 1);
     }
     
     @Override

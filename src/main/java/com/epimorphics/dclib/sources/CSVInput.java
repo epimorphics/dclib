@@ -41,11 +41,20 @@ public class CSVInput {
         String[] headerLine = in.readNext();
         headers = new String[headerLine.length];
         for(int i = 0; i < headerLine.length; i++) {
-            headers[i] = NameUtils.safeVarName( headerLine[i].trim() );
+            headers[i] = safeColName( headerLine[i].trim() );
         }
         lineNumber++;
         if (headerLine.length > 1 && headerLine[0].equals("#")) {
             hasPreamble = true;
+        }
+    }
+    
+    private String safeColName(String col) {
+        if (col.startsWith("<") && col.endsWith(">")) {
+            // Let through URI wrapped column names raw
+            return col;
+        } else {
+            return NameUtils.safeVarName(col);
         }
     }
     

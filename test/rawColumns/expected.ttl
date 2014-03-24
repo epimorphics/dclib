@@ -1,0 +1,23 @@
+<http://example.com/3>
+        a                               <htttp://example.com/type> , <http://www.w3.org/2004/02/skos/core#Concept> ;
+        <http://example.com/predicate>  "2014-03-24"^^<http://www.w3.org/2001/XMLSchema#date> ;
+        <http://www.w3.org/2004/02/skos/core#notation>
+                "3" ;
+        <http://www.w3.org/2004/02/skos/core#prefLabel>
+                "three" .
+
+<http://example.com/2>
+        a                               <http://example.com/type> , <http://www.w3.org/2004/02/skos/core#Concept> ;
+        <http://example.com/predicate>  42 ;
+        <http://www.w3.org/2004/02/skos/core#notation>
+                "2" ;
+        <http://www.w3.org/2004/02/skos/core#prefLabel>
+                "two" .
+
+<http://example.com/1>
+        a                               <http://example.com/type> , <http://www.w3.org/2004/02/skos/core#Concept> ;
+        <http://example.com/predicate>  "a string value" ;
+        <http://www.w3.org/2004/02/skos/core#notation>
+                "1" ;
+        <http://www.w3.org/2004/02/skos/core#prefLabel>
+                "one" .
