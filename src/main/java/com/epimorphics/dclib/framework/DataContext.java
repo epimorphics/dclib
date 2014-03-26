@@ -93,13 +93,14 @@ public class DataContext {
     /**
      * Register a template from a file
      */
-    public void registerTemplate(String src) throws IOException {
+    public Template registerTemplate(String src) throws IOException {
         Template template = TemplateFactory.templateFrom(src, this);
         if (template.getName() == null) {
             templates.put(src, template);
         } else {
             templates.put(template.getName(), template);
         }
+        return template;
     }
     
     /**
