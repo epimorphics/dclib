@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
 
 import com.epimorphics.dclib.templates.TemplateFactory;
 import com.epimorphics.tasks.LiveProgressMonitor;
-import com.epimorphics.tasks.ProgressReporter;
+import com.epimorphics.tasks.ProgressMonitorReporter;
 import com.epimorphics.tasks.SimpleProgressMonitor;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
@@ -104,7 +104,7 @@ public class ConverterService {
      * Problems/progress reporting live to given reporter
      * @throws IOException 
      */
-    public Model simpleConvert(String templateFile, String dataFile, ProgressReporter reporter, boolean debug) throws IOException {
+    public Model simpleConvert(String templateFile, String dataFile, ProgressMonitorReporter reporter, boolean debug) throws IOException {
         Template template = TemplateFactory.templateFrom(templateFile, dc);
         
         InputStream is = new FileInputStream(dataFile);
@@ -123,7 +123,8 @@ public class ConverterService {
      * Problems/progress reporting live to given reporter
      * @throws IOException 
      */
-    public Model simpleConvert(String templateFile, String dataFile, ProgressReporter reporter) throws IOException {
+    public Model simpleConvert(String templateFile, String dataFile, ProgressMonitorReporter
+            reporter) throws IOException {
         return simpleConvert(templateFile, dataFile, reporter, false);
     }
     

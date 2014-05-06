@@ -126,7 +126,7 @@ public class Pattern {
             ProgressReporter reporter = proc.getMessageReporter();
             reporter.report(err.getErrorMessage(), rowNumber);
             if (err.isFatal()) {
-                reporter.failed();
+                reporter.setFailed();
             }
             throw new NullResult(err.getErrorMessage());
         }        

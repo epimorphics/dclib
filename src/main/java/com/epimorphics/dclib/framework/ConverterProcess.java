@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory;
 import com.epimorphics.dclib.sources.CSVInput;
 import com.epimorphics.dclib.values.Row;
 import com.epimorphics.dclib.values.ValueFactory;
-import com.epimorphics.tasks.ProgressReporter;
+import com.epimorphics.tasks.ProgressMonitorReporter;
 import com.epimorphics.tasks.SimpleProgressMonitor;
 import com.epimorphics.tasks.TaskState;
 import com.hp.hpl.jena.graph.Node;
@@ -48,7 +48,7 @@ public class ConverterProcess {
 
     protected int BATCH_SIZE = 100;
     protected DataContext dataContext;
-    protected ProgressReporter messageReporter = new SimpleProgressMonitor();
+    protected ProgressMonitorReporter messageReporter = new SimpleProgressMonitor();
     
     protected CSVInput dataSource;
 
@@ -78,7 +78,7 @@ public class ConverterProcess {
             
         } catch (IOException e) {
             messageReporter.report("Failed read headerline of data");
-            messageReporter.failed();
+            messageReporter.setFailed();
             close();
         }
     }
@@ -122,16 +122,16 @@ public class ConverterProcess {
                         Node result = template.convertRow(this, row, lineNumber);
                         if (result == null) {
                             messageReporter.report("Error: no templates matched line " + lineNumber, lineNumber);
-                            messageReporter.failed();
+                            messageReporter.setFailed();
                         }
                     } catch (Exception e) {
                         if (!(e instanceof NullResult)) {
                             messageReporter.report("Error: " + e, lineNumber);
 //                            log.error("Error processing line " + lineNumber, e);
-                            messageReporter.failed();
+                            messageReporter.setFailed();
                         } else {
                             messageReporter.report("Warning: no templates matched line " + lineNumber + ", " + e, lineNumber);
-                            messageReporter.failed();
+                            messageReporter.setFailed();
                         }
                     }
                 } else {
@@ -140,7 +140,7 @@ public class ConverterProcess {
             }
         } catch (IOException e) {
             messageReporter.report("Problem reading next line of source");
-            messageReporter.failed();
+            messageReporter.setFailed();
         }
         messageReporter.setState(TaskState.Terminated);
         close();
@@ -171,7 +171,7 @@ public class ConverterProcess {
             getTemplate().preamble(this);
         } catch (Exception e) {
             messageReporter.report("Problem with one-off preprocessing of template: " + e);
-            messageReporter.failed();
+            messageReporter.setFailed();
         }
 
         // Check for linkedcsv-style preamble
@@ -251,11 +251,11 @@ public class ConverterProcess {
         this.outputStream = outputStream;
     }
 
-    public ProgressReporter getMessageReporter() {
+    public ProgressMonitorReporter getMessageReporter() {
         return messageReporter;
     }
 
-    public void setMessageReporter(ProgressReporter messageReporter) {
+    public void setMessageReporter(ProgressMonitorReporter messageReporter) {
         this.messageReporter = messageReporter;
     }
 
