@@ -52,6 +52,10 @@ public class DataContext {
          this.prefixes.setNsPrefix(prefix, uri);
     }
     
+    public PrefixMapping getPrefixes() {
+        return prefixes;
+    }
+    
     /**
      * Expand a prefixes in the given URI string using the reference prefix definitions.
      */
