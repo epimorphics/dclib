@@ -188,6 +188,10 @@ public abstract class ValueBase<T> implements Value {
         return wrap( NameUtils.safeName(toString()) );
     }
     
+    public ValueString toSegment(String repl) {
+        return wrap( NameUtils.safeName(toString()).replaceAll("_", repl) );
+    }
+    
     public ValueString trim() {
         return wrap( toString().trim() );
     }
@@ -199,7 +203,11 @@ public abstract class ValueBase<T> implements Value {
     public ValueString substring(int start, int end) {
         return new ValueString( toString().substring(start, end), proc );
     }
-    
+
+    public ValueString replaceAll(String regex, String replacement) {
+        return wrap( toString().replaceAll(regex, replacement) );
+    }
+
     public ValueString regex(String regex) {
         Matcher m = Pattern.compile(regex).matcher(toString());
         if (m.matches()) {

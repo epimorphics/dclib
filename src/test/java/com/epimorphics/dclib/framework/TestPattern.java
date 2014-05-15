@@ -100,8 +100,11 @@ public class TestPattern {
         assertEquals("43", eval("{j.asString().asNumber().value + 1}").toString());
         assertEquals("a_string", eval("{A.toSegment().toLowerCase()}").toString());
         assertEquals("A_String", eval("{A.toSegment().toSegment()}").toString());
+        assertEquals("A-String", eval("{A.toSegment('-')}").toString());
         assertEquals("a_string", eval("{A.asString().toSegment().toLowerCase()}").toString());
         assertEquals("a_string", eval("{A.asString().toSegment() \n\r .toLowerCase()}").toString());
+        assertEquals("fzz bar", eval("{b.replaceAll('o','z')}").toString());
+        assertEquals("zzz bar", eval("{b.replaceAll('[fo]','z')}").toString());
     }
     
     private Object eval(String pattern) {
