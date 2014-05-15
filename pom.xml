@@ -83,16 +83,18 @@
       <artifactId>junit</artifactId>
       <version>4.10</version>
     </dependency>
+    <!-- 
     <dependency>
       <groupId>org.apache.jena</groupId>
       <artifactId>apache-jena-libs</artifactId>
       <type>pom</type>
       <version>2.11.0</version>
-    </dependency>    
+    </dependency>
+     -->    
     <dependency>
       <groupId>com.epimorphics</groupId>
       <artifactId>lib</artifactId>
-      <version>0.0.19-SNAPSHOT</version>
+      <version>0.0.19</version>
     </dependency>
     <dependency>
       <groupId>org.apache.commons</groupId>
