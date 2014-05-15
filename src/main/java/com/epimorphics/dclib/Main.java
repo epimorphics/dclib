@@ -12,6 +12,9 @@ package com.epimorphics.dclib;
 import java.io.IOException;
 
 import com.epimorphics.dclib.framework.ConverterService;
+import com.epimorphics.dclib.framework.DataContext;
+import com.epimorphics.dclib.framework.Template;
+import com.epimorphics.dclib.templates.TemplateFactory;
 import com.epimorphics.tasks.LiveProgressMonitor;
 import com.epimorphics.tasks.ProgressMessage;
 import com.epimorphics.tasks.SimpleProgressMonitor;
@@ -32,10 +35,16 @@ public class Main {
             System.err.println("Usage:  java -jar dclib.jar [--debug] template.json ... data.csv");
             System.exit(1);
         }
-        String templateName = args[argsOffset];
-        String dataFile = args[argsOffset + 1];
+        String templateName = args[argsOffset++];
+        String dataFile = args[args.length - 1];
         
         ConverterService service = new ConverterService();
+        DataContext dc = service.getDataContext();
+        for (int i = argsOffset; i < args.length - 1; i++) {
+            Template aux = TemplateFactory.templateFrom(args[i], dc);
+            dc.registerTemplate(aux);
+        }
+        
         SimpleProgressMonitor reporter = new LiveProgressMonitor();
         Model m = service.simpleConvert(templateName, dataFile, reporter, debug);
         if (m != null) {
