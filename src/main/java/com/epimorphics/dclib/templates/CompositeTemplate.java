@@ -9,10 +9,8 @@
 
 package com.epimorphics.dclib.templates;
 
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.jena.atlas.json.JsonObject;
@@ -32,9 +30,7 @@ import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.NodeFactory;
 import com.hp.hpl.jena.graph.Triple;
 
-public class CompositeTemplate extends TemplateBase implements Template {
-    protected Map<String, Pattern> parameters = new HashMap<String, Pattern>();
-    protected JsonObject spec;
+public class CompositeTemplate extends ParameterizedTemplate implements Template {
     protected List<Template> templates;
     
     /**
@@ -49,8 +45,7 @@ public class CompositeTemplate extends TemplateBase implements Template {
     }
 
     public CompositeTemplate(JsonObject spec, DataContext dc) {
-        super(spec);
-        this.spec = spec;
+        super(spec, dc);
         
         // Extract any prefixes
         if (spec.get(JSONConstants.PREFIXES) != null) {
@@ -72,33 +67,13 @@ public class CompositeTemplate extends TemplateBase implements Template {
             dc.registerTemplate(t);
         }
         
-        // Extract any bindings
-        if (spec.hasKey(JSONConstants.BIND)) {
-            JsonObject binding = spec.get(JSONConstants.BIND).getAsObject();
-            for (Entry<String, JsonValue> ent : binding.entrySet()) {
-                Pattern p = new Pattern(ent.getValue().getAsString().value(), dc);
-                parameters.put(ent.getKey(), p);
-            }
-        }
-           
     }
 
     @Override
     public Node convertRow(ConverterProcess proc, BindingEnv row, int rowNumber) {
         super.convertRow(proc, row, rowNumber);
 
-        // TODO this code duplicates Parameterized templates, needs DRYing
-        BindingEnv env = new BindingEnv(row);
-        for (Entry<String, Pattern> ent : parameters.entrySet()) {
-            try {
-                proc.debugCheck(row, rowNumber, ent.getValue());
-                Object value = ent.getValue().evaluate(row, proc, rowNumber);
-                env.put(ent.getKey(), value);
-            } catch (NullResult e) {
-                // TODO should this be a fatal error instead of an abort?
-                throw new NullResult("Failed to bind variable " + ent.getKey());
-            }
-        }
+        BindingEnv env = bindParameters(proc, row, rowNumber);
 
         Node result = null;
         for (Template template : templates) {
