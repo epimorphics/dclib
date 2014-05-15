@@ -36,6 +36,7 @@ public class TestPattern {
         
         env = new BindingEnv();
         env.set("a", ValueFactory.asValue("a string", proc));
+        env.set("a2", ValueFactory.asValue("a string", proc));
         env.set("b", ValueFactory.asValue("foo bar", proc));
         env.set("i", ValueFactory.asValue("42", proc));
         env.set("j", ValueFactory.asValue("042", proc));
@@ -105,6 +106,7 @@ public class TestPattern {
         assertEquals("a_string", eval("{A.asString().toSegment() \n\r .toLowerCase()}").toString());
         assertEquals("fzz bar", eval("{b.replaceAll('o','z')}").toString());
         assertEquals("zzz bar", eval("{b.replaceAll('[fo]','z')}").toString());
+        assertEquals("yes", eval("{a == a2 ? 'yes' : 'no'}"));
     }
     
     private Object eval(String pattern) {

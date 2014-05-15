@@ -232,5 +232,19 @@ public abstract class ValueBase<T> implements Value {
     public Node lang(String lang) {
         return NodeFactory.createLiteral(toString(), lang, false);
     }
+    
+    @Override
+    public int hashCode() {
+        return value.hashCode();
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+        if (other instanceof ValueBase<?>) {
+            return value.equals( ((ValueBase<?>)other).value );
+        } else {
+            return value.equals(other);
+        }
+    }
 }
 
