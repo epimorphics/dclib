@@ -15,6 +15,8 @@ import java.util.Map;
 import org.apache.commons.jexl2.JexlContext;
 
 import com.epimorphics.dclib.values.ValueNull;
+import com.hp.hpl.jena.util.iterator.ExtendedIterator;
+import com.hp.hpl.jena.util.iterator.WrappedIterator;
 
 /**
  * Represents a set of name to value mappings. Can be chained so it's 
@@ -86,5 +88,16 @@ public class BindingEnv extends HashMap<String, Object> implements Map<String, O
     
     public void setParent(BindingEnv parent) {
         this.parent = parent;
+    }
+    
+    /**
+     * Iterate over all keys up the whole environment
+     */
+    public ExtendedIterator<String> allKeys() {
+        ExtendedIterator<String> it = WrappedIterator.create( keySet().iterator() );
+        if (parent != null){
+            it = it.andThen( parent.allKeys() );
+        }
+        return it;
     }
 }

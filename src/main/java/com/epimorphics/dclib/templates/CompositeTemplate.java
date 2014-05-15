@@ -9,6 +9,8 @@
 
 package com.epimorphics.dclib.templates;
 
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -31,6 +33,7 @@ import com.hp.hpl.jena.graph.NodeFactory;
 import com.hp.hpl.jena.graph.Triple;
 
 public class CompositeTemplate extends TemplateBase implements Template {
+    protected Map<String, Pattern> parameters = new HashMap<String, Pattern>();
     protected JsonObject spec;
     protected List<Template> templates;
     
@@ -68,17 +71,40 @@ public class CompositeTemplate extends TemplateBase implements Template {
         for (Template t : getTemplates(spec.get(JSONConstants.REFERENCED), dc)) {
             dc.registerTemplate(t);
         }
+        
+        // Extract any bindings
+        if (spec.hasKey(JSONConstants.BIND)) {
+            JsonObject binding = spec.get(JSONConstants.BIND).getAsObject();
+            for (Entry<String, JsonValue> ent : binding.entrySet()) {
+                Pattern p = new Pattern(ent.getValue().getAsString().value(), dc);
+                parameters.put(ent.getKey(), p);
+            }
+        }
+           
     }
 
     @Override
     public Node convertRow(ConverterProcess proc, BindingEnv row, int rowNumber) {
         super.convertRow(proc, row, rowNumber);
-        
+
+        // TODO this code duplicates Parameterized templates, needs DRYing
+        BindingEnv env = new BindingEnv(row);
+        for (Entry<String, Pattern> ent : parameters.entrySet()) {
+            try {
+                proc.debugCheck(row, rowNumber, ent.getValue());
+                Object value = ent.getValue().evaluate(row, proc, rowNumber);
+                env.put(ent.getKey(), value);
+            } catch (NullResult e) {
+                // TODO should this be a fatal error instead of an abort?
+                throw new NullResult("Failed to bind variable " + ent.getKey());
+            }
+        }
+
         Node result = null;
         for (Template template : templates) {
-            if (template.isApplicableTo(row)) {
+            if (template.isApplicableTo(env)) {
                 try {
-                    Node n = template.convertRow(proc, row, rowNumber);
+                    Node n = template.convertRow(proc, env, rowNumber);
                     if (result == null && n != null) {
                         result = n;
                     }
@@ -89,7 +115,7 @@ public class CompositeTemplate extends TemplateBase implements Template {
                 }
             }
         }
-        processRawColumns(result, proc, row, rowNumber);
+        processRawColumns(result, proc, env, rowNumber);
         return result;
     }
     
@@ -98,12 +124,12 @@ public class CompositeTemplate extends TemplateBase implements Template {
      */
     private void processRawColumns(Node resource, ConverterProcess proc, BindingEnv row, int rowNumber) {
         StreamRDF out = proc.getOutputStream();
-        for (Map.Entry<String, Object> entry : row.entrySet()) {
-            String col = entry.getKey();
+        for (Iterator<String> i = row.allKeys(); i.hasNext(); ) {
+            String col = i.next();
             if (isURI(col)) {
                 String p = proc.getDataContext().expandURI( asURI(col) );
                 Node predicate = NodeFactory.createURI(p);
-                Object v = entry.getValue();
+                Object v = row.get(col);
                 Node obj = null;
                 if (v instanceof Value) {
                     Value val = (Value)v;
@@ -127,7 +153,7 @@ public class CompositeTemplate extends TemplateBase implements Template {
                 } else if (v instanceof Node) {
                     obj = (Node) v;
                 } else {
-                    proc.getMessageReporter().report("Warning: ould not interpret raw column value: " + v, rowNumber);
+                    proc.getMessageReporter().report("Warning: could not interpret raw column value: " + v, rowNumber);
                 }
                 out.triple( new Triple(resource, predicate, obj) );
             }
@@ -157,7 +183,7 @@ public class CompositeTemplate extends TemplateBase implements Template {
                 env.put(ent.getKey(), p.evaluate(env, proc, -1));
             }
             
-            // Fix up dataset binding incase the BIND has changed the $base (which it typically does)
+            // Fix up dataset binding in-case the BIND has changed the $base (which it typically does)
             Object baseURI = env.get(ConverterProcess.BASE_OBJECT_NAME);
             if (baseURI != null) {
                 Node dataset = NodeFactory.createURI(baseURI.toString());

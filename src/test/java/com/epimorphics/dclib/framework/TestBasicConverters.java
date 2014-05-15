@@ -78,6 +78,12 @@ public class TestBasicConverters {
     }
     
     @Test
+    public void testNested() throws IOException {
+        checkAgainstExpected("test/nesting/nested-lets.json", "test/test-map.csv", "test/nesting/nested.ttl");
+        checkAgainstExpected("test/nesting/nested-composite.json", "test/test-map.csv", "test/nesting/nested.ttl");
+    }
+    
+    @Test
     public void testMapping() throws IOException {
         checkAgainstExpected("test/mapping/dept-type.json", "test/mapping/dept-type-data.csv", "test/mapping/dept-type-result.ttl");
         checkAgainstExpected("test/mapping/dept-type.json", "test/mapping/dept-type-data-error.csv", "test/mapping/dept-type-result-error.ttl");

@@ -1,0 +1,26 @@
+{       
+    "type"  : "Composite",
+    "bind" : {"$base" : "http://example.com"},
+      "templates" : [
+       {
+        "required" : [ "label", "notation"],
+        "type"  : "Composite",
+        "bind"  : {"s1" : "{$base}/s1"},
+        "templates" : ["second-level"]
+       }
+      ],
+    "referenced" : [
+      { 
+        "name" : "second-level",
+        "type" : "Composite",
+        "bind" : {"s2" : "{s1}/s2"},
+        "templates" : ["third-level"]
+      },
+      {
+        "name" : "third-level",
+        "@id" : "<{s2}/{notation}>",
+        "<rdf:type>" : "<skos:Concept>",
+        "<rdfs:label>" : "{label}"
+      }
+    ]
+}

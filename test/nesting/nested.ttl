@@ -1,0 +1,9 @@
+<http://example.com/s1/s2/1>
+        a       <http://www.w3.org/2004/02/skos/core#Concept> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "Entry 1" .
+
+<http://example.com/s1/s2/2>
+        a       <http://www.w3.org/2004/02/skos/core#Concept> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "Entry 2" .
