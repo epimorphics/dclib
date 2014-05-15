@@ -16,6 +16,7 @@ import java.io.InputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.epimorphics.appbase.core.PrefixService;
 import com.epimorphics.dclib.templates.TemplateFactory;
 import com.epimorphics.tasks.LiveProgressMonitor;
 import com.epimorphics.tasks.ProgressMonitorReporter;
@@ -59,6 +60,22 @@ public class ConverterService {
     public void setPrefixFile(String prefixes) {
         PrefixMapping pref = FileManager.get().loadModel(prefixes);
         dc.setPrefixes(pref);
+    }
+    
+    /**
+     * Take global default prefixes from a configurable prefix service 
+     */
+    public void setPrefixService(PrefixService ps) {
+        dc.setPrefixes( ps.getPrefixes() );
+    }
+    
+    /**
+     * Set a sequence of directories which be searched when loading
+     * referenced files (specifically those used in mapping sources).
+     * @param dirs a comma-separated list of directory names
+     */
+    public void setLoadDirectories(String dirs) {
+        dc.setLoadDirectories(dirs);
     }
     
     /**

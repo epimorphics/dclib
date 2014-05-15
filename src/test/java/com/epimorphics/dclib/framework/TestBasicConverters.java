@@ -144,9 +144,21 @@ public class TestBasicConverters {
     public void testRawColumns() throws IOException {
         checkAgainstExpected("test/composite/cond-composite.json", "test/rawColumns/test1.csv", "test/rawColumns/expected.ttl");
     }
+    
+    @Test
+    public void testLoadDirs() throws IOException {
+        checkAgainstExpected("test/mapping/dept-type-rel.json", "test/mapping/dept-type-data.csv", ".,test/mapping", "test/mapping/dept-type-result.ttl");
+    }
 
     public static Model convert(String templateFile, String dataFile) throws IOException {
+        return convert(templateFile, dataFile, null);
+    }
+
+    public static Model convert(String templateFile, String dataFile, String loadDirs) throws IOException {
         ConverterService service = new ConverterService();
+        if (loadDirs != null) {
+            service.setLoadDirectories(loadDirs);
+        }
         service.getDataContext().registerTemplate("test/simple-skos-template.json");
         service.put("$base", "http://example.com/");
         SimpleProgressMonitor monitor = new SimpleProgressMonitor();
@@ -167,8 +179,13 @@ public class TestBasicConverters {
 //        System.out.println(monitor.getMessages().get(0));
     }
     
+    
     public static void checkAgainstExpected(String templateFile, String dataFile, String resultFile) throws IOException {
-        Model m = convert(templateFile, dataFile);
+        checkAgainstExpected(templateFile, dataFile, null, resultFile);
+    }
+    
+    public static void checkAgainstExpected(String templateFile, String dataFile, String loadDirs, String resultFile) throws IOException {
+        Model m = convert(templateFile, dataFile, loadDirs);
         assertNotNull(m);
         String DUMMY = "http://example.com/DONOTUSE/";
         Model expected = FileManager.get().loadModel(resultFile, DUMMY, "Turtle");
@@ -181,6 +198,5 @@ public class TestBasicConverters {
             expected.write(System.err, "Turtle");
         }
         assertTrue( same );
-        
     }
 }

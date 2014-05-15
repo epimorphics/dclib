@@ -46,7 +46,7 @@ public class CSVMapSource extends MapSourceBase implements MapSource {
         boolean makeURI = getFlag(JSONConstants.MAKE_URI, true);
         String sourceFile = getRequiredField(JSONConstants.SOURCE);
         
-        CSVInput in = new CSVInput(sourceFile);
+        CSVInput in = new CSVInput( findFile(sourceFile, config) );
         if (!in.hasHeader(keyCol) || !in.hasHeader(valueCol)) {
             if (in.getHeaders().length >= 2) {
                 config.getMessageReporter().report("Defaulting to using first two columns as key and value");

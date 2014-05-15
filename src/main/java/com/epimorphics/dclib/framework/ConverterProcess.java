@@ -171,6 +171,7 @@ public class ConverterProcess {
             getTemplate().preamble(this);
         } catch (Exception e) {
             messageReporter.report("Problem with one-off preprocessing of template: " + e);
+            log.error("Problem with one-off preprocessing of template", e);
             messageReporter.setFailed();
         }
 

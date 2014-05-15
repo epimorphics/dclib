@@ -9,9 +9,12 @@
 
 package com.epimorphics.dclib.sources;
 
+import java.io.File;
+
 import org.apache.jena.atlas.json.JsonObject;
 import org.apache.jena.atlas.json.JsonValue;
 
+import com.epimorphics.dclib.framework.ConverterProcess;
 import com.epimorphics.dclib.framework.MapSource;
 import com.epimorphics.dclib.templates.JSONConstants;
 import com.epimorphics.util.EpiException;
@@ -76,5 +79,14 @@ public class MapSourceBase implements MapSource {
             return value.getAsBoolean().value();
         }
         return deflt;
+    }
+    
+    protected String findFile(String source, ConverterProcess proc) {
+        File f = proc.getDataContext().findFile(source);
+        if (f != null) {
+            return f.getPath();
+        } else {
+            throw new EpiException("Can't locate mapping source file: " + source);
+        }
     }
 }

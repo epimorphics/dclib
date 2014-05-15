@@ -9,6 +9,7 @@
 
 package com.epimorphics.dclib.framework;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -34,6 +35,7 @@ public class DataContext {
     protected BindingEnv env = new BindingEnv();
     protected DataContext parent;
     protected Map<String, MapSource> sources = new HashMap<>();
+    protected String[] loadDirectories = new String[]{"."};
     
     public DataContext() {
     }
@@ -42,6 +44,7 @@ public class DataContext {
         this.parent = parent;
         env = new BindingEnv( parent.getGlobalEnv() );
         prefixes = parent.prefixes;
+        loadDirectories = parent.loadDirectories;
     }
     
     public void setPrefixes(PrefixMapping prefixes) {
@@ -54,6 +57,15 @@ public class DataContext {
     
     public PrefixMapping getPrefixes() {
         return prefixes;
+    }
+    
+    /**
+     * Set a sequence of directories which be searched when loading
+     * referenced files (specifically those used in mapping sources).
+     * @param dirs a comma-separated list of directory names
+     */
+    public void setLoadDirectories(String dirs) {
+        loadDirectories = dirs.split(",");
     }
     
     /**
@@ -77,7 +89,7 @@ public class DataContext {
     /**
      * Register a new template
      */
-    public void registerTemplate(Template template) {
+    public synchronized void registerTemplate(Template template) {
         String name = template.getName();
         if (name != null) {
             templates.put(name, template);
@@ -89,7 +101,7 @@ public class DataContext {
     /**
      * Register a new template
      */
-    public void registerTemplate(String name, Template template) {
+    public synchronized void registerTemplate(String name, Template template) {
         templates.put(name, template);
 
     }
@@ -97,7 +109,7 @@ public class DataContext {
     /**
      * Register a template from a file
      */
-    public Template registerTemplate(String src) throws IOException {
+    public synchronized Template registerTemplate(String src) throws IOException {
         Template template = TemplateFactory.templateFrom(src, this);
         if (template.getName() == null) {
             templates.put(src, template);
@@ -110,7 +122,7 @@ public class DataContext {
     /**
      * Find a named template
      */
-    public Template getTemplate(String name) {
+    public synchronized Template getTemplate(String name) {
         Template template = templates.get(name);
         if (template == null && parent != null) {
             template = parent.getTemplate(name);
@@ -119,9 +131,16 @@ public class DataContext {
     }
     
     /**
+     * Remove a template from the register
+     */
+    public synchronized void removeTemplate(String name) {
+        templates.remove(name);
+    }
+    
+    /**
      * Return a list of all known templates, ordered by name
      */
-    public List<Template> listTemplates() {
+    public synchronized List<Template> listTemplates() {
         List<Template> results = new ArrayList<>();
         results.addAll( templates.values() );
         if (parent != null) {
@@ -139,7 +158,7 @@ public class DataContext {
     /**
      * Register a new data source
      */
-    public void registerSource(MapSource source) {
+    public synchronized void registerSource(MapSource source) {
         String name = source.getName();
         if (name != null) {
             sources.put(name, source);
@@ -151,11 +170,25 @@ public class DataContext {
     /**
      * Find a named source
      */
-    public MapSource getSource(String name) {
+    public synchronized MapSource getSource(String name) {
         MapSource source = sources.get(name);
         if (source == null && parent != null) {
             source = parent.getSource(name);
         }
         return source;
+    }
+    
+    /**
+     * Locate a file, source as a source data file, using any configured load directories
+     */
+    public File findFile(String source) {
+        for (String dirname : loadDirectories) {
+            File dir = new File(dirname.trim());
+            File src = new File(dir, source);
+            if (src.exists()) {
+                return src;
+            }
+        }
+        return null;
     }
 }

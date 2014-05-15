@@ -11,6 +11,7 @@ package com.epimorphics.dclib.framework;
 
 import java.util.List;
 
+import com.epimorphics.appbase.monitor.ConfigInstance;
 import com.hp.hpl.jena.graph.Node;
 
 /**
@@ -18,7 +19,7 @@ import com.hp.hpl.jena.graph.Node;
  * into larger templates.
  * @author <a href="mailto:dave@epimorphics.com">Dave Reynolds</a>
  */
-public interface Template {
+public interface Template extends ConfigInstance {
     
     /**
      * Test if this template could be applied to a supplied CSV
