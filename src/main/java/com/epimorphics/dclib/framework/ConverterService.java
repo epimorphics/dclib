@@ -16,11 +16,13 @@ import java.io.InputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.epimorphics.appbase.core.ComponentBase;
 import com.epimorphics.appbase.core.PrefixService;
 import com.epimorphics.dclib.templates.TemplateFactory;
 import com.epimorphics.tasks.LiveProgressMonitor;
 import com.epimorphics.tasks.ProgressMonitorReporter;
 import com.epimorphics.tasks.SimpleProgressMonitor;
+import com.epimorphics.util.EpiException;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.shared.PrefixMapping;
@@ -32,7 +34,7 @@ import com.hp.hpl.jena.util.FileManager;
  * 
  * @author <a href="mailto:dave@epimorphics.com">Dave Reynolds</a>
  */
-public class ConverterService {
+public class ConverterService extends ComponentBase {
     static final Logger log = LoggerFactory.getLogger(ConverterService.class);
             
     public static final String DEFAULT_PREFIXES_RESOURCE = "defaultPrefixes.ttl";
@@ -40,6 +42,7 @@ public class ConverterService {
     
     protected DataContext dc;
     protected boolean silent = false;
+    protected TemplateMonitor monitor;
     
     public ConverterService() {
         dc = new DataContext();
@@ -79,6 +82,15 @@ public class ConverterService {
     }
     
     /**
+     * Attach a TemplateMonitor that will dynamically 
+     * add configured templates to the data context.
+     */
+    public void setTemplateMonitor(TemplateMonitor monitor) {
+        this.monitor = monitor;
+        monitor.setDataContext(dc);
+    }
+    
+    /**
      * Add a variable value to the global environment 
      */
     public void put(String key, Object value) {
@@ -99,8 +111,6 @@ public class ConverterService {
         }
     }
 
-    // TODO template management and template load from the environment
-    
     // TODO finding template for a CSV
     
     public DataContext getDataContext() {
@@ -153,5 +163,19 @@ public class ConverterService {
      */
     public Model simpleConvert(String templateFile, String dataFile) throws IOException {
         return simpleConvert(templateFile, dataFile, silent ? new SimpleProgressMonitor() : new LiveProgressMonitor() );
+    }
+    
+    /**
+     * Set up a conversion process using the service's configured data context.
+     * Caller can set the process to be streaming or not before triggering it.
+     */
+    public ConverterProcess startConvert(String templateName, InputStream is) {
+        ConverterProcess process = new ConverterProcess(dc, is);
+        Template template = dc.getTemplate(templateName);
+        if (template == null) {
+            throw new EpiException("Template not found: " + templateName);
+        }
+        process.setTemplate( template );
+        return process;
     }
 }
