@@ -1,0 +1,11 @@
+<http://example.com/b>
+        <http://www.w3.org/1999/02/22-rdf-syntax-ns#value>
+                <mailto:b@foo.com> ;
+        <http://www.w3.org/2004/02/skos/core#notation>
+                20 .
+
+<http://example.com/a>
+        <http://www.w3.org/1999/02/22-rdf-syntax-ns#value>
+                <mailto:a@foo.com> ;
+        <http://www.w3.org/2004/02/skos/core#notation>
+                10 .

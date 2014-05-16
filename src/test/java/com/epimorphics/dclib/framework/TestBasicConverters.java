@@ -149,6 +149,11 @@ public class TestBasicConverters {
     public void testLoadDirs() throws IOException {
         checkAgainstExpected("test/mapping/dept-type-rel.json", "test/mapping/dept-type-data.csv", ".,test/mapping", "test/mapping/dept-type-result.ttl");
     }
+    
+    @Test
+    public void testBugs() throws IOException {
+        checkAgainstExpected("test/bugCases/mailto.json", "test/test-ok.csv", "test/bugCases/mailto.ttl");
+    }
 
     public static Model convert(String templateFile, String dataFile) throws IOException {
         return convert(templateFile, dataFile, null);

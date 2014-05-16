@@ -11,8 +11,10 @@ package com.epimorphics.dclib.templates;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
 
 import org.apache.jena.atlas.json.JsonObject;
@@ -251,6 +253,17 @@ public class TemplateBase implements Template {
         }
     }
     
+    static Set<String> ACCEPTED_URI_SCHEMES = new HashSet<>();
+    static {
+        ACCEPTED_URI_SCHEMES.add("http");
+        ACCEPTED_URI_SCHEMES.add("https");
+        ACCEPTED_URI_SCHEMES.add("ftp");
+        ACCEPTED_URI_SCHEMES.add("ssh");
+        ACCEPTED_URI_SCHEMES.add("sftp");
+        ACCEPTED_URI_SCHEMES.add("urn");
+        ACCEPTED_URI_SCHEMES.add("mailto");
+    }
+    
     /**
      * Check for things like unsubstituted URIs
      */
@@ -267,7 +280,7 @@ public class TemplateBase implements Template {
             Matcher m =  PREFIX.matcher(uri);
             if (m.matches()) {
                 String prefix = m.group(1).toLowerCase();
-                if (prefix.equals("http") || prefix.equals("https") || prefix.equals("urn")) {
+                if (ACCEPTED_URI_SCHEMES.contains(prefix)) {
                     // OK
                 } else {
                     throw new EvalFailed("Looks like unexpanded prefix in URI: " + uri);
