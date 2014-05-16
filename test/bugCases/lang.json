@@ -1,0 +1,6 @@
+{
+    "name" : "test/types",
+         "@id" : "<{$base}{name}>",
+        "<rdfs:label>" : "{lang('£'+value, 'en')}" ,
+        "<rdf:value>" : "{datatype(value, 'xsd:int')}"
+}

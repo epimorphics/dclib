@@ -153,6 +153,7 @@ public class TestBasicConverters {
     @Test
     public void testBugs() throws IOException {
         checkAgainstExpected("test/bugCases/mailto.json", "test/test-ok.csv", "test/bugCases/mailto.ttl");
+        checkAgainstExpected("test/bugCases/lang.json", "test/test-ok.csv", "test/bugCases/lang.ttl");
     }
 
     public static Model convert(String templateFile, String dataFile) throws IOException {

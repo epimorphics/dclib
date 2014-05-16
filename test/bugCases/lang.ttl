@@ -1,0 +1,11 @@
+<http://example.com/b>
+        <http://www.w3.org/1999/02/22-rdf-syntax-ns#value>
+                "20"^^<http://www.w3.org/2001/XMLSchema#int> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "£20"@en .
+
+<http://example.com/a>
+        <http://www.w3.org/1999/02/22-rdf-syntax-ns#value>
+                "10"^^<http://www.w3.org/2001/XMLSchema#int> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "£10"@en .

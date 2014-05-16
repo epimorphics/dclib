@@ -1,5 +1,5 @@
 {
-    "name" : "test/maito",
+    "name" : "test/mailto",
          "@id" : "<{$base}{name}>",
         "<skos:notation>" : "{value}",
         "<rdf:value>" : "<mailto:{name}@foo.com>"

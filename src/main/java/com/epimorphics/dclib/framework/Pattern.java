@@ -16,6 +16,7 @@ import org.apache.commons.jexl2.Expression;
 import org.apache.commons.jexl2.JexlEngine;
 import org.apache.commons.jexl2.Script;
 
+import com.epimorphics.dclib.values.GlobalFunctions;
 import com.epimorphics.dclib.values.Value;
 import com.epimorphics.dclib.values.ValueError;
 import com.epimorphics.dclib.values.ValueNumber;
@@ -44,8 +45,10 @@ public class Pattern {
         engine.setStrict(false);
         engine.setSilent(true);
         engine.setCache(500);
+        
+        engine.setFunctions( GlobalFunctions.getFunctions() );
     }
-    
+        
     /**
      * Compile a pattern definition into a pattern that can be later applied
      * to some set of variable values. 
