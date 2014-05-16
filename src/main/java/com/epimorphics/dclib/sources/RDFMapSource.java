@@ -55,7 +55,7 @@ public class RDFMapSource extends MapSourceBase implements MapSource {
         Resource type = asResource( getField(JSONConstants.TYPE), proc);
         
         String sourceFile = getRequiredField(JSONConstants.SOURCE);
-        Model rdf = FileManager.get().loadModel( findFile(sourceFile, proc) );
+        Model rdf = FileManager.get().loadModel( "file:" + findFile(sourceFile, proc) );
 
         for (StmtIterator i = rdf.listStatements(null,  keyProp, (RDFNode)null); i.hasNext();) {
             Statement s = i.next();

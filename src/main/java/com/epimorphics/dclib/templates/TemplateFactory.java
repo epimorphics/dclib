@@ -69,7 +69,7 @@ public class TemplateFactory {
         }
     }
 
-    public static Template templateFrom(InputStream is, DataContext dc) {
+    public static Template templateFrom(InputStream is, String filename, DataContext dc) {
         try {
             JsonValue json = JSON.parseAny(is);
             try {
@@ -81,7 +81,8 @@ public class TemplateFactory {
             return templateFrom(json, dc);
         } catch (JsonParseException e) {
             if (e.getLine() >= 0) {
-                throw new EpiException( String.format("Illegal json: %s at line %d column %d", e.toString(), e.getLine(), e.getColumn()));
+                throw new EpiException( String.format("Illegal json: %s at line %d column %d in %s", 
+                        e.toString(), e.getLine(), e.getColumn(), filename));
             } else {
                 throw e;
             }
@@ -89,6 +90,6 @@ public class TemplateFactory {
     }
 
     public static Template templateFrom(String filename, DataContext dc) throws IOException {
-        return templateFrom( new FileInputStream(filename), dc );
+        return templateFrom( new FileInputStream(filename), filename, dc );
     }
 }

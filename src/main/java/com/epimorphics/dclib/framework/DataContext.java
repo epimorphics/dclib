@@ -35,7 +35,7 @@ public class DataContext {
     protected BindingEnv env = new BindingEnv();
     protected DataContext parent;
     protected Map<String, MapSource> sources = new HashMap<>();
-    protected String[] loadDirectories = new String[]{"."};
+    protected String[] loadDirectories = null;
     
     public DataContext() {
     }
@@ -182,11 +182,18 @@ public class DataContext {
      * Locate a file, source as a source data file, using any configured load directories
      */
     public File findFile(String source) {
-        for (String dirname : loadDirectories) {
-            File dir = new File(dirname.trim());
-            File src = new File(dir, source);
+        if (loadDirectories == null) {
+            File src = new File(source);
             if (src.exists()) {
                 return src;
+            }
+        } else {
+            for (String dirname : loadDirectories) {
+                File dir = new File(dirname.trim());
+                File src = new File(dir, source);
+                if (src.exists()) {
+                    return src;
+                }
             }
         }
         return null;
