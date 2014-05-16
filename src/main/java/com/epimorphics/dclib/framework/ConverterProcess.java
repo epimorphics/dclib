@@ -149,13 +149,20 @@ public class ConverterProcess {
     }
     
     private BindingEnv nextRow() throws IOException {
-        BindingEnv row = dataSource.nextRow();
-        if (row == null) return null;
-        BindingEnv wrapped = new BindingEnv(env);
-        for (Entry<String, Object> entry : row.entrySet()) {
-            wrapped.put(entry.getKey(), ValueFactory.asValue(entry.getValue().toString().trim(), this));
+        try {
+            BindingEnv row = dataSource.nextRow();
+            if (row == null) return null;
+            BindingEnv wrapped = new BindingEnv(env);
+            for (Entry<String, Object> entry : row.entrySet()) {
+                wrapped.put(entry.getKey(), ValueFactory.asValue(entry.getValue().toString().trim(), this));
+            }
+            return wrapped;
+        } catch (Exception e) {
+            // Most likely problem here is bad data such as an unterminated line
+            messageReporter.report("Error during CSV reading, unterminated final line? " + e, dataSource.getLineNumber());
+            messageReporter.setFailed();
+            return null;
         }
-        return wrapped;
     }
     
     private void preprocess() throws IOException {        
