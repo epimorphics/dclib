@@ -38,6 +38,10 @@ public class GlobalFunctions {
         return NodeFactory.createLiteral(value.toString(), typeR);
     }
     
+    public static Value nullValue() {
+        return new ValueNull();
+    }
+    
     public static Map<String, Object> getFunctions() {
         Map<String, Object> fns = new HashMap<String, Object>();
         fns.put(null, GlobalFunctions.class);

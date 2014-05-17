@@ -1,0 +1,11 @@
+{       
+    "type"  : "Composite",
+    "bind" : 
+        {"class" : "{(value.value == 10) ? nullValue() : 'large' }" },
+    "templates" : [
+       {
+        "@id" : "<{$base}{name}>",
+        "<rdf:value>" : "{class}"
+       }
+    ]
+}
