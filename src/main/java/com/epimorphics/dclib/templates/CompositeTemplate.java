@@ -21,7 +21,6 @@ import com.epimorphics.dclib.framework.BindingEnv;
 import com.epimorphics.dclib.framework.ConverterProcess;
 import com.epimorphics.dclib.framework.DataContext;
 import com.epimorphics.dclib.framework.NullResult;
-import com.epimorphics.dclib.framework.Pattern;
 import com.epimorphics.dclib.framework.Template;
 import com.epimorphics.dclib.values.Value;
 import com.epimorphics.dclib.values.ValueFactory;
@@ -152,19 +151,7 @@ public class CompositeTemplate extends ParameterizedTemplate implements Template
         
         // Instantiate any global bindings
         if (spec.hasKey(JSONConstants.BIND)) {
-            JsonObject binding = spec.get(JSONConstants.BIND).getAsObject();
-            for (Entry<String, JsonValue> ent : binding.entrySet()) {
-                Pattern p = new Pattern(ent.getValue().getAsString().value(), dc);
-                env.put(ent.getKey(), p.evaluate(env, proc, -1));
-            }
-            
-            // Fix up dataset binding in-case the BIND has changed the $base (which it typically does)
-            Object baseURI = env.get(ConverterProcess.BASE_OBJECT_NAME);
-            if (baseURI != null) {
-                Node dataset = NodeFactory.createURI(baseURI.toString());
-                env.put(ConverterProcess.DATASET_OBJECT_NAME, dataset);
-            }
-
+            env = bindParameters(proc, env, -1);
         }
         
         // Process any one-offs

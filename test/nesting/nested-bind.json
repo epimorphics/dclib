@@ -1,0 +1,17 @@
+{       
+    "type"  : "Composite",
+    "bind" : [
+        {"$base" : "http://example.com" },
+        {"foo" : "{$base}" },
+        {"foo2" : "{foo}/bar" },
+        {"foo3" : "{foo2}/baz" }
+    ],
+    "templates" : [
+       {
+        "required" : ["notation", "label"],
+        "@id" : "<{foo3}/{notation}>",
+        "<skos:notation>" : "{notation.asString()}",
+        "<skos:prefLabel>" : "{label}"
+       }
+    ]
+}

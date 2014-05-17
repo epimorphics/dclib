@@ -81,6 +81,8 @@ public class TestBasicConverters {
     public void testNested() throws IOException {
         checkAgainstExpected("test/nesting/nested-lets.json", "test/test-map.csv", "test/nesting/nested.ttl");
         checkAgainstExpected("test/nesting/nested-composite.json", "test/test-map.csv", "test/nesting/nested.ttl");
+        
+        checkAgainstExpected("test/nesting/nested-bind.json", "test/test-map.csv", "test/nesting/nested-bind.ttl");
     }
     
     @Test
@@ -197,6 +199,7 @@ public class TestBasicConverters {
         Model expected = FileManager.get().loadModel(resultFile, DUMMY, "Turtle");
         expected = RDFUtil.mapNamespace(expected, DUMMY, "");
         boolean same = m.isIsomorphicWith(expected);
+        boolean rev = expected.isIsomorphicWith(m);
         if (!same) {
             System.err.println("Result mismatch, result was:");
             m.write(System.err, "Turtle");
