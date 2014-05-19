@@ -103,7 +103,7 @@ public class ParameterizedTemplate extends TemplateBase implements Template {
         for (Map<String, Pattern> bindingSet : parameters) {
             for (Entry<String, Pattern> ent : bindingSet.entrySet()) {
                 try {
-                    proc.debugCheck(row, rowNumber, ent.getValue());
+                    proc.debugCheck(env, rowNumber, ent.getValue());
                     Object value = ent.getValue().evaluate(env, proc, rowNumber);
                     env.put(ent.getKey(), value);
                 } catch (NullResult e) {

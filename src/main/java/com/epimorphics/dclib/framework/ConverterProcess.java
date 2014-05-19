@@ -230,7 +230,9 @@ public class ConverterProcess {
             try {
                 p.evaluate(row, this, rowNumber);
             } catch (Exception e) {
-                getMessageReporter().report("Debug: pattern " + p + " failed to match environment " + row, rowNumber);
+                String msg = "Debug: pattern " + p + " failed to match environment " + row;
+                log.warn(msg);
+                getMessageReporter().report(msg, rowNumber);
             }
         }
     }
