@@ -188,6 +188,14 @@ public abstract class ValueBase<T> implements Value {
         return wrap( NameUtils.safeName(toString()) );
     }
     
+    public ValueString toCleanSegment() {
+        String seg = NameUtils.safeName(toString()).toLowerCase().replaceAll("_", "-");
+        if (seg.endsWith("-")) {
+            seg = seg.substring(0, seg.length()-1);
+        }
+        return wrap( seg );
+    }
+    
     public ValueString toSegment(String repl) {
         return wrap( NameUtils.safeName(toString()).replaceAll("_", repl) );
     }

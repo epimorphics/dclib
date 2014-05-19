@@ -44,6 +44,7 @@ public class TestPattern {
         env.set("A", ValueFactory.asValue("A String", proc));
         env.set("u", ValueFactory.asValue("http://example.com/foo", proc));
         env.set("t", ValueFactory.asValue("true", proc));
+        env.set("p", ValueFactory.asValue("G (A)", proc));
         
         dc.setPrefixes( FileManager.get().loadModel("prefixes.ttl") );
     }
@@ -107,6 +108,7 @@ public class TestPattern {
         assertEquals("fzz bar", eval("{b.replaceAll('o','z')}").toString());
         assertEquals("zzz bar", eval("{b.replaceAll('[fo]','z')}").toString());
         assertEquals("yes", eval("{a == a2 ? 'yes' : 'no'}"));
+        assertEquals("g-a", eval("{p.toCleanSegment()}").toString());
     }
     
     private Object eval(String pattern) {
