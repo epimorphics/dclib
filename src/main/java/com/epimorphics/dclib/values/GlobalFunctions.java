@@ -12,6 +12,9 @@ package com.epimorphics.dclib.values;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.hp.hpl.jena.datatypes.RDFDatatype;
 import com.hp.hpl.jena.datatypes.TypeMapper;
 import com.hp.hpl.jena.graph.Node;
@@ -24,6 +27,7 @@ import com.hp.hpl.jena.vocabulary.XSD;
  * @author <a href="mailto:dave@epimorphics.com">Dave Reynolds</a>
  */
 public class GlobalFunctions {
+    static Logger log = LoggerFactory.getLogger( GlobalFunctions.class );
 
     public static Node lang(Object value, Object lang) {
         return NodeFactory.createLiteral(value.toString(), lang.toString(), null);
@@ -42,10 +46,23 @@ public class GlobalFunctions {
         return new ValueNull();
     }
     
+    /** Debug aid - log the value  */
+    public static Object print(Object value) {
+        log.info("Value = " + value + " [" + value.getClass() + "]");
+        return value;
+    }
+    
+    /** Debug aid - log the value  */
+    public static Object print(String label, Object value) {
+        log.info(label + ": value = " + value + " [" + value.getClass() + "]");
+        return value;
+    }
+    
     public static Map<String, Object> getFunctions() {
         Map<String, Object> fns = new HashMap<String, Object>();
         fns.put(null, GlobalFunctions.class);
         return fns;
     }
+    
     
 }
