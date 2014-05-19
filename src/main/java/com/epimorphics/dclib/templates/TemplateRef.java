@@ -27,21 +27,29 @@ import com.hp.hpl.jena.graph.Node;
 public class TemplateRef implements Template {
     protected String name;
     protected DataContext dc;
-    protected Template template;
+//    protected Template template;
     
     public TemplateRef(String name, DataContext dc) {
         this.name = name;
         this.dc = dc;
     }
 
-    protected Template getTemplate() {
-        if (template == null) {
-            template = dc.getTemplate(name);
+    protected synchronized Template getTemplate() {
+        // Switched to late binding rather than attempting to clear cached early binding
+//        if (template == null) {
+            Template template = dc.getTemplate(name);
             if (template == null) {
                 throw new EpiException("Can't find template called: " + name);
             }
-        }
+//        }
         return template;
+    }
+    
+    /**
+     * Clear any cached template dereferences, used when dynamically loading templates into a running system.
+     */
+    public synchronized void clearReference() {
+//        template = null;
     }
     
     @Override
@@ -77,17 +85,27 @@ public class TemplateRef implements Template {
 
     @Override
     public String getSource() {
-        return template.getSource();
+        return getTemplate().getSource();
     }
 
     @Override
     public List<String> required() {
-        return template.required();
+        return getTemplate().required();
     }
 
     @Override
     public List<String> optional() {
-        return template.optional();
+        return getTemplate().optional();
+    }
+    
+    @Override
+    public String toString() {
+        return "TemplateRef-" + getName();
+    }
+
+    @Override
+    public Template deref() {
+        return getTemplate().deref();
     }
 
 }

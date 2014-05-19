@@ -73,12 +73,16 @@ public class CompositeTemplate extends ParameterizedTemplate implements Template
         super.convertRow(proc, row, rowNumber);
 
         BindingEnv env = bindParameters(proc, row, rowNumber);
+        if (proc.isDebugging()) {
+            proc.getMessageReporter().report("Bindings for " + getName() + ": " + env);
+        }
 
         Node result = null;
         for (Template template : templates) {
+            template = template.deref();
             if (template.isApplicableTo(env)) {
                 if (proc.isDebugging()) {
-                    proc.getMessageReporter().report("Debug: trying template " + template.getName());
+                    proc.getMessageReporter().report("Debug: applying template " + template.getName(), rowNumber);
                 }
                 try {
                     Node n = template.convertRow(proc, env, rowNumber);
@@ -92,7 +96,7 @@ public class CompositeTemplate extends ParameterizedTemplate implements Template
                 }
             } else {
                 if (proc.isDebugging()) {
-                    proc.getMessageReporter().report("Debug: template " + template.getName() + " not applicable");
+                    proc.getMessageReporter().report("Debug: template " + template.getName() + " not applicable", rowNumber);
                 }
             }
         }
@@ -167,4 +171,5 @@ public class CompositeTemplate extends ParameterizedTemplate implements Template
             t.convertRow(proc, env, 0);
         }
     }
+    
 }

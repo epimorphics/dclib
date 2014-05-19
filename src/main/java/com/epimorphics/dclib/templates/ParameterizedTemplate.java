@@ -115,7 +115,7 @@ public class ParameterizedTemplate extends TemplateBase implements Template {
         
         // Fix up dataset binding in-case the BIND has changed the $base
         Object baseURI = env.get(ConverterProcess.BASE_OBJECT_NAME);
-        if (baseURI != null) {
+        if (baseURI != null && !baseURI.toString().isEmpty()) {
             Node dataset = NodeFactory.createURI(baseURI.toString());
             env.put(ConverterProcess.DATASET_OBJECT_NAME, dataset);
         }

@@ -291,5 +291,15 @@ public class TemplateBase implements Template {
     
     static final java.util.regex.Pattern BAD_CHARS = java.util.regex.Pattern.compile("[{}<>]");
     static final java.util.regex.Pattern PREFIX = java.util.regex.Pattern.compile("([^/]+):.*");
+    
+    @Override
+    public String toString() {
+        return "Template-" + name;
+    }
+
+    @Override
+    public Template deref() {
+        return this;
+    }
 
 }

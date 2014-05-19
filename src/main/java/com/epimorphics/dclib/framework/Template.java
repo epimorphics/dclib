@@ -72,4 +72,8 @@ public interface Template extends ConfigInstance {
      */
     public List<String> optional();
     
+    /**
+     * Return actual template, deferencing any TemplateRef links in the way.
+     */
+    public Template deref();
 }

@@ -113,6 +113,5 @@ public class HierarchyTemplate extends TemplateBase implements Template {
             proc.getOutputStream().triple( new Triple(resource, linkn, parent) );
         }
     }
-    
 
 }

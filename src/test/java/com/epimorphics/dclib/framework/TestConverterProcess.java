@@ -148,6 +148,11 @@ public class TestConverterProcess {
         public List<String> optional() {
             return null;
         }
-        
+
+        @Override
+        public Template deref() {
+            return this;
+        }
+
     }
 }
