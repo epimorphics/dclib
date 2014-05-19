@@ -77,6 +77,9 @@ public class CompositeTemplate extends ParameterizedTemplate implements Template
         Node result = null;
         for (Template template : templates) {
             if (template.isApplicableTo(env)) {
+                if (proc.isDebugging()) {
+                    proc.getMessageReporter().report("Debug: trying template " + template.getName());
+                }
                 try {
                     Node n = template.convertRow(proc, env, rowNumber);
                     if (result == null && n != null) {
@@ -86,6 +89,10 @@ public class CompositeTemplate extends ParameterizedTemplate implements Template
                     // Silently ignore null results
                 } catch (Exception e) {
                     proc.getMessageReporter().report("Warning: template " + template.getName() + " applied but failed: " + e, rowNumber);
+                }
+            } else {
+                if (proc.isDebugging()) {
+                    proc.getMessageReporter().report("Debug: template " + template.getName() + " not applicable");
                 }
             }
         }
