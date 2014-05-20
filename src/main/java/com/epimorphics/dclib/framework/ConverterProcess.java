@@ -142,6 +142,7 @@ public class ConverterProcess {
             messageReporter.report("Problem reading next line of source");
             messageReporter.setFailed();
         }
+        messageReporter.report("Processed " + (dataSource.getLineNumber() - 1) + " lines");
         messageReporter.setState(TaskState.Terminated);
         close();
         
@@ -194,6 +195,10 @@ public class ConverterProcess {
         
         try {
             BindingEnv initialEnv = peekRow();
+            if (initialEnv == null) {
+                // now rows to peek to
+                initialEnv = getEnv();
+            }
             initialEnv.put(ROW_OBJECT_NAME, new Row(0));
             if ( getTemplate().isApplicableTo(initialEnv) ) {
                 getTemplate().preamble(this, initialEnv);
