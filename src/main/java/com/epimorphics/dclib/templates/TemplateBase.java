@@ -131,7 +131,7 @@ public class TemplateBase implements Template {
     /**
      * Execute any one-off parts of the template
      */
-    public void preamble(ConverterProcess config) {
+    public void preamble(ConverterProcess config, BindingEnv env) {
         if (spec.hasKey(JSONConstants.SOURCES)) {
             JsonValue sspec = spec.get(JSONConstants.SOURCES);
             if (sspec != null) {

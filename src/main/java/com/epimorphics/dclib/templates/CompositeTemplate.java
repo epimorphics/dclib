@@ -154,11 +154,10 @@ public class CompositeTemplate extends ParameterizedTemplate implements Template
     }
     
     @Override
-    public void preamble(ConverterProcess proc) {
-        super.preamble(proc);
+    public void preamble(ConverterProcess proc, BindingEnv env) {
+        super.preamble(proc, env);
         
         DataContext dc = proc.getDataContext();
-        BindingEnv env =  proc.peekRow(); // proc.getEnv();
         
         // Instantiate any global bindings
         if (spec.hasKey(JSONConstants.BIND)) {
@@ -167,8 +166,12 @@ public class CompositeTemplate extends ParameterizedTemplate implements Template
         
         // Process any one-offs
         for (Template t : getTemplates(spec.get(JSONConstants.ONE_OFFS), dc)) {
-            t.preamble(proc);
+            t.preamble(proc, env);
             t.convertRow(proc, env, 0);
+        }
+        
+        for (Template t : templates) {
+            t.preamble(proc, env);
         }
     }
     

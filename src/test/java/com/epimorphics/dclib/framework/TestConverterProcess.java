@@ -131,7 +131,7 @@ public class TestConverterProcess {
         }
 
         @Override
-        public void preamble(ConverterProcess config) {
+        public void preamble(ConverterProcess config, BindingEnv env) {
         }
 
         @Override

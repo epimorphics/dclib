@@ -167,7 +167,7 @@ public class ConverterProcess {
     
     public BindingEnv peekRow() {
         try {
-            String[] row = dataSource.peekRow();
+            String[] row = dataSource.getPeekRow();
             String[] headers = dataSource.getHeaders();
             if (row == null) return null;
             BindingEnv wrapped = new BindingEnv(env);
@@ -193,7 +193,7 @@ public class ConverterProcess {
         }
         
         try {
-            getTemplate().preamble(this);
+            getTemplate().preamble(this, peekRow());
         } catch (Exception e) {
             messageReporter.report("Problem with one-off preprocessing of template: " + e);
             log.error("Problem with one-off preprocessing of template", e);
@@ -203,10 +203,11 @@ public class ConverterProcess {
         // Check for linkedcsv-style preamble
         if (dataSource.hasPreamble()) {
             while (true) {
-                String[] peekRow = dataSource.peekRow();
+                String[] peekRow = dataSource.getPeekRow();
                 if (peekRow == null || peekRow.length == 0 || peekRow[0].isEmpty()) {
                     break;
                 }
+                dataSource.advancePeek();
                 if (peekRow[0].equals(META)) {
                     if (peekRow.length >= 3) {
                         if (peekRow[1].equals(BASE_OBJECT_NAME)) {

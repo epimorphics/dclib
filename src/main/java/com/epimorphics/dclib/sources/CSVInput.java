@@ -59,14 +59,27 @@ public class CSVInput {
     }
     
     /**
-     * Read the next row, not mapping to headers.
-     * Sequences of peekRows read further rows.  
+     * Return a look ahead to the next row.
+     * Repeat calls do not advance to further rows, 
      */
-    public String[] peekRow() throws IOException {
-        peekRow = in.readNext();
-        lineNumber++;
+    public String[] getPeekRow() throws IOException {
+        if (peekRow == null) {
+            peekRow = in.readNext();
+        }
         return peekRow;
     }
+    
+    /**
+     * Advances to the next row after a prior peek.
+     * Returns true if a new peek was available.
+     */
+    public boolean advancePeek() throws IOException {
+        peekRow = in.readNext();
+        lineNumber++;
+        return peekRow != null;
+    }
+    
+    
     
     /**
      * Return the next row as a binding environment of strings
@@ -76,11 +89,8 @@ public class CSVInput {
     public BindingEnv nextRow() throws IOException {
         if (in != null) {
             String[] rowValues = (peekRow != null) ? peekRow : in.readNext();
-            if (peekRow == null) {
-                lineNumber++;
-            } else {
-                peekRow = null;
-            }
+            lineNumber++;
+            peekRow = null;
             if (rowValues == null || rowValues.length == 0) {
                 return null;
             }

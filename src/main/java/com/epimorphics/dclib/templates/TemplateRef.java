@@ -79,8 +79,8 @@ public class TemplateRef implements Template {
     }
 
     @Override
-    public void preamble(ConverterProcess config) {
-        getTemplate().preamble(config);
+    public void preamble(ConverterProcess config, BindingEnv env) {
+        getTemplate().preamble(config, env);
     }
 
     @Override

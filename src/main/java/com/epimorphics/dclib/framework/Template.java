@@ -42,7 +42,7 @@ public interface Template extends ConfigInstance {
     /**
      * Execute any one-off parts of the template
      */
-    public void preamble(ConverterProcess config);
+    public void preamble(ConverterProcess config, BindingEnv env);
     
     /**
      * Return the name of this template, may be null

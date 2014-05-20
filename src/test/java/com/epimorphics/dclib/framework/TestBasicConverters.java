@@ -74,6 +74,7 @@ public class TestBasicConverters {
 
     @Test
     public void testComposite() throws IOException {
+        checkAgainstExpected("test/composite/nestedComposite.json", "test/test-map.csv", "test/top.ttl");
         checkAgainstExpected("test/top.json", "test/test-map.csv", "test/top.ttl");
     }
     
