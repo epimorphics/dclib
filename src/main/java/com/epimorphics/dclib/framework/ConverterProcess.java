@@ -194,6 +194,7 @@ public class ConverterProcess {
         
         try {
             BindingEnv initialEnv = peekRow();
+            initialEnv.put(ROW_OBJECT_NAME, new Row(0));
             if ( getTemplate().isApplicableTo(initialEnv) ) {
                 getTemplate().preamble(this, initialEnv);
             }
@@ -252,7 +253,7 @@ public class ConverterProcess {
             try {
                 p.evaluate(row, this, rowNumber);
             } catch (Exception e) {
-                String msg = "Debug: pattern " + p + " failed to match environment " + row;
+                String msg = "Debug: pattern " + p + " failed to match environment " + row.toStringDeep();
                 log.warn(msg);
                 getMessageReporter().report(msg, rowNumber);
             }
