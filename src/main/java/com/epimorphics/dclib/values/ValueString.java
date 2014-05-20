@@ -9,6 +9,9 @@
 
 package com.epimorphics.dclib.values;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import com.epimorphics.dclib.framework.ConverterProcess;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.NodeFactory;
@@ -38,9 +41,22 @@ public class ValueString extends ValueBase<String> implements Value {
     public boolean isString() {
         return true;
     }
+    
+    static Pattern LANGSTR =  Pattern.compile(".*@([a-z\\-]+)$");
 
     @Override
     public Node asNode() {
+        Matcher matcher = LANGSTR.matcher(value);
+        if (matcher.matches()) {
+            String lang = matcher.group(1);
+            int split = value.length() - lang.length() - 1;
+            char pre = value.charAt(split-1);
+            if (value.charAt(split-1) == '@') {
+                return NodeFactory.createLiteral( value.substring(0, split) + lang );
+            } else {
+                return NodeFactory.createLiteral(value.substring(0, split), lang, false);
+            }
+        }
         return NodeFactory.createLiteral( value );
     }
 

@@ -55,7 +55,7 @@ public class TestConverterProcess {
         assertTrue( contains(process, "2", "b", "20") );
         assertTrue( contains(process, "4", "d", "10") );
         List<ProgressMessage> messages = monitor.getMessages();
-        assertEquals(1, messages.size());
+        assertEquals(2, messages.size());
         ProgressMessage message = messages.get(0);
         assertEquals(3, message.getLineNumber());
         assertTrue( message.getMessage().contains("Value exceeds test threshold") );

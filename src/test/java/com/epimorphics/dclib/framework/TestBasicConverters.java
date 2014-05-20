@@ -99,7 +99,7 @@ public class TestBasicConverters {
         SimpleProgressMonitor monitor = new SimpleProgressMonitor();
         service.simpleConvert("test/mapping/dept-type-required.json", "test/mapping/dept-type-data-error.csv", monitor);
         assertFalse( monitor.succeeded() );
-        assertEquals(1, monitor.getMessages().size());
+        assertEquals(2, monitor.getMessages().size());
 //        System.out.println(monitor.getMessages().get(0));
 
         // Non-sensical example to provide test of asNodeURI in situ
@@ -173,7 +173,7 @@ public class TestBasicConverters {
         service.put("$base", "http://example.com/");
         SimpleProgressMonitor monitor = new SimpleProgressMonitor();
         Model m = service.simpleConvert(templateFile, dataFile, monitor);
-        for (ProgressMessage message : monitor.getMessages()) System.err.println(message.toString());
+//        for (ProgressMessage message : monitor.getMessages()) System.err.println(message.toString());
         return m;
     }
 
