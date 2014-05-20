@@ -15,6 +15,8 @@ import java.util.List;
 import org.apache.commons.jexl2.Expression;
 import org.apache.commons.jexl2.JexlEngine;
 import org.apache.commons.jexl2.Script;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.epimorphics.dclib.values.GlobalFunctions;
 import com.epimorphics.dclib.values.Value;
@@ -33,6 +35,7 @@ import com.hp.hpl.jena.graph.impl.LiteralLabelFactory;
  * @author <a href="mailto:dave@epimorphics.com">Dave Reynolds</a>
  */
 public class Pattern {
+    static final Logger log = LoggerFactory.getLogger( Pattern.class );
     static final JexlEngine engine = new JexlEngine();
     
     protected boolean isURI;
@@ -266,7 +269,11 @@ public class Pattern {
                 if (blockDepth == 0) {
                     // Finish an expression block
                     String src = block.toString();
-                    components.add( isScript ? engine.createScript(src) : engine.createExpression(src) );
+                    try {
+                        components.add( isScript ? engine.createScript(src) : engine.createExpression(src) );
+                    } catch (Exception e) {
+                        log.error("Failed to parse pattern: " + src, e);
+                    }
                     block = new StringBuilder();
                 } else {
                     block.append(c);

@@ -164,6 +164,20 @@ public abstract class ValueBase<T> implements Value {
         return new ValueNode(n, proc);
     }
     
+    public Value map(String[] mapsources, Object deflt) {
+        for (String mapsource : mapsources) { 
+            Node n = proc.getDataContext().getSource(mapsource).lookup(toString());
+            if (n != null) {
+                return new ValueNode(n, proc);
+            }
+        }
+        if (deflt instanceof Value) {
+            return (Value)deflt;
+        } else {
+            return ValueFactory.asValue(deflt.toString(), proc);
+        }
+    }
+    
     public Value asDate(String format, String typeURI) {
         return ValueDate.parse(toString(), format, expandTypeURI(typeURI), proc);
     }

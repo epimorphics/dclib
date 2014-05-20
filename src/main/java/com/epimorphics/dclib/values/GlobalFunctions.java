@@ -15,6 +15,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.epimorphics.util.EpiException;
 import com.hp.hpl.jena.datatypes.RDFDatatype;
 import com.hp.hpl.jena.datatypes.TypeMapper;
 import com.hp.hpl.jena.graph.Node;
@@ -44,6 +45,10 @@ public class GlobalFunctions {
     
     public static Value nullValue() {
         return new ValueNull();
+    }
+    
+    public static void abort() {
+        throw new EpiException("Aborted at user request");
     }
     
     /** Debug aid - log the value  */
