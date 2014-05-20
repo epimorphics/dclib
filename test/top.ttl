@@ -2,7 +2,9 @@
 <http://example.com/test>
         a       <http://www.w3.org/2004/02/skos/core#Collection> ;
         <http://www.w3.org/2000/01/rdf-schema#label>
-                "A test collection" .
+                "A test collection" ;
+        <http://rdfs.org/ns/void#exampleResource>
+                <http://example.com/test/1> .                
 
 <http://example.com/test/1>
         a       <http://www.w3.org/2004/02/skos/core#Concept> ;

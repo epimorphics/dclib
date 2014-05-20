@@ -148,7 +148,7 @@ public class ConverterProcess {
         return messageReporter.succeeded();
     }
     
-    private BindingEnv nextRow() throws IOException {
+    public BindingEnv nextRow() throws IOException {
         try {
             BindingEnv row = dataSource.nextRow();
             if (row == null) return null;
@@ -165,7 +165,25 @@ public class ConverterProcess {
         }
     }
     
-    private void preprocess() throws IOException {        
+    public BindingEnv peekRow() {
+        try {
+            String[] row = dataSource.peekRow();
+            String[] headers = dataSource.getHeaders();
+            if (row == null) return null;
+            BindingEnv wrapped = new BindingEnv(env);
+            for (int i = 0; i < row.length; i++) {
+                wrapped.put(headers[i], ValueFactory.asValue(row[i].trim(), this));
+            }
+            return wrapped;
+        } catch (Exception e) {
+            // Most likely problem here is bad data such as an unterminated line
+            messageReporter.report("Error during CSV reading, unterminated final line? " + e, dataSource.getLineNumber());
+            messageReporter.setFailed();
+            return null;
+        }
+    }
+    
+    protected void preprocess() throws IOException {        
         Node dataset = NodeFactory.createAnon();
         
         Object baseURI = env.get(BASE_OBJECT_NAME);

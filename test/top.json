@@ -4,7 +4,8 @@
     "oneOffs" : [{
         "@id" : "<{$base}>",
         "<rdf:type>" : "<skos:Collection>",
-        "<rdfs:label>" : "A test collection"
+        "<rdfs:label>" : "A test collection",
+        "<void:exampleResource>" : "<{$base}/{notation}>"
     }],
     "templates" : [{
         "bind" : {"code" : "{notation}"},

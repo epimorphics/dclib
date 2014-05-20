@@ -158,7 +158,7 @@ public class CompositeTemplate extends ParameterizedTemplate implements Template
         super.preamble(proc);
         
         DataContext dc = proc.getDataContext();
-        BindingEnv env = proc.getEnv();
+        BindingEnv env =  proc.peekRow(); // proc.getEnv();
         
         // Instantiate any global bindings
         if (spec.hasKey(JSONConstants.BIND)) {
