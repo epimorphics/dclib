@@ -100,4 +100,17 @@ public class BindingEnv extends HashMap<String, Object> implements Map<String, O
         }
         return it;
     }
+    
+    /**
+     * Summary print of whole inherited environment
+     */
+    public String toStringDeep() {
+        StringBuffer buff = new StringBuffer();
+        buff.append( toString() );
+        if (parent != null) {
+            buff.append(" U ");
+            buff.append( parent.toStringDeep() );
+        }
+        return buff.toString();
+    }
 }
