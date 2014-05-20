@@ -171,7 +171,9 @@ public class CompositeTemplate extends ParameterizedTemplate implements Template
         }
         
         for (Template t : templates) {
-            t.preamble(proc, env);
+            if (t.isApplicableTo(env)) {
+                t.preamble(proc, env);
+            }
         }
     }
     

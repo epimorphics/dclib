@@ -193,7 +193,10 @@ public class ConverterProcess {
         }
         
         try {
-            getTemplate().preamble(this, peekRow());
+            BindingEnv initialEnv = peekRow();
+            if ( getTemplate().isApplicableTo(initialEnv) ) {
+                getTemplate().preamble(this, initialEnv);
+            }
         } catch (Exception e) {
             messageReporter.report("Problem with one-off preprocessing of template: " + e);
             log.error("Problem with one-off preprocessing of template", e);
