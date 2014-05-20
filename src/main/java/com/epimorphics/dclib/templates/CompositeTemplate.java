@@ -81,9 +81,7 @@ public class CompositeTemplate extends ParameterizedTemplate implements Template
         for (Template template : templates) {
             template = template.deref();
             if (template.isApplicableTo(env)) {
-                if (proc.isDebugging()) {
-                    proc.getMessageReporter().report("Debug: applying template " + template.getName(), rowNumber);
-                }
+                reportApplying(proc, template, rowNumber);
                 try {
                     Node n = template.convertRow(proc, env, rowNumber);
                     if (result == null && n != null) {
@@ -166,6 +164,7 @@ public class CompositeTemplate extends ParameterizedTemplate implements Template
         
         // Process any one-offs
         for (Template t : getTemplates(spec.get(JSONConstants.ONE_OFFS), dc)) {
+            reportApplying(proc, t, -1);
             t.preamble(proc, env);
             t.convertRow(proc, env, 0);
         }
@@ -176,5 +175,14 @@ public class CompositeTemplate extends ParameterizedTemplate implements Template
             }
         }
     }
-    
+
+    private void reportApplying(ConverterProcess proc, Template t, int rowNumber) {
+        if (proc.isDebugging()) {
+            if (rowNumber == -1) {
+                proc.getMessageReporter().report("Debug: applying template " + t.getName() + " as one-off");
+            } else {
+                proc.getMessageReporter().report("Debug: applying template " + t.getName(), rowNumber);
+            }
+        }
+    }
 }
