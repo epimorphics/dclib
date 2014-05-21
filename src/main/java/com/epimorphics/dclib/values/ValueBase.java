@@ -203,7 +203,7 @@ public abstract class ValueBase<T> implements Value {
     }
     
     public ValueString toCleanSegment() {
-        String seg = NameUtils.safeName(toString()).toLowerCase().replaceAll("_", "-");
+        String seg = NameUtils.safeName(toString()).toLowerCase().replaceAll("[_-]+", "-");
         if (seg.endsWith("-")) {
             seg = seg.substring(0, seg.length()-1);
         }
