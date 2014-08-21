@@ -90,8 +90,7 @@ public abstract class ValueBase<T> implements Value {
     
     protected void reportError(String msg) {
         ProgressReporter reporter = proc.getMessageReporter();
-        reporter.report(msg);
-        reporter.setFailed();
+        reporter.reportError(msg);
     }
     
     // Value methods applicable to any type

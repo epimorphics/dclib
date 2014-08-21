@@ -77,8 +77,7 @@ public class ConverterProcess {
             setModel( ModelFactory.createDefaultModel() );
             
         } catch (IOException e) {
-            messageReporter.report("Failed read headerline of data");
-            messageReporter.setFailed();
+            messageReporter.reportError("Failed read headerline of data");
             close();
         }
     }
@@ -121,17 +120,14 @@ public class ConverterProcess {
                     try {
                         Node result = template.convertRow(this, row, lineNumber);
                         if (result == null) {
-                            messageReporter.report("Error: no templates matched line " + lineNumber, lineNumber);
-                            messageReporter.setFailed();
+                            messageReporter.reportError("Error: no templates matched line " + lineNumber, lineNumber);
                         }
                     } catch (Exception e) {
                         if (!(e instanceof NullResult)) {
-                            messageReporter.report("Error: " + e, lineNumber);
+                            messageReporter.reportError("Error: " + e, lineNumber);
 //                            log.error("Error processing line " + lineNumber, e);
-                            messageReporter.setFailed();
                         } else {
-                            messageReporter.report("Warning: no templates matched line " + lineNumber + ", " + e, lineNumber);
-                            messageReporter.setFailed();
+                            messageReporter.reportError("Warning: no templates matched line " + lineNumber + ", " + e, lineNumber);
                         }
                     }
                 } else {
@@ -139,8 +135,7 @@ public class ConverterProcess {
                 }
             }
         } catch (IOException e) {
-            messageReporter.report("Problem reading next line of source");
-            messageReporter.setFailed();
+            messageReporter.reportError("Problem reading next line of source");
         }
         messageReporter.report("Processed " + (dataSource.getLineNumber() - 1) + " lines");
         messageReporter.setState(TaskState.Terminated);
@@ -160,8 +155,7 @@ public class ConverterProcess {
             return wrapped;
         } catch (Exception e) {
             // Most likely problem here is bad data such as an unterminated line
-            messageReporter.report("Error during CSV reading, unterminated final line? " + e, dataSource.getLineNumber());
-            messageReporter.setFailed();
+            messageReporter.reportError("Error during CSV reading, unterminated final line? " + e, dataSource.getLineNumber());
             return null;
         }
     }
@@ -178,8 +172,7 @@ public class ConverterProcess {
             return wrapped;
         } catch (Exception e) {
             // Most likely problem here is bad data such as an unterminated line
-            messageReporter.report("Error during CSV reading, unterminated final line? " + e, dataSource.getLineNumber());
-            messageReporter.setFailed();
+            messageReporter.reportError("Error during CSV reading, unterminated final line? " + e, dataSource.getLineNumber());
             return null;
         }
     }
@@ -204,9 +197,8 @@ public class ConverterProcess {
                 getTemplate().preamble(this, initialEnv);
             }
         } catch (Exception e) {
-            messageReporter.report("Problem with one-off preprocessing of template: " + e);
+            messageReporter.reportError("Problem with one-off preprocessing of template: " + e);
             log.error("Problem with one-off preprocessing of template", e);
-            messageReporter.setFailed();
         }
 
         // Check for linkedcsv-style preamble
