@@ -50,6 +50,7 @@ public class TestPattern {
         env.set("p", ValueFactory.asValue("G (A)", proc));
         env.set("q", ValueFactory.asValue("foo's - bar __ baz()", proc));
         env.set("m", ValueFactory.asValue("Fo o,Bar ", proc));
+        env.set("f", ValueFactory.asValue("12.7", proc));
         
         dc.setPrefixes( FileManager.get().loadModel("prefixes.ttl") );
     }
@@ -125,6 +126,12 @@ public class TestPattern {
     @Test
     public void testBigNum() {
         assertEquals("Number 05501000000000000000000000000000", eval("Number {big}").toString());
+    }
+    
+    @Test
+    public void testFunctions() {
+        assertEquals(13, ((Number)eval("{round(f)}")).longValue());
+        assertEquals(12, ((Number)eval("{round(f.value - 0.3)}")).longValue());
     }
     
     @Test

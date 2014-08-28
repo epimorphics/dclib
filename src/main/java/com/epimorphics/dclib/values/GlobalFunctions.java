@@ -9,6 +9,8 @@
 
 package com.epimorphics.dclib.values;
 
+import java.math.BigDecimal;
+import java.math.MathContext;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.epimorphics.dclib.framework.EvalFailed;
+import com.epimorphics.util.EpiException;
 import com.hp.hpl.jena.datatypes.RDFDatatype;
 import com.hp.hpl.jena.datatypes.TypeMapper;
 import com.hp.hpl.jena.graph.Node;
@@ -49,6 +52,20 @@ public class GlobalFunctions {
     
     public static void abort() {
         throw new EvalFailed("Aborted at user request");
+    }
+    
+    public static Object round(Object value) {
+        if (value instanceof Number) {
+            if (value instanceof BigDecimal) {
+                return ((BigDecimal)value).round( MathContext.DECIMAL64 );
+            } else {
+                return Math.round( ((Number)value).doubleValue() );
+            }
+        } else if (value instanceof ValueNumber) {
+            return Math.round( ((ValueNumber)value).toNumber().doubleValue() );
+        } else {
+            throw new EpiException("Round could not process value " + value + " (" + value.getClass() + ")");
+        }
     }
     
     /** Debug aid - log the value  */
