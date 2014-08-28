@@ -1,0 +1,6 @@
+"mud","http://environment.data.gov.uk/def/bathing-water/mud_sediment"
+"sand","http://environment.data.gov.uk/def/bathing-water/sand_sediment"
+"shingle","http://environment.data.gov.uk/def/bathing-water/shingle_sediment"
+"marsh","http://environment.data.gov.uk/def/bathing-water/marsh_sediment"
+"rock","http://environment.data.gov.uk/def/bathing-water/rock_sediment"
+"other","http://environment.data.gov.uk/def/bathing-water/other_sediment"

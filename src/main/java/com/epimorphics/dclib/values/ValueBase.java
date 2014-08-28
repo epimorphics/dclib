@@ -65,16 +65,15 @@ public abstract class ValueBase<T> implements Value {
     
     @Override
     public Value append(Value val) {
-        String base = toString();
         if (val.isMulti()) {
-            Object[] values = val.getValues();
-            String[] results = new String[values.length];
+            Value[] values = val.getValues();
+            Value[] results = new Value[values.length];
             for (int i = 0; i < values.length; i++) {
-                results[i] = base + values[i];
+                results[i] = append( values[i] );
             }
-            return new ValueStringArray(results, proc);
+            return new ValueArray(results, proc);
         } else {
-            return new ValueString(base + val.toString(), proc);
+            return new ValueString(toString() + val.toString(), proc);
         }
     }
 
@@ -84,8 +83,8 @@ public abstract class ValueBase<T> implements Value {
     }
 
     @Override
-    public Object[] getValues() {
-        return new Object[]{value};
+    public Value[] getValues() {
+        return new Value[]{this};
     }
     
     protected void reportError(String msg) {
@@ -189,19 +188,19 @@ public abstract class ValueBase<T> implements Value {
     protected ValueString wrap(String s) {
         return new ValueString(s, proc);
     }
-    public ValueString toLowerCase() {
+    public Value toLowerCase() {
         return wrap(toString().toLowerCase());
     }
     
-    public ValueString toUpperCase() {
+    public Value toUpperCase() {
         return wrap(toString().toUpperCase());
     }
     
-    public ValueString toSegment() {
+    public Value toSegment() {
         return wrap( NameUtils.safeName(toString()) );
     }
     
-    public ValueString toCleanSegment() {
+    public Value toCleanSegment() {
         String seg = toString().toLowerCase().replace("'", "");
         seg =  seg.replaceAll("[^@$a-zA-Z0-9\\.~]+", "-");
         if (seg.endsWith("-")) {
@@ -210,27 +209,27 @@ public abstract class ValueBase<T> implements Value {
         return wrap( seg );
     }
     
-    public ValueString toSegment(String repl) {
+    public Value toSegment(String repl) {
         return wrap( NameUtils.safeName(toString()).replaceAll("_", repl) );
     }
     
-    public ValueString trim() {
+    public Value trim() {
         return wrap( toString().trim() );
     }
     
-    public ValueString substring(int offset) {
+    public Value substring(int offset) {
         return wrap( toString().substring(offset) );
     }
     
-    public ValueString substring(int start, int end) {
+    public Value substring(int start, int end) {
         return new ValueString( toString().substring(start, end), proc );
     }
 
-    public ValueString replaceAll(String regex, String replacement) {
+    public Value replaceAll(String regex, String replacement) {
         return wrap( toString().replaceAll(regex, replacement) );
     }
 
-    public ValueString regex(String regex) {
+    public Value regex(String regex) {
         Matcher m = Pattern.compile(regex).matcher(toString());
         if (m.matches()) {
             if (m.groupCount() > 0) {
@@ -247,7 +246,7 @@ public abstract class ValueBase<T> implements Value {
         return toString().matches(regex);
     }
     
-    public ValueString lastSegment() {
+    public Value lastSegment() {
         return new ValueString( RDFUtil.getLocalname( toString() ), proc );
     }
     

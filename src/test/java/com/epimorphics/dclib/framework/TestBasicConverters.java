@@ -104,6 +104,8 @@ public class TestBasicConverters {
 
         // Non-sensical example to provide test of asNodeURI in situ
         convert("test/mapping/dept-type-inv.json", "test/mapping/dept-type-data.csv");
+        
+        checkAgainstExpected("test/mapping/multi-test.json", "test/mapping/multi-test.csv", "test/mapping/multi-test-expected.ttl");
 
     }
     

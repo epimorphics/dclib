@@ -24,7 +24,8 @@ import com.epimorphics.dclib.framework.DataContext;
 import com.epimorphics.dclib.framework.NullResult;
 import com.epimorphics.dclib.framework.Pattern;
 import com.epimorphics.dclib.framework.Template;
-import com.epimorphics.dclib.values.ValueStringArray;
+import com.epimorphics.dclib.values.Value;
+import com.epimorphics.dclib.values.ValueArray;
 import com.epimorphics.util.EpiException;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.util.OneToManyMap;
@@ -88,8 +89,8 @@ public class ResourceMapTemplate extends TemplateBase implements Template {
                 if (value instanceof Node) {
                     validateNode((Node)value);
                 }
-                if (value instanceof ValueStringArray) {
-                    for (Object v : ((ValueStringArray) value).getValues()) {
+                if (value instanceof ValueArray) {
+                    for (Value v : ((ValueArray) value).getValues()) {
                         out.triple(asTriple(propPattern, valPattern, subject,
                                 prop, v));
                     }

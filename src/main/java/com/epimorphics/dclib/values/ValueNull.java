@@ -46,7 +46,7 @@ public class ValueNull implements Value
     }
 
     @Override
-    public Object[] getValues() {
+    public Value[] getValues() {
         return null;
     }
 

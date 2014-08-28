@@ -23,8 +23,8 @@ public class ValueString extends ValueBase<String> implements Value {
         super(value, proc);
     }
 
-    public ValueStringArray split(String pattern) {
-        return new ValueStringArray( value.split(pattern), proc );
+    public ValueArray split(String pattern) {
+        return new ValueArray( value.split(pattern), proc );
     }
     
     @Override
@@ -50,7 +50,7 @@ public class ValueString extends ValueBase<String> implements Value {
         if (matcher.matches()) {
             String lang = matcher.group(1);
             int split = value.length() - lang.length() - 1;
-            char pre = value.charAt(split-1);
+//            char pre = value.charAt(split-1);
             if (value.charAt(split-1) == '@') {
                 return NodeFactory.createLiteral( value.substring(0, split) + lang );
             } else {

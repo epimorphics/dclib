@@ -1,0 +1,18 @@
+{       
+    "type"  : "Composite",
+    "bind" : {"$base" : "http://example.com/test"},
+     "templates" : {
+        "@id" : "<{$base}/{label.toSegment()}>",
+        "<rdfs:label>" : "{label}",
+        "<rdf:type>" : "{type.split(',').map('sediment')}"
+    },
+    "sources" :
+        {
+            "name": "sediment",
+            "sourceType": "CSV",
+            "source": "test/mapping/sediment.csv",
+            "key" : "code",
+            "resource": "sediment_type",
+            "makeURI" : "true"
+        }   
+}

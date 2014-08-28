@@ -1,0 +1,9 @@
+<http://example.com/test/foo>
+        a       <http://environment.data.gov.uk/def/bathing-water/shingle_sediment> , <http://environment.data.gov.uk/def/bathing-water/sand_sediment> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "foo" .
+
+<http://example.com/test/bar>
+        a       <http://environment.data.gov.uk/def/bathing-water/other_sediment> , <http://environment.data.gov.uk/def/bathing-water/sand_sediment> , <http://environment.data.gov.uk/def/bathing-water/rock_sediment> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "bar" .

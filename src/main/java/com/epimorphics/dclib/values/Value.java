@@ -41,7 +41,7 @@ public interface Value {
     public boolean isMulti();
     
     /** Return all the raw values of a multi-valued value */
-    public Object[] getValues();
+    public Value[] getValues();
     
     /** Convert the value to an RDF node */
     public Node asNode();

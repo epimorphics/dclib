@@ -71,7 +71,7 @@ public class ValueError implements Value {
     }
 
     @Override
-    public Object[] getValues() {
+    public Value[] getValues() {
         return null;
     }
 

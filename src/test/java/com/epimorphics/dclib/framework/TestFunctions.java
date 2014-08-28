@@ -9,16 +9,21 @@
 
 package com.epimorphics.dclib.framework;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertTrue;
+
 import java.io.IOException;
 
 import org.junit.Test;
 
 import com.epimorphics.dclib.values.Row;
+import com.epimorphics.dclib.values.Value;
+import com.epimorphics.dclib.values.ValueArray;
 import com.epimorphics.dclib.values.ValueFactory;
-import com.epimorphics.dclib.values.ValueStringArray;
 import com.hp.hpl.jena.graph.Node;
-
-import static org.junit.Assert.*;
 
 public class TestFunctions {
 
@@ -46,10 +51,10 @@ public class TestFunctions {
         assertEquals("lower", eval("LOWER", "{x.toLowerCase()}").toString());
         assertEquals("UPPER", eval("upper", "{x.toUpperCase()}").toString());
         assertEquals("This_is_a_foolish_-_pattern", eval("This    is a (foolish) - pattern", "{x.toSegment()}").toString());
-        Object[] values = ((ValueStringArray)eval("a,b,c", "stub-{x.split(',')}")).getValues();
-        assertEquals("stub-a", values[0]);
-        assertEquals("stub-b", values[1]);
-        assertEquals("stub-c", values[2]);
+        Value[] values = ((ValueArray)eval("a,b,c", "stub-{x.split(',')}")).getValues();
+        assertEquals("stub-a", values[0].toString());
+        assertEquals("stub-b", values[1].toString());
+        assertEquals("stub-c", values[2].toString());
         assertEquals("12", eval("UK012", "{x.regex('UK0?([0-9]*)')}").toString() );
         assertTrue( (Boolean)eval("UK012", "{x.matches('UK0?([0-9]*)')}") );
         assertFalse( (Boolean)eval("UK0a", "{x.matches('UK0?([0-9]*)')}") );

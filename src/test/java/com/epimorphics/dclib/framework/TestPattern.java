@@ -9,18 +9,21 @@
 
 package com.epimorphics.dclib.framework;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import org.junit.Before;
 import org.junit.Test;
 
+import com.epimorphics.dclib.values.Value;
+import com.epimorphics.dclib.values.ValueArray;
 import com.epimorphics.dclib.values.ValueFactory;
-import com.epimorphics.dclib.values.ValueStringArray;
 import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.NodeFactory;
 import com.hp.hpl.jena.util.FileManager;
 import com.hp.hpl.jena.vocabulary.RDF;
-
-import static org.junit.Assert.*;
 
 public class TestPattern {
     DataContext dc = new DataContext();
@@ -46,6 +49,7 @@ public class TestPattern {
         env.set("t", ValueFactory.asValue("true", proc));
         env.set("p", ValueFactory.asValue("G (A)", proc));
         env.set("q", ValueFactory.asValue("foo's - bar __ baz()", proc));
+        env.set("m", ValueFactory.asValue("Fo o,Bar ", proc));
         
         dc.setPrefixes( FileManager.get().loadModel("prefixes.ttl") );
     }
@@ -72,19 +76,34 @@ public class TestPattern {
         assertEquals("bar = 42", eval("{b.value.split(' ').1} = {i}").toString());
         assertEquals("big", eval("{i.value > 10 ? 'big' : 'little'}"));
     }
-    
-    @Test
-    public void testArrays() {
-        assertEquals("foo", eval("{b.split(' ').0}"));
-    }
-    
+        
     @Test
     public void testMultiValues() {
         Object result = eval("prefix:{b.split(' ')}");
-        assertTrue(result instanceof ValueStringArray);
-        Object[] ans = ((ValueStringArray)result).getValues();
-        assertEquals("prefix:foo", ans[0]);
-        assertEquals("prefix:bar", ans[1]);
+        checkArray(result, "prefix:foo", "prefix:bar");
+        assertEquals("foo", eval("{b.split(' ').0}").toString());
+        checkArray( eval("{b.split(' ').substring(1)}"), "oo", "ar");
+        checkArray( eval("{m.split(',').trim()}"), "Fo o", "Bar");
+        checkArray( eval("{m.split(',')}"), "Fo o", "Bar ");
+        checkArray( eval("{m.split(',').trim().toUpperCase()}"), "FO O", "BAR");
+        checkArray( eval("{m.split(',').trim().toLowerCase()}"), "fo o", "bar");
+        checkArray( eval("{m.split(',').toCleanSegment()}"), "fo-o", "bar");
+        checkArray( eval("{m.split(',').replaceAll('[oa]','z')}"), "Fz z", "Bzr ");
+        checkArray( eval("{b.split(' ').append(i)}"), "foo42", "bar42");
+        checkArray( eval("{i.append(b.split(' '))}"), "42foo", "42bar");
+    }
+    
+    protected void checkArray(Object result, String...expected) {
+        assertTrue(result instanceof ValueArray);
+        checkArray((ValueArray)result, expected);
+    }
+    
+    protected void checkArray(ValueArray result, String...expected) {
+        Value[] ans = result.getValues();
+        assertEquals(expected.length, ans.length);
+        for (int i = 0; i < expected.length; i++) {
+            assertEquals(expected[i], ans[i].toString());
+        }
     }
     
     @Test
