@@ -59,14 +59,10 @@ public class Pattern {
      * @param dc DataContext used for things like prefix expansion
      */
     public Pattern(String pattern, DataContext dc) {
-        /* 
-         * Not necessary because the general purpose \ escape handles it
-         * 
+       
          if (pattern.startsWith("\\<") || pattern.startsWith("\\^")) {
             parse(pattern.substring(1));
-        } else */ 
-        
-        if (pattern.startsWith("<") && pattern.endsWith(">")) {
+        } else if (pattern.startsWith("<") && pattern.endsWith(">")) {
             isURI = true;
             parse( pattern.substring(1, pattern.length() - 1) );
         } else if (pattern.startsWith("^<") && pattern.endsWith(">")) {
@@ -236,6 +232,8 @@ public class Pattern {
             components.set(0, dc.expandURI((String)components.get(0)));
         }
     }
+    
+    protected static final String ESCAPED = "<>{}";
 
     protected void parse(String pattern) {
         boolean escaped = false;
@@ -248,6 +246,9 @@ public class Pattern {
             char c = pattern.charAt(i);
             
             if (escaped) {
+                if (ESCAPED.indexOf(c) == -1) {
+                    block.append('\\');
+                }
                 block.append(c);
                 escaped = false;
                 continue;

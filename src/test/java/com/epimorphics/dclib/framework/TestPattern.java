@@ -71,6 +71,8 @@ public class TestPattern {
         assertFalse(p.isURI());
         assertFalse(p.isInverse());
         assertEquals("<rdf:type>", p.evaluate(env, proc, 0));
+        
+        assertEquals("^<rdf:type>", eval("\\^<rdf:type>"));
     }
     
     @Test
@@ -82,6 +84,8 @@ public class TestPattern {
         assertEquals("big", eval("{i.value > 10 ? 'big' : 'little'}").toString());
         
         assertEquals("foo barbaz", eval("{b.toString() + 'baz'}").toString());
+        
+        assertEquals("foo \\ bar", eval("foo \\ bar"));
     }
         
     @Test
@@ -164,6 +168,12 @@ public class TestPattern {
         
         assertEquals(NodeFactory.createLiteral("foo bar", "en", false), evalNode("{b}@en") );
         assertEquals(NodeFactory.createLiteral("foo bar@en"), evalNode("{b}@@en") );
+        assertEquals(NodeFactory.createLiteral("foo bar@en"), evalNode("{b}\\@en") );
+        
+        assertEquals(NodeFactory.createLiteral("foo bar", XSDDatatype.XSDstring), evalNode("{b}^^xsd:string"));
+        assertEquals(NodeFactory.createLiteral("foo bar^^xsd:string"), evalNode("{b}\\^^xsd:string"));
+        assertEquals(NodeFactory.createLiteral("foo bar", XSDDatatype.XSDstring), evalNode("{b}^^http://www.w3.org/2001/XMLSchema#string"));
+        assertEquals(NodeFactory.createLiteral("foo bar", XSDDatatype.XSDstring), evalNode("{b}^^<http://www.w3.org/2001/XMLSchema#string>"));
     }
   
     @Test
