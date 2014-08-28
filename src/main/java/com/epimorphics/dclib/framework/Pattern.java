@@ -59,7 +59,9 @@ public class Pattern {
      * @param dc DataContext used for things like prefix expansion
      */
     public Pattern(String pattern, DataContext dc) {
-        if (pattern.startsWith("<") && pattern.endsWith(">")) {
+        if (pattern.startsWith("\\<") || pattern.startsWith("\\^")) {
+            parse(pattern.substring(1));
+        } else  if (pattern.startsWith("<") && pattern.endsWith(">")) {
             isURI = true;
             parse( pattern.substring(1, pattern.length() - 1) );
         } else if (pattern.startsWith("^<") && pattern.endsWith(">")) {
