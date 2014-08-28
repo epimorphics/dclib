@@ -20,7 +20,6 @@ import java.io.IOException;
 import org.junit.Test;
 
 import com.epimorphics.rdfutil.RDFUtil;
-import com.epimorphics.tasks.ProgressMessage;
 import com.epimorphics.tasks.SimpleProgressMonitor;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.util.FileManager;
@@ -208,7 +207,7 @@ public class TestBasicConverters {
         Model expected = FileManager.get().loadModel(resultFile, DUMMY, "Turtle");
         expected = RDFUtil.mapNamespace(expected, DUMMY, "");
         boolean same = m.isIsomorphicWith(expected);
-        boolean rev = expected.isIsomorphicWith(m);
+//        boolean rev = expected.isIsomorphicWith(m);
         if (!same) {
             System.err.println("Result mismatch, result was:");
             m.write(System.err, "Turtle");
