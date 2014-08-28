@@ -74,7 +74,9 @@ public class TestPattern {
         assertEquals("this is 42", eval("this is {i}").toString());
         assertEquals("this is 40", eval("this is {i.value - 2}").toString());
         assertEquals("bar = 42", eval("{b.value.split(' ').1} = {i}").toString());
-        assertEquals("big", eval("{i.value > 10 ? 'big' : 'little'}"));
+        assertEquals("big", eval("{i.value > 10 ? 'big' : 'little'}").toString());
+        
+        assertEquals("foo barbaz", eval("{b.toString() + 'baz'}").toString());
     }
         
     @Test
@@ -132,7 +134,7 @@ public class TestPattern {
         assertEquals("a_string", eval("{A.asString().toSegment() \n\r .toLowerCase()}").toString());
         assertEquals("fzz bar", eval("{b.replaceAll('o','z')}").toString());
         assertEquals("zzz bar", eval("{b.replaceAll('[fo]','z')}").toString());
-        assertEquals("yes", eval("{a == a2 ? 'yes' : 'no'}"));
+        assertEquals("yes", eval("{a == a2 ? 'yes' : 'no'}").toString());
         assertEquals("g-a", eval("{p.toCleanSegment()}").toString());
         assertEquals("foos-bar-baz", eval("{q.toCleanSegment()}").toString());
     }

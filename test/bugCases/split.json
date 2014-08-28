@@ -1,5 +1,5 @@
 { "type" : "Composite",
-  "bind" : [ {"$ex_id" : "http://example.org/id", "foo": "foo" } ],
+  "bind" : [ {"$ex_id" : "http://example.org/id", "foo": "{'foo'}" } ],
    "templates" : [ "play" ],
    "referenced" : [
      { "name" : "play",
