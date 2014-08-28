@@ -64,8 +64,8 @@ public class TestPattern {
         assertTrue(p.isURI());
         assertTrue(p.isInverse());
         
-        assertEquals(RDF.type.getURI(), eval("<rdf:type>"));
-        assertEquals(RDF.type.getURI(), eval("^<rdf:type>"));
+        assertEquals(RDF.type.getURI(), eval("<rdf:type>").toString());
+        assertEquals(RDF.type.getURI(), eval("^<rdf:type>").toString());
     }
     
     @Test

@@ -106,7 +106,12 @@ public class TestBasicConverters {
         convert("test/mapping/dept-type-inv.json", "test/mapping/dept-type-data.csv");
         
         checkAgainstExpected("test/mapping/multi-test.json", "test/mapping/multi-test.csv", "test/mapping/multi-test-expected.ttl");
-
+    }
+    
+    @Test
+    public void testMultiValued() throws IOException {
+        checkAgainstExpected("test/bugCases/split.json", "test/bugCases/array-field.csv", "test/bugCases/split-expected.ttl");
+        
     }
     
     @Test

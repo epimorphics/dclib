@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import com.epimorphics.dclib.values.GlobalFunctions;
 import com.epimorphics.dclib.values.Value;
 import com.epimorphics.dclib.values.ValueError;
+import com.epimorphics.dclib.values.ValueFactory;
 import com.epimorphics.dclib.values.ValueNumber;
 import com.epimorphics.dclib.values.ValueString;
 import com.epimorphics.tasks.ProgressReporter;
@@ -88,7 +89,8 @@ public class Pattern {
      */
     public Object evaluate(BindingEnv env, ConverterProcess proc, int rowNumber) {
         if (isConstant) {
-            return components.get(0);
+            return ValueFactory.asValue( components.get(0).toString(), proc);
+//            return components.get(0);
         } else if (components.size() == 1) {
             Object result = evaluateComponent(0, env);
             checkForError(result, proc, rowNumber);
@@ -297,6 +299,7 @@ public class Pattern {
         } if (components.size() == 1 && components.get(0) instanceof String) {
             isConstant = true;
         }
+        
     }
     
     public String toString() {

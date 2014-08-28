@@ -1,0 +1,4 @@
+<http://example.org/a>
+        <http://www.w3.org/1999/02/22-rdf-syntax-ns#value>
+                "foo6" , "foo5" , "foo4" , "foo3" , "foo2" , "foo1" .
+                

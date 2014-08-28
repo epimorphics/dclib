@@ -1,0 +1,10 @@
+{ "type" : "Composite",
+  "bind" : [ {"$ex_id" : "http://example.org/id", "foo": "foo" } ],
+   "templates" : [ "play" ],
+   "referenced" : [
+     { "name" : "play",
+       "@id" : "<http://example.org/{id}>",
+       "<rdf:value>" : "{foo.append(value.split(','))}"
+     }
+   ]
+} 
