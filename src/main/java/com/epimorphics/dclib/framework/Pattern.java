@@ -59,9 +59,14 @@ public class Pattern {
      * @param dc DataContext used for things like prefix expansion
      */
     public Pattern(String pattern, DataContext dc) {
-        if (pattern.startsWith("\\<") || pattern.startsWith("\\^")) {
+        /* 
+         * Not necessary because the general purpose \ escape handles it
+         * 
+         if (pattern.startsWith("\\<") || pattern.startsWith("\\^")) {
             parse(pattern.substring(1));
-        } else  if (pattern.startsWith("<") && pattern.endsWith(">")) {
+        } else */ 
+        
+        if (pattern.startsWith("<") && pattern.endsWith(">")) {
             isURI = true;
             parse( pattern.substring(1, pattern.length() - 1) );
         } else if (pattern.startsWith("^<") && pattern.endsWith(">")) {
