@@ -74,6 +74,11 @@ public class TestPattern {
     }
     
     @Test
+    public void testArrays() {
+        assertEquals("foo", eval("{b.split(' ').0}"));
+    }
+    
+    @Test
     public void testMultiValues() {
         Object result = eval("prefix:{b.split(' ')}");
         assertTrue(result instanceof ValueStringArray);

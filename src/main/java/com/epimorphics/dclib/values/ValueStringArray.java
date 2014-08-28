@@ -74,5 +74,9 @@ public class ValueStringArray extends ValueBase<String[]> implements Value {
     public String getDatatype() {
         return null;
     }
+    
+    public String get(int i) {
+        return value[i];
+    }
 
 }
