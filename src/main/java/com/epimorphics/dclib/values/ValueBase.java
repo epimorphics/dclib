@@ -76,6 +76,10 @@ public abstract class ValueBase<T> implements Value {
             return new ValueString(toString() + val.toString(), proc);
         }
     }
+    
+    public Value append(String str) {
+        return append( new ValueString(str, proc) );
+    }
 
     @Override
     public boolean isMulti() {
