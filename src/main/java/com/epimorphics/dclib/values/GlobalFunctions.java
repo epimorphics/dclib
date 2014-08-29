@@ -55,17 +55,20 @@ public class GlobalFunctions {
     }
     
     public static Object round(Object value) {
+        Number result = null;
         if (value instanceof Number) {
             if (value instanceof BigDecimal) {
-                return ((BigDecimal)value).round( MathContext.DECIMAL64 );
+                result = ((BigDecimal)value).round( MathContext.DECIMAL64 );
             } else {
-                return Math.round( ((Number)value).doubleValue() );
+                result = Math.round( ((Number)value).doubleValue() );
             }
         } else if (value instanceof ValueNumber) {
-            return Math.round( ((ValueNumber)value).toNumber().doubleValue() );
+            result = Math.round( ((ValueNumber)value).toNumber().doubleValue() );
         } else {
             throw new EpiException("Round could not process value " + value + " (" + value.getClass() + ")");
         }
+        return result;
+//        return new ValueNumber(result, proc);
     }
     
     /** Debug aid - log the value  */
