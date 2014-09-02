@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.epimorphics</groupId>
   <artifactId>dclib</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>0.0.3-SNAPSHOT</version>
   <name>Data Converter library</name>
 
   <scm>
@@ -182,8 +182,7 @@
           </filters>
     
           <transformers>
-            <transformer
-              implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+            <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
               <mainClass>com.epimorphics.dclib.Main</mainClass>
             </transformer>
             <transformer implementation="org.apache.maven.plugins.shade.resource.IncludeResourceTransformer">
