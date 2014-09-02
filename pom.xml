@@ -6,7 +6,7 @@
   <name>Data Converter library</name>
 
   <scm>
-    <developerConnection>scm:git:ssh://git@github.com:epimorphics/dclib.git</developerConnection>
+    <developerConnection>scm:git:ssh://git@github.com/epimorphics/dclib.git</developerConnection>
     <tag>HEAD</tag>
   </scm>
 
