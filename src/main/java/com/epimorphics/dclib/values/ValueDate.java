@@ -15,7 +15,6 @@ import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-import com.epimorphics.dclib.framework.ConverterProcess;
 import com.hp.hpl.jena.datatypes.TypeMapper;
 import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
 import com.hp.hpl.jena.graph.Node;
@@ -29,13 +28,13 @@ public class ValueDate extends ValueNode implements Value {
     
     protected String lexical;
     
-    public ValueDate(String value, ConverterProcess proc) {
-        super(stringToDate(value), proc);
+    public ValueDate(String value) {
+        super(stringToDate(value));
         lexical = value;
     }
     
-    public ValueDate(Node node, ConverterProcess proc) {
-        super(node, proc);
+    public ValueDate(Node node) {
+        super(node);
         lexical = node.getLiteralLexicalForm();
     }
     
@@ -89,10 +88,9 @@ public class ValueDate extends ValueNode implements Value {
      * These patterns are nearly identical to Java SimpleDateFormat patterns. If the pattern contains a timezone parse (Z) then
      * the generated literal with have an explicit timezone, otherwise it will be a local, timezone-free, literal. 
      * @param typeURI The URI for the date time type - can be one of xsd:dateTime, xsd:date, xsd:time, xsd:gYearMonth, xsd:gYear.
-     * @param proc the parent converter process for error reporting
      * @return A ValueDate containing a legal RDF literal of the given time, or a ValueNull if non of the parse options worked.
      */
-    public static Value parse(String lex, String format, String typeURI, ConverterProcess proc) {
+    public static Value parse(String lex, String format, String typeURI) {
         for(String fmt : format.split("\\|")) {
             try {
                 boolean withTZ = fmt.contains("Z");
@@ -117,7 +115,7 @@ public class ValueDate extends ValueNode implements Value {
                     formatted = formatted.replace("UTC", "Z");
                 }
                 Node n = NodeFactory.createLiteral(formatted, TypeMapper.getInstance().getSafeTypeByName(typeURI));
-                return new ValueDate(n , proc);
+                return new ValueDate(n);
             } catch(Exception e) {
                 // Ignore and loop round to try the next pattern
             }
@@ -131,17 +129,17 @@ public class ValueDate extends ValueNode implements Value {
      * @param typeURI The URI for the date time type - can be one of xsd:dateTime, xsd:date, xsd:time, xsd:gYearMonth, xsd:gYear.
      * @return A ValueDate containing an RDF literal
      */
-    public static Value parse(String lex, String typeURI, ConverterProcess proc) {
+    public static Value parse(String lex, String typeURI) {
         Node node = NodeFactory.createLiteral(lex, TypeMapper.getInstance().getSafeTypeByName(typeURI));
         node.getLiteral().getValue(); // Checks well formed, throws exception if not
-        return new ValueDate( node, proc);
+        return new ValueDate( node);
     }
     
     /**
      * Wrap string as an xsd dateTime, date, time, or gYearMonth
      */
-    public static Value parse(String lex, ConverterProcess proc) {
-        return new ValueDate(lex, proc);
+    public static Value parse(String lex) {
+        return new ValueDate(lex);
     }
     
     public static void main(String[] args) {

@@ -13,7 +13,6 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.regex.Pattern;
 
-import com.epimorphics.dclib.framework.ConverterProcess;
 import com.hp.hpl.jena.datatypes.RDFDatatype;
 import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
 import com.hp.hpl.jena.graph.Node;
@@ -27,12 +26,12 @@ public class ValueNumber extends ValueBase<Number> implements Value {
 
     protected String lexical;
     
-    public ValueNumber(Number value, ConverterProcess proc) {
-        super(value, proc);
+    public ValueNumber(Number value) {
+        super(value);
     }
 
-    public ValueNumber(String value, ConverterProcess proc) {
-        super(stringToNumber(value), proc);
+    public ValueNumber(String value) {
+        super(stringToNumber(value));
         lexical = value;
     }
     

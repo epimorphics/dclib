@@ -40,6 +40,9 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
 public class ConverterProcess {
     static final Logger log = LoggerFactory.getLogger( ConverterProcess.class );
     
+    private static final ThreadLocal<ConverterProcess> current = new ThreadLocal<>();
+    private static final DataContext defaultDC = new DataContext();
+    
     public static final String ROW_OBJECT_NAME = "$row";
     public static final String BASE_OBJECT_NAME = "$base";
     public static final String DATASET_OBJECT_NAME = "$dataset";
@@ -83,6 +86,22 @@ public class ConverterProcess {
     }
     
     /**
+     * Return the current, thread specific, instance of the converter process
+     */
+    public static ConverterProcess get() {
+        return current.get();
+    }
+    
+    /**
+     * Return the current, thread specific, data context. If there is no converter process
+     * then returns the default data context.
+     */
+    public static DataContext getGlobalDataContext() {
+        ConverterProcess proc = get();
+        return proc == null ? defaultDC : proc.getDataContext();
+    }
+    
+    /**
      * Set to true to provide verbose output for all template matching
      * to aid with debugging
      */
@@ -100,6 +119,7 @@ public class ConverterProcess {
      */
     public boolean process() {
         try {
+            current.set(this);
             preprocess();
             
             // TODO locate a matching template it none is set
@@ -136,6 +156,8 @@ public class ConverterProcess {
             }
         } catch (IOException e) {
             messageReporter.reportError("Problem reading next line of source");
+        } finally {
+            current.set(null);
         }
         messageReporter.report("Processed " + (dataSource.getLineNumber() - 1) + " lines");
         messageReporter.setState(TaskState.Terminated);
@@ -144,13 +166,39 @@ public class ConverterProcess {
         return messageReporter.succeeded();
     }
     
+    /**
+     * Evaluate a pattern in the context of this process.
+     * Mostly used for testing
+     */
+    public Object evaluate(Pattern pattern, BindingEnv env, int rowNumber){
+        try {
+            current.set(this);
+            return pattern.evaluate(env, this, rowNumber);
+        } finally {
+            current.set(null);
+        }
+    }
+    
+    /**
+     * Evaluate a pattern in the context of this process.
+     * Mostly used for testing
+     */
+    public Node evaluateAsNode(Pattern pattern, BindingEnv env, int rowNumber) {
+        try {
+            current.set(this);
+            return pattern.evaluateAsNode(env, this, rowNumber);
+        } finally {
+            current.set(null);
+        }
+    }
+    
     public BindingEnv nextRow() throws IOException {
         try {
             BindingEnv row = dataSource.nextRow();
             if (row == null) return null;
             BindingEnv wrapped = new BindingEnv(env);
             for (Entry<String, Object> entry : row.entrySet()) {
-                wrapped.put(entry.getKey(), ValueFactory.asValue(entry.getValue().toString().trim(), this));
+                wrapped.put(entry.getKey(), ValueFactory.asValue(entry.getValue().toString().trim()));
             }
             return wrapped;
         } catch (Exception e) {
@@ -167,7 +215,7 @@ public class ConverterProcess {
             if (row == null) return null;
             BindingEnv wrapped = new BindingEnv(env);
             for (int i = 0; i < row.length; i++) {
-                wrapped.put(headers[i], ValueFactory.asValue(row[i].trim(), this));
+                wrapped.put(headers[i], ValueFactory.asValue(row[i].trim()));
             }
             return wrapped;
         } catch (Exception e) {

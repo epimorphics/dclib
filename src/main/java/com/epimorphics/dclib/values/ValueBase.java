@@ -30,12 +30,10 @@ import com.hp.hpl.jena.vocabulary.XSD;
  * @author <a href="mailto:dave@epimorphics.com">Dave Reynolds</a>
  */
 public abstract class ValueBase<T> implements Value {
-    protected ConverterProcess proc;
     protected T value;
     
-    public ValueBase(T value, ConverterProcess config) {
+    public ValueBase(T value) {
         this.value = value;
-        this.proc = config;
     }
 
     @Override
@@ -71,14 +69,14 @@ public abstract class ValueBase<T> implements Value {
             for (int i = 0; i < values.length; i++) {
                 results[i] = append( values[i] );
             }
-            return new ValueArray(results, proc);
+            return new ValueArray(results);
         } else {
-            return new ValueString(toString() + val.toString(), proc);
+            return new ValueString(toString() + val.toString());
         }
     }
     
     public Value append(String str) {
-        return append( new ValueString(str, proc) );
+        return append( new ValueString(str) );
     }
 
     @Override
@@ -92,7 +90,7 @@ public abstract class ValueBase<T> implements Value {
     }
     
     protected void reportError(String msg) {
-        ProgressReporter reporter = proc.getMessageReporter();
+        ProgressReporter reporter = ConverterProcess.get().getMessageReporter();
         reporter.reportError(msg);
     }
     
@@ -107,9 +105,7 @@ public abstract class ValueBase<T> implements Value {
     }
     
     protected String expandTypeURI(String typeURI) {
-        if (proc != null) {
-            typeURI = proc.getDataContext().expandURI(typeURI);
-        }
+        typeURI = ConverterProcess.getGlobalDataContext().expandURI(typeURI);
         if (typeURI.startsWith("xsd:")) {
             // Hardwired xsd: even if the prefix mapping doesn't have it
             typeURI = typeURI.replace("xsd:", XSD.getURI());
@@ -118,7 +114,7 @@ public abstract class ValueBase<T> implements Value {
     }
     
     public Object format(String fmtstr) {
-        return new ValueString(String.format(fmtstr, value), proc);
+        return new ValueString(String.format(fmtstr, value));
     }
 
     public boolean isString() {
@@ -134,7 +130,7 @@ public abstract class ValueBase<T> implements Value {
     }
     
     public Value asNumber() {
-        ValueNumber v = new ValueNumber(toString(), proc);
+        ValueNumber v = new ValueNumber(toString());
         if (v.isNull()) {
             reportError("Could not convert " + value + " to a number");
         }
@@ -146,7 +142,7 @@ public abstract class ValueBase<T> implements Value {
     }
     
     public Value map(String mapsource, boolean matchRequried) {
-        Node n = proc.getDataContext().getSource(mapsource).lookup(toString());
+        Node n = ConverterProcess.getGlobalDataContext().getSource(mapsource).lookup(toString());
         if (n == null) {
             String msg = "Value '" + value + "' not found in source " + mapsource;
             if (matchRequried) {
@@ -155,42 +151,42 @@ public abstract class ValueBase<T> implements Value {
                 throw new NullResult(msg);
             }
         }
-        return new ValueNode(n, proc);
+        return new ValueNode(n);
     }
     
     public Value map(String mapsource) {
-        Node n = proc.getDataContext().getSource(mapsource).lookup(toString());
+        Node n = ConverterProcess.getGlobalDataContext().getSource(mapsource).lookup(toString());
         if (n == null) {
             throw new MatchFailed("Value '" + value + "' not found in source " + mapsource);
         }
-        return new ValueNode(n, proc);
+        return new ValueNode(n);
     }
     
     public Value map(String[] mapsources, Object deflt) {
         for (String mapsource : mapsources) { 
-            Node n = proc.getDataContext().getSource(mapsource).lookup(toString());
+            Node n = ConverterProcess.getGlobalDataContext().getSource(mapsource).lookup(toString());
             if (n != null) {
-                return new ValueNode(n, proc);
+                return new ValueNode(n);
             }
         }
         if (deflt instanceof Value) {
             return (Value)deflt;
         } else {
-            return ValueFactory.asValue(deflt.toString(), proc);
+            return ValueFactory.asValue(deflt.toString());
         }
     }
     
     public Value asDate(String format, String typeURI) {
-        return ValueDate.parse(toString(), format, expandTypeURI(typeURI), proc);
+        return ValueDate.parse(toString(), format, expandTypeURI(typeURI));
     }
     
     public Value asDate(String typeURI) {
-        return ValueDate.parse(toString(), expandTypeURI(typeURI), proc);
+        return ValueDate.parse(toString(), expandTypeURI(typeURI));
     }
 
     
     protected ValueString wrap(String s) {
-        return new ValueString(s, proc);
+        return new ValueString(s);
     }
     public Value toLowerCase() {
         return wrap(toString().toLowerCase());
@@ -226,7 +222,7 @@ public abstract class ValueBase<T> implements Value {
     }
     
     public Value substring(int start, int end) {
-        return new ValueString( toString().substring(start, end), proc );
+        return new ValueString( toString().substring(start, end) );
     }
 
     public Value replaceAll(String regex, String replacement) {
@@ -251,7 +247,7 @@ public abstract class ValueBase<T> implements Value {
     }
     
     public Value lastSegment() {
-        return new ValueString( RDFUtil.getLocalname( toString() ), proc );
+        return new ValueString( RDFUtil.getLocalname( toString() ) );
     }
     
     public Node lang(String lang) {

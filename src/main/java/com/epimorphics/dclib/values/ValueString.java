@@ -20,12 +20,12 @@ import com.hp.hpl.jena.vocabulary.XSD;
 
 public class ValueString extends ValueBase<String> implements Value {
     
-    public ValueString(String value, ConverterProcess proc) {
-        super(value, proc);
+    public ValueString(String value) {
+        super(value);
     }
 
     public ValueArray split(String pattern) {
-        return new ValueArray( value.split(pattern), proc );
+        return new ValueArray( value.split(pattern) );
     }
     
     @Override
@@ -69,7 +69,7 @@ public class ValueString extends ValueBase<String> implements Value {
                     if (dt.startsWith("<") && dt.endsWith(">")) {
                         dt = dt.substring(1, dt.length() - 1);
                     }
-                    dt = proc.getDataContext().expandURI(dt);
+                    dt = ConverterProcess.getGlobalDataContext().expandURI(dt);
                     return NodeFactory.createLiteral(lex, TypeMapper.getInstance().getSafeTypeByName(dt));
                 } else {
                     return NodeFactory.createLiteral(value.substring(0,split-1) + value.substring(split));

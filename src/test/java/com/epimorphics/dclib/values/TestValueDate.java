@@ -68,18 +68,18 @@ public class TestValueDate {
     
     @Test
     public void testFactory() {
-        assertEquals(XSD.xstring.getURI(), ValueFactory.asValue("foobar", null).getDatatype());
-        assertEquals(XSD.integer.getURI(), ValueFactory.asValue("123", null).getDatatype());
-        assertEquals(XSD.decimal.getURI(), ValueFactory.asValue("123.4", null).getDatatype());
+        assertEquals(XSD.xstring.getURI(), ValueFactory.asValue("foobar").getDatatype());
+        assertEquals(XSD.integer.getURI(), ValueFactory.asValue("123").getDatatype());
+        assertEquals(XSD.decimal.getURI(), ValueFactory.asValue("123.4").getDatatype());
         
-        assertEquals(XSD.dateTime.getURI(), ValueFactory.asValue("2002-10-10T12:00:00-05:00", null).getDatatype());
-        assertEquals(XSD.dateTime.getURI(), ValueFactory.asValue("2002-10-10T12:00:00", null).getDatatype());
-        assertEquals(XSD.time.getURI(), ValueFactory.asValue("12:00:00-05:00", null).getDatatype());
-        assertEquals(XSD.time.getURI(), ValueFactory.asValue("12:00:00Z", null).getDatatype());
-        assertEquals(XSD.time.getURI(), ValueFactory.asValue("12:00:00", null).getDatatype());
-        assertEquals(XSD.date.getURI(), ValueFactory.asValue("2002-10-10-05:00", null).getDatatype());
-        assertEquals(XSD.date.getURI(), ValueFactory.asValue("2002-10-10", null).getDatatype());
-        assertEquals(XSD.gYearMonth.getURI(), ValueFactory.asValue("2002-10", null).getDatatype());
+        assertEquals(XSD.dateTime.getURI(), ValueFactory.asValue("2002-10-10T12:00:00-05:00").getDatatype());
+        assertEquals(XSD.dateTime.getURI(), ValueFactory.asValue("2002-10-10T12:00:00").getDatatype());
+        assertEquals(XSD.time.getURI(), ValueFactory.asValue("12:00:00-05:00").getDatatype());
+        assertEquals(XSD.time.getURI(), ValueFactory.asValue("12:00:00Z").getDatatype());
+        assertEquals(XSD.time.getURI(), ValueFactory.asValue("12:00:00").getDatatype());
+        assertEquals(XSD.date.getURI(), ValueFactory.asValue("2002-10-10-05:00").getDatatype());
+        assertEquals(XSD.date.getURI(), ValueFactory.asValue("2002-10-10").getDatatype());
+        assertEquals(XSD.gYearMonth.getURI(), ValueFactory.asValue("2002-10").getDatatype());
     }
     
     private boolean matches(Pattern p, String s) {
@@ -110,7 +110,7 @@ public class TestValueDate {
     }
     
     private void doTestCoercion(String src, String typeURI, String expected) {
-        Value v = ValueFactory.asValue(src, null);
+        Value v = ValueFactory.asValue(src);
         assertTrue(v instanceof ValueString || v instanceof ValueNumber);
         Value conv = (v instanceof ValueString) ? ((ValueString)v).asDate(typeURI) : ((ValueNumber)v).asDate(typeURI);
         assertTrue(conv instanceof ValueDate);
@@ -119,7 +119,7 @@ public class TestValueDate {
     }
     
     private void doTestCoercion(String src, String format, String typeURI, String expected) {
-        Value v = ValueFactory.asValue(src, null);
+        Value v = ValueFactory.asValue(src);
         assertTrue(v instanceof ValueString || v instanceof ValueNumber);
         Value conv = (v instanceof ValueString) ? ((ValueString)v).asDate(format, typeURI) : ((ValueNumber)v).asDate(format, typeURI);
         assertTrue(conv instanceof ValueDate);

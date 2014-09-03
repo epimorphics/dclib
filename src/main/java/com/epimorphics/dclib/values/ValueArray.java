@@ -25,18 +25,18 @@ import com.hp.hpl.jena.vocabulary.XSD;
  */
 public class ValueArray extends ValueBase<Value[]> implements Value {
     
-    public ValueArray(Value[] values, ConverterProcess proc) {
-        super(values, proc);
+    public ValueArray(Value[] values) {
+        super(values);
     }
     
-    public ValueArray(String[] values, ConverterProcess proc) {
-        super(wrapStrings(values, proc), proc);
+    public ValueArray(String[] values) {
+        super(wrapStrings(values));
     }
     
-    private static Value[] wrapStrings(String[] values, ConverterProcess proc) {
+    private static Value[] wrapStrings(String[] values) {
         Value[] wrapped = new Value[ values.length ];
         for (int i = 0; i < values.length; i++) {
-            wrapped[i] = new ValueString(values[i], proc);
+            wrapped[i] = new ValueString(values[i]);
         }
         return wrapped;
     }
@@ -67,13 +67,13 @@ public class ValueArray extends ValueBase<Value[]> implements Value {
                     results[i*len + j] = value[i].append( apps[j] );
                 }
             }
-            return new ValueArray(results, proc);
+            return new ValueArray(results);
         } else {
             String[] results = new String[value.length];
             for (int i = 0; i < value.length; i++) {
                 results[i] = value[i] + app.toString();
             }
-            return new ValueArray(results, proc);
+            return new ValueArray(results);
         }
     }
 
@@ -101,7 +101,7 @@ public class ValueArray extends ValueBase<Value[]> implements Value {
     public Object datatype(final String typeURI) {
         return applyFunction(new MapValue() {
             public Value map(Value value) {
-                return new ValueNode( NodeFactory.createLiteral(value.toString(), typeFor(typeURI)), proc );        
+                return new ValueNode( NodeFactory.createLiteral(value.toString(), typeFor(typeURI)) );        
             }
         });
     }
@@ -111,9 +111,7 @@ public class ValueArray extends ValueBase<Value[]> implements Value {
     }
     
     protected String expandTypeURI(String typeURI) {
-        if (proc != null) {
-            typeURI = proc.getDataContext().expandURI(typeURI);
-        }
+        typeURI = ConverterProcess.getGlobalDataContext().expandURI(typeURI);
         if (typeURI.startsWith("xsd:")) {
             // Hardwired xsd: even if the prefix mapping doesn't have it
             typeURI = typeURI.replace("xsd:", XSD.getURI());
@@ -124,7 +122,7 @@ public class ValueArray extends ValueBase<Value[]> implements Value {
     public Object format(final String fmtstr) {
         return applyFunction(new MapValue() {
             public Value map(Value value) {
-                return new ValueString(String.format(fmtstr, value), proc); 
+                return new ValueString(String.format(fmtstr, value)); 
             }
         });
         
@@ -145,7 +143,7 @@ public class ValueArray extends ValueBase<Value[]> implements Value {
     public Value asNumber() {
         return applyFunction(new MapValue() {
             public Value map(Value value) {
-                ValueNumber v = new ValueNumber(value.toString(), proc);
+                ValueNumber v = new ValueNumber(value.toString());
                 if (v.isNull()) {
                     reportError("Could not convert " + value + " to a number");
                 }
@@ -185,7 +183,7 @@ public class ValueArray extends ValueBase<Value[]> implements Value {
     public Value asDate(final String format, final String typeURI) {
         return applyFunction(new MapValue() {
             public Value map(Value value) {
-                return ValueDate.parse(this.toString(), format, expandTypeURI(typeURI), proc);
+                return ValueDate.parse(this.toString(), format, expandTypeURI(typeURI));
             }
         });        
     }
@@ -193,7 +191,7 @@ public class ValueArray extends ValueBase<Value[]> implements Value {
     public Value asDate(final String typeURI) {
         return applyFunction(new MapValue() {
             public Value map(Value value) {
-                return ValueDate.parse(this.toString(), expandTypeURI(typeURI), proc);
+                return ValueDate.parse(this.toString(), expandTypeURI(typeURI));
             }
         });
     }
@@ -303,7 +301,7 @@ public class ValueArray extends ValueBase<Value[]> implements Value {
         for (int i = 0; i < value.length; i++) {
             result[i] = map.map( value[i]);
         }
-        return new ValueArray(result, proc);
+        return new ValueArray(result);
     }
 }
 

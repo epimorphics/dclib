@@ -67,8 +67,7 @@ public class GlobalFunctions {
         } else {
             throw new EpiException("Round could not process value " + value + " (" + value.getClass() + ")");
         }
-        return result;
-//        return new ValueNumber(result, proc);
+        return new ValueNumber(result);
     }
     
     /** Debug aid - log the value  */
@@ -89,5 +88,17 @@ public class GlobalFunctions {
         return fns;
     }
     
+    /** Wrap a plain object as a Value */
+    public static Object value(Object value) {
+        if (value instanceof Value) {
+            return value;
+        } else if (value instanceof String) {
+            return new ValueString((String)value);
+        } else if (value instanceof Number) {
+            return new ValueNumber((Number)value);
+        } else {
+            return value;
+        }
+    }
     
 }

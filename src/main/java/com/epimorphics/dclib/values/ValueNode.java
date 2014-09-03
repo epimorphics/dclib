@@ -9,13 +9,12 @@
 
 package com.epimorphics.dclib.values;
 
-import com.epimorphics.dclib.framework.ConverterProcess;
 import com.hp.hpl.jena.graph.Node;
 
 public class ValueNode extends ValueBase<Node> implements Value{
 
-    public ValueNode(Node value, ConverterProcess config) {
-        super(value, config);
+    public ValueNode(Node value) {
+        super(value);
     }
     
     @Override

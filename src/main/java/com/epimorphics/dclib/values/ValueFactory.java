@@ -9,7 +9,6 @@
 
 package com.epimorphics.dclib.values;
 
-import com.epimorphics.dclib.framework.ConverterProcess;
 
 /**
  * Construct Objects suitable for scripting from string sources.
@@ -20,15 +19,15 @@ import com.epimorphics.dclib.framework.ConverterProcess;
  */
 public class ValueFactory {
     
-    public static Value asValue(String string, ConverterProcess proc) {
+    public static Value asValue(String string) {
         if (string == null || string.isEmpty()) {
             return new ValueNull();
         } else if (ValueNumber.isNumber(string)) {
-            return new ValueNumber(string, proc);
+            return new ValueNumber(string);
         } else if (ValueDate.isDate(string)) {
-            return new ValueDate(string, proc);
+            return new ValueDate(string);
         } else {
-            return new ValueString(string, proc);
+            return new ValueString(string);
         }
     }
 }

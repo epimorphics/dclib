@@ -131,7 +131,7 @@ public class CompositeTemplate extends ParameterizedTemplate implements Template
                     if ( isURI(s) ) {
                         obj = NodeFactory.createURI( asURI(s) );
                     } else {
-                        obj = ValueFactory.asValue(s, proc).asNode();
+                        obj = ValueFactory.asValue(s).asNode();
                     }
                 } else if (v instanceof Node) {
                     obj = (Node) v;

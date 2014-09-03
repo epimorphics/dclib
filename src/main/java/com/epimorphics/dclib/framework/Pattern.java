@@ -98,7 +98,7 @@ public class Pattern {
             checkForError(result, proc, rowNumber);
 //            return result;
             if (result instanceof String) {
-                return new ValueString((String)result, proc);
+                return new ValueString((String)result);
             } else {
                 return result;
             }
@@ -114,14 +114,14 @@ public class Pattern {
                 if (result instanceof Value && ((Value)result).isMulti()) {
                     if (!multiValued) {
                         multiValued = true;
-                        ans = new ValueString( ansString.toString(), proc );
+                        ans = new ValueString( ansString.toString() );
                     }
                 }
                 if (multiValued) {
                     if (result instanceof Value) {
                         ans = ans.append( (Value)result );
                     } else {
-                        ans = ans.append( new ValueString(result.toString(), proc) );
+                        ans = ans.append( new ValueString(result.toString()) );
                     }
                 } else {
                     ansString.append( result.toString() );
@@ -130,7 +130,7 @@ public class Pattern {
             if (multiValued) {
                 return ans;
             } else {
-                return new ValueString(ansString.toString(), proc);
+                return new ValueString(ansString.toString());
             }
         }
     }

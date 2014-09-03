@@ -19,6 +19,7 @@ import org.junit.Test;
 import com.epimorphics.dclib.values.Value;
 import com.epimorphics.dclib.values.ValueArray;
 import com.epimorphics.dclib.values.ValueFactory;
+import com.epimorphics.dclib.values.ValueNumber;
 import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.NodeFactory;
@@ -38,19 +39,19 @@ public class TestPattern {
         proc = new ConverterProcess(dc, null);
         
         env = new BindingEnv();
-        env.set("a", ValueFactory.asValue("a string", proc));
-        env.set("a2", ValueFactory.asValue("a string", proc));
-        env.set("b", ValueFactory.asValue("foo bar", proc));
-        env.set("i", ValueFactory.asValue("42", proc));
-        env.set("j", ValueFactory.asValue("042", proc));
-        env.set("big", ValueFactory.asValue("05501000000000000000000000000000", proc));
-        env.set("A", ValueFactory.asValue("A String", proc));
-        env.set("u", ValueFactory.asValue("http://example.com/foo", proc));
-        env.set("t", ValueFactory.asValue("true", proc));
-        env.set("p", ValueFactory.asValue("G (A)", proc));
-        env.set("q", ValueFactory.asValue("foo's - bar __ baz()", proc));
-        env.set("m", ValueFactory.asValue("Fo o,Bar ", proc));
-        env.set("f", ValueFactory.asValue("12.7", proc));
+        env.set("a", ValueFactory.asValue("a string"));
+        env.set("a2", ValueFactory.asValue("a string"));
+        env.set("b", ValueFactory.asValue("foo bar"));
+        env.set("i", ValueFactory.asValue("42"));
+        env.set("j", ValueFactory.asValue("042"));
+        env.set("big", ValueFactory.asValue("05501000000000000000000000000000"));
+        env.set("A", ValueFactory.asValue("A String"));
+        env.set("u", ValueFactory.asValue("http://example.com/foo"));
+        env.set("t", ValueFactory.asValue("true"));
+        env.set("p", ValueFactory.asValue("G (A)"));
+        env.set("q", ValueFactory.asValue("foo's - bar __ baz()"));
+        env.set("m", ValueFactory.asValue("Fo o,Bar "));
+        env.set("f", ValueFactory.asValue("12.7"));
         
         dc.setPrefixes( FileManager.get().loadModel("prefixes.ttl") );
     }
@@ -130,8 +131,12 @@ public class TestPattern {
     
     @Test
     public void testFunctions() {
-        assertEquals(13, ((Number)eval("{round(f)}")).longValue());
-        assertEquals(12, ((Number)eval("{round(f.value - 0.3)}")).longValue());
+        assertEquals(13, ((ValueNumber)eval("{round(f)}")).toNumber().longValue());
+        assertEquals(12, ((ValueNumber)eval("{round(f.value - 0.3)}")).toNumber().longValue());
+        assertEquals("013", eval("{round(f).format('%03d')}").toString());
+        
+        assertEquals(5, ((ValueNumber)eval("{value(1+4)}")).toNumber().longValue());
+        assertEquals("1.2", eval("{value(1.23).format('%2.1f')}").toString());
     }
     
     @Test
@@ -156,7 +161,7 @@ public class TestPattern {
     }
     
     private Object eval(String pattern) {
-        return new Pattern(pattern, dc).evaluate(env, proc, 0);
+        return proc.evaluate(new Pattern(pattern, dc), env, 0);
     }
     
     @Test
@@ -195,6 +200,6 @@ public class TestPattern {
     }
     
     private Node evalNode(String pattern) {
-        return new Pattern(pattern, dc).evaluateAsNode(env, proc, 0);
+        return proc.evaluateAsNode(new Pattern(pattern, dc), env, 0);
     }
 }

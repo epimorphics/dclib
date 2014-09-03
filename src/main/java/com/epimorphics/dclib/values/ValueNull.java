@@ -37,7 +37,7 @@ public class ValueNull implements Value
 
     @Override
     public Value getString() {
-        return new ValueString("null", null);
+        return new ValueString("null");
     }
 
     @Override

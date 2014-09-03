@@ -67,7 +67,7 @@ public class TestFunctions {
         DataContext dc = new DataContext();
         ConverterProcess proc = new ConverterProcess(dc, null);
         BindingEnv env = new BindingEnv();
-        env.put("x", ValueFactory.asValue(value, proc));
+        env.put("x", ValueFactory.asValue(value));
         Object result = new Pattern(pattern, dc).evaluate(env, proc, 0);
         return result;
     }
