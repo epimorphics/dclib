@@ -11,24 +11,18 @@ package com.epimorphics.dclib.framework;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Pattern;
 
 import org.apache.commons.jexl2.Expression;
 import org.apache.commons.jexl2.JexlEngine;
 import org.apache.commons.jexl2.MapContext;
-import org.apache.jena.atlas.json.JSON;
-import org.apache.jena.atlas.json.JsonObject;
+import org.apache.jena.atlas.json.JsonValue;
+import org.yaml.snakeyaml.Yaml;
 
-import com.epimorphics.dclib.framework.TestConverterProcess.TestTemplate;
-import com.epimorphics.dclib.templates.ResourceMapTemplate;
-import com.epimorphics.dclib.templates.TemplateFactory;
 import com.epimorphics.dclib.values.Row;
-import com.epimorphics.tasks.ProgressMonitor;
+import com.epimorphics.json.JsonUtil;
 import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.util.FileManager;
 
 /**
  * Playpen used for experiments
@@ -63,8 +57,17 @@ public class Temp {
         }
     }
     
+    public void testYamlParse(String file) throws IOException {
+        Yaml yaml = new Yaml();
+        Object result = yaml.load( new FileInputStream(file));
+        JsonValue val = JsonUtil.asJson(result);
+        System.out.println(val.toString());
+    }
+    
+    
     public static void main(String[] args) throws IOException {
-        new Temp().testTemplate();
+        new Temp().testYamlParse("test/mapping/sampling-points.json");
+//        new Temp().testTemplate();
 //        new Temp().testJexl();
     }
     
