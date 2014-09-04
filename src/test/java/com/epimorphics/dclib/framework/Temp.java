@@ -66,7 +66,7 @@ public class Temp {
     
     
     public static void main(String[] args) throws IOException {
-        new Temp().testYamlParse("test/mapping/sampling-points.json");
+        new Temp().testYamlParse("test/composite/example.yaml");
 //        new Temp().testTemplate();
 //        new Temp().testJexl();
     }

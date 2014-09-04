@@ -1,0 +1,10 @@
+# Example template in Yaml
+type     : Composite
+templates : 
+   "@id"        : <{$base}/{notation}>
+   <rdf:type>   : <skos:Concept>
+   <rdfs:label> : >
+      this is a long
+      multi-line label,
+      though in this case it will be folded into a single line
+      in the resulting RDF
