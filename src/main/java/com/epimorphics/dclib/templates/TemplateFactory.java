@@ -19,9 +19,11 @@ import org.apache.jena.atlas.json.JsonArray;
 import org.apache.jena.atlas.json.JsonObject;
 import org.apache.jena.atlas.json.JsonParseException;
 import org.apache.jena.atlas.json.JsonValue;
+import org.yaml.snakeyaml.Yaml;
 
 import com.epimorphics.dclib.framework.DataContext;
 import com.epimorphics.dclib.framework.Template;
+import com.epimorphics.json.JsonUtil;
 import com.epimorphics.util.EpiException;
 
 /**
@@ -69,9 +71,12 @@ public class TemplateFactory {
         }
     }
 
+    /**
+     * If the filename ends with .yaml parse as yaml rather than plain JSON
+     */
     public static Template templateFrom(InputStream is, String filename, DataContext dc) {
         try {
-            JsonValue json = JSON.parseAny(is);
+            JsonValue json = filename.endsWith(".yaml") ? JsonUtil.asJson( new Yaml().load(is) ) : JSON.parseAny(is);
             try {
                 // just making sure
                 is.close();
@@ -89,6 +94,9 @@ public class TemplateFactory {
         }
     }
 
+    /**
+     * If the filename ends with .yaml parse as yaml rather than plain JSON
+     */
     public static Template templateFrom(String filename, DataContext dc) throws IOException {
         return templateFrom( new FileInputStream(filename), filename, dc );
     }

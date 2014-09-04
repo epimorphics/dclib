@@ -21,11 +21,11 @@
          "<{$admingeo}/inDistrict>"          : "{smpt_dc_ref != null ? smpt_dc_ref.map('dc') : null }"
        }],
    sources : [{
-   	    name       : "dc",
-   		sourceType : "CSV",
- 		source     : "test/mapping/districts.csv",
- 		key        : "dc_ref",
- 		value      : "dc_lname"   		
-   	   }]
+        name       : "dc",
+        sourceType : "CSV",
+        source     : "test/mapping/districts.csv",
+        key        : "dc_ref",
+        value      : "dc_lname"
+        }]
   }
 ]

@@ -21,19 +21,19 @@
          "<{$admingeo}/inDistrict>"          : "{smpt_dc_ref != null ? smpt_dc_ref.asString().map('dc').map('chain') : null }"
        }],
    sources : [{
-   	    name       : "dc",
-   		sourceType : "CSV",
- 		source     : "test/mapping/districts.csv",
- 		key        : "dc_ref",
- 		value      : "dc_lname"   		
-   	   },
-   	   {
-        name       : "chain",
-        sourceType : "CSV",
-        source     : "test/mapping/chained-map.csv",
-        key        : "key",
-        value      : "value",
-        makeURI    : false        
-       }]
+    name       : "dc",
+    sourceType : "CSV",
+    source     : "test/mapping/districts.csv",
+    key        : "dc_ref",
+    value      : "dc_lname"
+   },
+   {
+    name       : "chain",
+    sourceType : "CSV",
+    source     : "test/mapping/chained-map.csv",
+    key        : "key",
+    value      : "value",
+    makeURI    : false        
+   }]
   }
 ]
