@@ -9,26 +9,16 @@
 
 package com.epimorphics.dclib.framework;
 
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Pattern;
 
 import org.apache.commons.jexl2.Expression;
 import org.apache.commons.jexl2.JexlEngine;
 import org.apache.commons.jexl2.MapContext;
-import org.apache.jena.atlas.json.JSON;
-import org.apache.jena.atlas.json.JsonObject;
 
-import com.epimorphics.dclib.framework.TestConverterProcess.TestTemplate;
-import com.epimorphics.dclib.templates.ResourceMapTemplate;
-import com.epimorphics.dclib.templates.TemplateFactory;
 import com.epimorphics.dclib.values.Row;
-import com.epimorphics.tasks.ProgressMonitor;
 import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.util.FileManager;
 
 /**
  * Playpen used for experiments
