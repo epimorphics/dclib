@@ -1,0 +1,77 @@
+K 25
+svn:wc:ra_dav:version-url
+V 125
+/Epimorphics/BathingWaterQuality/svn/!svn/ver/1288/com.epimorphics.bwqserver/trunk/src/main/java/com/epimorphics/govData/util
+END
+GregorianOnlyCalendar.java
+K 25
+svn:wc:ra_dav:version-url
+V 151
+/Epimorphics/BathingWaterQuality/svn/!svn/ver/209/com.epimorphics.bwqserver/trunk/src/main/java/com/epimorphics/govData/util/GregorianOnlyCalendar.java
+END
+CalendarBase.java
+K 25
+svn:wc:ra_dav:version-url
+V 142
+/Epimorphics/BathingWaterQuality/svn/!svn/ver/513/com.epimorphics.bwqserver/trunk/src/main/java/com/epimorphics/govData/util/CalendarBase.java
+END
+TimeUtil.java
+K 25
+svn:wc:ra_dav:version-url
+V 139
+/Epimorphics/BathingWaterQuality/svn/!svn/ver/1288/com.epimorphics.bwqserver/trunk/src/main/java/com/epimorphics/govData/util/TimeUtil.java
+END
+CalendarDay.java
+K 25
+svn:wc:ra_dav:version-url
+V 141
+/Epimorphics/BathingWaterQuality/svn/!svn/ver/513/com.epimorphics.bwqserver/trunk/src/main/java/com/epimorphics/govData/util/CalendarDay.java
+END
+packageinfo
+K 25
+svn:wc:ra_dav:version-url
+V 137
+/Epimorphics/BathingWaterQuality/svn/!svn/ver/1286/com.epimorphics.bwqserver/trunk/src/main/java/com/epimorphics/govData/util/packageinfo
+END
+CalendarYear.java
+K 25
+svn:wc:ra_dav:version-url
+V 142
+/Epimorphics/BathingWaterQuality/svn/!svn/ver/513/com.epimorphics.bwqserver/trunk/src/main/java/com/epimorphics/govData/util/CalendarYear.java
+END
+Duration.java
+K 25
+svn:wc:ra_dav:version-url
+V 138
+/Epimorphics/BathingWaterQuality/svn/!svn/ver/209/com.epimorphics.bwqserver/trunk/src/main/java/com/epimorphics/govData/util/Duration.java
+END
+CalendarInstant.java
+K 25
+svn:wc:ra_dav:version-url
+V 145
+/Epimorphics/BathingWaterQuality/svn/!svn/ver/209/com.epimorphics.bwqserver/trunk/src/main/java/com/epimorphics/govData/util/CalendarInstant.java
+END
+CalendarUtils.java
+K 25
+svn:wc:ra_dav:version-url
+V 143
+/Epimorphics/BathingWaterQuality/svn/!svn/ver/209/com.epimorphics.bwqserver/trunk/src/main/java/com/epimorphics/govData/util/CalendarUtils.java
+END
+CalendarInterval.java
+K 25
+svn:wc:ra_dav:version-url
+V 146
+/Epimorphics/BathingWaterQuality/svn/!svn/ver/209/com.epimorphics.bwqserver/trunk/src/main/java/com/epimorphics/govData/util/CalendarInterval.java
+END
+CalendarWeek.java
+K 25
+svn:wc:ra_dav:version-url
+V 142
+/Epimorphics/BathingWaterQuality/svn/!svn/ver/513/com.epimorphics.bwqserver/trunk/src/main/java/com/epimorphics/govData/util/CalendarWeek.java
+END
+BritishCalendar.java
+K 25
+svn:wc:ra_dav:version-url
+V 145
+/Epimorphics/BathingWaterQuality/svn/!svn/ver/209/com.epimorphics.bwqserver/trunk/src/main/java/com/epimorphics/govData/util/BritishCalendar.java
+END

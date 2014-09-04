@@ -9,15 +9,31 @@
 
 package com.epimorphics.dclib.values;
 
-import java.util.regex.Pattern;
-
+import org.junit.Before;
 import org.junit.Test;
 
+import com.epimorphics.dclib.framework.BindingEnv;
+import com.epimorphics.dclib.framework.ConverterProcess;
+import com.epimorphics.dclib.framework.DataContext;
+import com.epimorphics.dclib.framework.Pattern;
+import com.hp.hpl.jena.util.FileManager;
 import com.hp.hpl.jena.vocabulary.XSD;
 
 import static org.junit.Assert.*;
 
 public class TestValueDate {
+    DataContext dc = new DataContext();
+    ConverterProcess proc;
+    BindingEnv env;
+
+    @Before
+    public void setUp() {
+        proc = new ConverterProcess(dc, null);
+        dc.setPrefixes( FileManager.get().loadModel("prefixes.ttl") );
+        env = new BindingEnv();
+        env.put("date", ValueDate.parse("2014-09-11") );
+        env.put("datetime", ValueDate.parse("2014-09-11T12:42:21.23") );
+    }
 
     @Test
     public void testPatterns() {
@@ -82,7 +98,7 @@ public class TestValueDate {
         assertEquals(XSD.gYearMonth.getURI(), ValueFactory.asValue("2002-10").getDatatype());
     }
     
-    private boolean matches(Pattern p, String s) {
+    private boolean matches(java.util.regex.Pattern p, String s) {
         return p.matcher(s).matches();
     }
     
@@ -127,4 +143,32 @@ public class TestValueDate {
         assertEquals(expected, conv.toString());
     }
     
+    
+    @Test
+    public void testAccessors() {
+        assertEquals( 2014, evaluateInt("{date.year}") );
+        assertEquals( 2014, evaluateInt("{datetime.year}") );
+        assertEquals( 9, evaluateInt("{date.month}") );
+        assertEquals( 9, evaluateInt("{datetime.month}") );
+        assertEquals( 11, evaluateInt("{date.day}") );
+        assertEquals( 11, evaluateInt("{datetime.day}") );
+        
+        assertEquals( 12, evaluateInt("{datetime.hour}") );
+        assertEquals( 42, evaluateInt("{datetime.minute}") );
+        assertEquals( 21, evaluateInt("{datetime.fullSecond}") );
+        
+        assertEquals(21.23,  ((ValueNumber)evaluate("{datetime.second}")).toNumber().doubleValue(), 0.001);
+    }
+    
+    protected void printValue(Object val) {
+        System.out.println( String.format("'%s' of type %s", val.toString(), val.getClass().getName()));
+    }
+    
+    protected Object evaluate(String pattern) {
+         return proc.evaluate(new Pattern(pattern, dc), env, 0);
+    }
+    
+    protected int evaluateInt(String pattern) {
+         return ((ValueNumber)proc.evaluate(new Pattern(pattern, dc), env, 0)).toNumber().intValue();
+    }
 }

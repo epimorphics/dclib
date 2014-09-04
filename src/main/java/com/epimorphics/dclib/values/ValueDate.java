@@ -9,16 +9,31 @@
 
 package com.epimorphics.dclib.values;
 
+import java.util.Calendar;
 import java.util.regex.Pattern;
 
+import org.apache.jena.riot.system.StreamRDF;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
+import com.epimorphics.dclib.framework.ConverterProcess;
+import com.epimorphics.govData.util.BritishCalendar;
+import com.epimorphics.govData.util.CalendarDay;
+import com.epimorphics.govData.util.CalendarInstant;
+import com.epimorphics.govData.util.CalendarUtils;
+import com.epimorphics.govData.util.CalendarWeek;
+import com.epimorphics.govData.util.CalendarYear;
+import com.epimorphics.util.EpiException;
 import com.hp.hpl.jena.datatypes.TypeMapper;
 import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
+import com.hp.hpl.jena.datatypes.xsd.XSDDateTime;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.NodeFactory;
+import com.hp.hpl.jena.graph.Triple;
+import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.ModelFactory;
+import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 import com.hp.hpl.jena.vocabulary.XSD;
 
 /**
@@ -140,6 +155,100 @@ public class ValueDate extends ValueNode implements Value {
      */
     public static Value parse(String lex) {
         return new ValueDate(lex);
+    }
+    
+    /**
+     * Access the years part (if any) of the date
+     */
+    public Value getYear() {
+        return new ValueNumber( getDateTime().getYears() );
+    }
+    
+    /**
+     * Access the month part (if any) of the date
+     */
+    public Value getMonth() {
+        return new ValueNumber( getDateTime().getMonths() );
+    }
+    
+    /**
+     * Access the day part (if any) of the date
+     */
+    public Value getDay() {
+        return new ValueNumber( getDateTime().getDays() );
+    }
+    
+    /**
+     * Access the hours part (if any) of the datetime
+     */
+    public Value getHour() {
+        return new ValueNumber( getDateTime().getHours() );
+    }
+    
+    /**
+     * Access the minue part (if any) of the datetime
+     */
+    public Value getMinute() {
+        return new ValueNumber( getDateTime().getMinutes() );
+    }
+    
+    /**
+     * Access the whole seconds part (if any) of the datetime
+     */
+    public Value getFullSecond() {
+        return new ValueNumber( getDateTime().getFullSeconds() );
+    }
+    
+    /**
+     * Access the seconds part (if any) of the datetime
+     */
+    public Value getSecond() {
+        return new ValueNumber( getDateTime().getSeconds() );
+    }
+
+    /**
+     * Inject triples from the reference time service describing 
+     * this date into the template output stream as a side effect.
+     * Returns the date, unchanged.
+     */
+    public Value outputReference() {
+        XSDDateTime time = getDateTime();
+        BritishCalendar bcal = null;
+        int syear = time.getYears();
+        if (value.getLiteralDatatype().equals(XSDDatatype.XSDdateTime)) {
+            bcal = new BritishCalendar(
+                    time.getYears(), time.getMonths()-1, time.getDays(), 
+                    time.getHours(), time.getMinutes(), time.getFullSeconds() );
+        } else {
+            bcal = new BritishCalendar(
+                    time.getYears(), time.getMonths()-1, time.getDays()); 
+        }
+        
+        Model model = ModelFactory.createDefaultModel();
+        int i_woy_year = CalendarUtils.getWeekOfYearYear(bcal);
+        int i_woy_week = bcal.get(Calendar.WEEK_OF_YEAR);
+        new CalendarInstant(model, bcal, true);       
+        new CalendarDay(model, bcal, true);
+        new CalendarWeek(model, i_woy_year, i_woy_week, true, false);
+        new CalendarYear(model, syear, true, false);
+        
+        StreamRDF out = ConverterProcess.get().getOutputStream();
+        ExtendedIterator<Triple> it = model.getGraph().find(null, null, null);
+        while (it.hasNext()) {
+            out.triple(it.next());
+        }
+
+        return this;
+    }
+    
+    protected XSDDateTime getDateTime() {
+        Object val = value.getLiteralValue();
+        if (val instanceof XSDDateTime) {
+            return (XSDDateTime)val;
+        } else {
+            throw new EpiException("Not a date/time node");
+        }
+        
     }
     
     public static void main(String[] args) {
