@@ -6,5 +6,6 @@ templates :
    <rdfs:label> : >
       this is a long
       multi-line label,
-      though in this case it will be folded into a single line
+      though in this case it will  be folded into a single line
       in the resulting RDF
+   <rdf:value> : fool\@en
