@@ -130,7 +130,11 @@ public class Pattern {
             if (multiValued) {
                 return ans;
             } else {
-                return new ValueString(ansString.toString());
+                String result = ansString.toString();
+                if (isURI()) {
+                    result = ConverterProcess.getGlobalDataContext().expandURI(result);
+                }
+                return new ValueString(result);
             }
         }
     }
