@@ -9,6 +9,8 @@
 
 package com.epimorphics.dclib.framework;
 
+import org.apache.jena.riot.system.StreamRDF;
+
 import com.hp.hpl.jena.graph.Node;
 
 /**
@@ -31,4 +33,8 @@ public interface MapSource {
      */
     public String getName();
     
+    /**
+     * Enrich the RDF outstream from other properties of a matched node
+     */
+    public void enrich(StreamRDF stream, Node match);
 }

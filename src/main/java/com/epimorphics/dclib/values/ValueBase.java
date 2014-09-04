@@ -13,6 +13,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.epimorphics.dclib.framework.ConverterProcess;
+import com.epimorphics.dclib.framework.MapSource;
 import com.epimorphics.dclib.framework.MatchFailed;
 import com.epimorphics.dclib.framework.NullResult;
 import com.epimorphics.rdfutil.RDFUtil;
@@ -142,7 +143,9 @@ public abstract class ValueBase<T> implements Value {
     }
     
     public Value map(String mapsource, boolean matchRequried) {
-        Node n = ConverterProcess.getGlobalDataContext().getSource(mapsource).lookup(toString());
+        ConverterProcess proc = ConverterProcess.get();
+        MapSource source = proc.getDataContext().getSource(mapsource);
+        Node n = source.lookup(toString());
         if (n == null) {
             String msg = "Value '" + value + "' not found in source " + mapsource;
             if (matchRequried) {
@@ -151,21 +154,28 @@ public abstract class ValueBase<T> implements Value {
                 throw new NullResult(msg);
             }
         }
+        source.enrich(proc.getOutputStream(), n);
         return new ValueNode(n);
     }
     
     public Value map(String mapsource) {
-        Node n = ConverterProcess.getGlobalDataContext().getSource(mapsource).lookup(toString());
+        ConverterProcess proc = ConverterProcess.get();
+        MapSource source = proc.getDataContext().getSource(mapsource);
+        Node n = source.lookup(toString());
         if (n == null) {
             throw new MatchFailed("Value '" + value + "' not found in source " + mapsource);
         }
+        source.enrich(proc.getOutputStream(), n);
         return new ValueNode(n);
     }
     
     public Value map(String[] mapsources, Object deflt) {
+        ConverterProcess proc = ConverterProcess.get();
         for (String mapsource : mapsources) { 
-            Node n = ConverterProcess.getGlobalDataContext().getSource(mapsource).lookup(toString());
+            MapSource source = proc.getDataContext().getSource(mapsource);
+            Node n = source.lookup(toString());
             if (n != null) {
+                source.enrich(proc.getOutputStream(), n);
                 return new ValueNode(n);
             }
         }

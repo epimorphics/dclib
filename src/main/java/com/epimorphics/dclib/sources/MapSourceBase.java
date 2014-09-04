@@ -13,6 +13,7 @@ import java.io.File;
 
 import org.apache.jena.atlas.json.JsonObject;
 import org.apache.jena.atlas.json.JsonValue;
+import org.apache.jena.riot.system.StreamRDF;
 
 import com.epimorphics.dclib.framework.ConverterProcess;
 import com.epimorphics.dclib.framework.MapSource;
@@ -46,6 +47,11 @@ public class MapSourceBase implements MapSource {
     @Override
     public String getName() {
         return getField(JSONConstants.NAME);
+    }
+    
+    @Override
+    public void enrich(StreamRDF stream, Node match) {
+        // Default is no enrichment
     }
     
     protected String getRequiredField(String name) {

@@ -8,8 +8,8 @@
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
 @prefix : <http://example.com/map/> .
 
-:root1 skos:notation "key1"; rdf:value :value1 .
-:root2 skos:notation "key2"; rdf:value :value2 .
-:root3 skos:notation "key3"; rdf:value :value3 .
+:root1 skos:notation "key1"; rdf:value :value1 ; rdf:label "key 1" .
+:root2 skos:notation "key2"; rdf:value :value2 ; rdf:label "key 2" .
+:root3 skos:notation "key3"; rdf:value :value3 ; rdf:label "key 3" .
 
 
