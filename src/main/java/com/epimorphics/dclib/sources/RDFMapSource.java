@@ -10,13 +10,20 @@
 package com.epimorphics.dclib.sources;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import org.apache.jena.atlas.json.JsonObject;
+import org.apache.jena.atlas.json.JsonValue;
+import org.apache.jena.riot.system.StreamRDF;
 
 import com.epimorphics.dclib.framework.ConverterProcess;
 import com.epimorphics.dclib.framework.MapSource;
 import com.epimorphics.dclib.templates.JSONConstants;
+import com.epimorphics.util.EpiException;
 import com.hp.hpl.jena.graph.Node;
+import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.RDFNode;
@@ -24,7 +31,9 @@ import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.ResourceFactory;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
+import com.hp.hpl.jena.sparql.util.Closure;
 import com.hp.hpl.jena.util.FileManager;
+import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 import com.hp.hpl.jena.vocabulary.RDF;
 
 /**
@@ -35,6 +44,9 @@ import com.hp.hpl.jena.vocabulary.RDF;
  * @author <a href="mailto:dave@epimorphics.com">Dave Reynolds</a>
  */
 public class RDFMapSource extends MapSourceBase implements MapSource {
+    Model rdf;
+    boolean enrichDescribe = false;
+    List<Property> enrich = new ArrayList<>();
     
     /**
      * Test if a json object specifies on of these templates
@@ -55,7 +67,7 @@ public class RDFMapSource extends MapSourceBase implements MapSource {
         Resource type = asResource( getField(JSONConstants.TYPE), proc);
         
         String sourceFile = getRequiredField(JSONConstants.SOURCE);
-        Model rdf = FileManager.get().loadModel( "file:" + findFile(sourceFile, proc) );
+        rdf = FileManager.get().loadModel( "file:" + findFile(sourceFile, proc) );
 
         for (StmtIterator i = rdf.listStatements(null,  keyProp, (RDFNode)null); i.hasNext();) {
             Statement s = i.next();
@@ -69,6 +81,50 @@ public class RDFMapSource extends MapSourceBase implements MapSource {
                 put(key, value);
             }
         }
+        
+        JsonValue enrichSpec = spec.get(JSONConstants.ENRICH);
+        if (enrichSpec != null) {
+            if (enrichSpec.isString()) {
+                String enrichStr = enrichSpec.getAsString().value();
+                if (enrichStr.equals("*")) {
+                    enrichDescribe = true;
+                } else {
+                    enrich.add( asProperty(enrichStr, proc) );
+                }
+            } else if (enrichSpec.isArray()) {
+                for (Iterator<JsonValue> i = enrichSpec.getAsArray().iterator(); i.hasNext();) {
+                    JsonValue v = i.next();
+                    if (v.isString()) {
+                        enrich.add( asProperty(v.getAsString().value(), proc) );
+                    } else {
+                        throw new EpiException("Bad source configuration, enrich can only be a string or array of strings");
+                    }
+                }
+            } else {
+                throw new EpiException("Bad source configuration, enrich can only be a string or array of strings");
+            }
+        }
+        
+    }
+    
+    @Override
+    public void enrich(StreamRDF stream, Node match) {
+        if (match.isURI()) {
+            Resource r = rdf.getResource( match.getURI() );
+            if (enrichDescribe) {
+                Model description = Closure.closure(r, false);
+                ExtendedIterator<Triple> it = description.getGraph().find(null, null, null);
+                while (it.hasNext()) {
+                    stream.triple(it.next());
+                }
+            } else {
+                for (Property p : enrich) {
+                    for (StmtIterator si = r.listProperties(p); si.hasNext(); ) {
+                        stream.triple( si.next().asTriple() ); 
+                    }
+                }
+            }
+        } 
     }
     
     private Property asProperty(String val, ConverterProcess proc) {

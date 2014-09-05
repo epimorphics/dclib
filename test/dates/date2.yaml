@@ -1,7 +1,7 @@
 name       : date testcase
 required   : ["id","date" ]
 "@id"      : <http://example.org/{id}>
-<dct:date> : "{date.asDate('dd/MM/yyyy HH:mm:ss', 'xsd:dateTime').outputReference()}"
+<dct:date> : "{date.asDate('dd/MM/yyyy HH:mm:ss', 'xsd:dateTime').referenceTime()}"
 
  
 

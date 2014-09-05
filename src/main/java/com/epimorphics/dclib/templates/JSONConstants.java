@@ -41,4 +41,5 @@ public class JSONConstants {
     public static final String KEY          = "key";
     public static final String VALUE        = "value";
     public static final String MAKE_URI     = "makeURI";
+    public static final String ENRICH       = "enrich";
 }

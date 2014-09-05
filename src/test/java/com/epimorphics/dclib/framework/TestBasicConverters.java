@@ -124,6 +124,9 @@ public class TestBasicConverters {
         checkAgainstExpected("test/mapping/map-rdf-test-root.json", "test/mapping/map-rdf-test.csv", "test/mapping/map-rdf-root-result.ttl");
         checkAgainstExpected("test/mapping/map-rdf-test.json", "test/mapping/map-rdf-test.csv", "test/mapping/map-rdf-result.ttl");
         checkAgainstExpected("test/mapping/map-rdf-test-type.json", "test/mapping/map-rdf-test.csv", "test/mapping/map-rdf-result.ttl");
+        
+        checkAgainstExpected("test/mapping/map-rdf-test-root-enrich.json", "test/mapping/map-rdf-test.csv", "test/mapping/map-rdf-root-enrich-result.ttl");
+        checkAgainstExpected("test/mapping/map-rdf-test-root-describe.json", "test/mapping/map-rdf-test.csv", "test/mapping/map-rdf-root-enrich-result.ttl");
     }
     
     @Test

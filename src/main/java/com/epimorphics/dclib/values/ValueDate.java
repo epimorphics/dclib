@@ -211,7 +211,7 @@ public class ValueDate extends ValueNode implements Value {
      * this date into the template output stream as a side effect.
      * Returns the date, unchanged.
      */
-    public Value outputReference() {
+    public Value referenceTime() {
         XSDDateTime time = getDateTime();
         BritishCalendar bcal = null;
         int syear = time.getYears();
