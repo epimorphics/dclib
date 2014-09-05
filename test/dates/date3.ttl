@@ -1,0 +1,230 @@
+
+<http://example.org/01>
+        <http://purl.org/dc/terms/date>
+                <http://reference.data.gov.uk/id/year/2007> .
+
+<http://reference.data.gov.uk/id/year/2007>
+        a       <http://reference.data.gov.uk/def/intervals/CalendarYear> , <http://reference.data.gov.uk/def/intervals/Year> ;
+        <http://www.w3.org/2000/01/rdf-schema#comment>
+                "The British calendar year of 2007"@en ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "British Year:2007"@en ;
+        <http://reference.data.gov.uk/def/intervals/hasXsdDurationDescription>
+                "P1Y"^^<http://www.w3.org/2001/XMLSchema#duration> ;
+        <http://reference.data.gov.uk/def/intervals/nextInterval>
+                <http://reference.data.gov.uk/id/year/2008> ;
+        <http://reference.data.gov.uk/def/intervals/ordinalYear>
+                2007 ;
+        <http://reference.data.gov.uk/def/intervals/previousInterval>
+                <http://reference.data.gov.uk/id/year/2006> ;
+        <http://www.w3.org/2004/02/skos/core#prefLabel>
+                "British Year:2007"@en ;
+        <http://www.w3.org/2006/time#hasBeginning>
+                <http://reference.data.gov.uk/id/gregorian-instant/2007-01-01T00:00:00> ;
+        <http://www.w3.org/2006/time#hasDurationDescription>
+                <http://reference.data.gov.uk/def/intervals/one-year> ;
+        <http://www.w3.org/2006/time#hasEnd>
+                <http://reference.data.gov.uk/id/gregorian-instant/2008-01-01T00:00:00> ;
+        <http://www.w3.org/2006/time#intervalMeets>
+                <http://reference.data.gov.uk/id/year/2008> ;
+        <http://www.w3.org/2006/time#intervalMetBy>
+                <http://reference.data.gov.uk/id/year/2006> .
+                                
+<http://reference.data.gov.uk/id/gregorian-instant/2006-01-01T00:00:00>
+        a       <http://www.w3.org/2006/time#Instant> ;
+        <http://www.w3.org/2000/01/rdf-schema#comment>
+                "The instant at start of the 1st second of 1st minute of 1st hour of Sunday the 1st January of the British calendar year 2006"@en ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "British Instant:2006-01-01T00:00:00"@en ;
+        <http://reference.data.gov.uk/def/intervals/dayOfWeek>
+                <http://www.w3.org/2006/time#Sunday> ;
+        <http://reference.data.gov.uk/def/intervals/monthOfYear>
+                <http://reference.data.gov.uk/def/intervals/January> ;
+        <http://reference.data.gov.uk/def/intervals/ordinalDayOfMonth>
+                1 ;
+        <http://reference.data.gov.uk/def/intervals/ordinalDayOfWeek>
+                7 ;
+        <http://reference.data.gov.uk/def/intervals/ordinalDayOfYear>
+                1 ;
+        <http://reference.data.gov.uk/def/intervals/ordinalHalfOfYear>
+                1 ;
+        <http://reference.data.gov.uk/def/intervals/ordinalHourOfDay>
+                0 ;
+        <http://reference.data.gov.uk/def/intervals/ordinalMinuteOfHour>
+                0 ;
+        <http://reference.data.gov.uk/def/intervals/ordinalMonthOfYear>
+                1 ;
+        <http://reference.data.gov.uk/def/intervals/ordinalQuarterOfYear>
+                1 ;
+        <http://reference.data.gov.uk/def/intervals/ordinalSecondOfMinute>
+                0 ;
+        <http://reference.data.gov.uk/def/intervals/ordinalWeekOfYear>
+                52 ;
+        <http://reference.data.gov.uk/def/intervals/ordinalWeekOfYearYear>
+                2005 ;
+        <http://reference.data.gov.uk/def/intervals/ordinalYear>
+                2006 ;
+        <http://www.w3.org/2004/02/skos/core#prefLabel>
+                "British Instant:2006-01-01T00:00:00"@en ;
+        <http://www.w3.org/2006/time#inXSDDateTime>
+                "2006-01-01T00:00:00"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+
+<http://reference.data.gov.uk/id/year/2008>
+        a       <http://reference.data.gov.uk/def/intervals/CalendarYear> , <http://reference.data.gov.uk/def/intervals/Year> ;
+        <http://www.w3.org/2000/01/rdf-schema#comment>
+                "The British calendar year of 2008"@en ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "British Year:2008"@en ;
+        <http://reference.data.gov.uk/def/intervals/hasXsdDurationDescription>
+                "P1Y"^^<http://www.w3.org/2001/XMLSchema#duration> ;
+        <http://reference.data.gov.uk/def/intervals/ordinalYear>
+                2008 ;
+        <http://www.w3.org/2004/02/skos/core#prefLabel>
+                "British Year:2008"@en ;
+        <http://www.w3.org/2006/time#hasBeginning>
+                <http://reference.data.gov.uk/id/gregorian-instant/2008-01-01T00:00:00> ;
+        <http://www.w3.org/2006/time#hasDurationDescription>
+                <http://reference.data.gov.uk/def/intervals/one-year> ;
+        <http://www.w3.org/2006/time#hasEnd>
+                <http://reference.data.gov.uk/id/gregorian-instant/2009-01-01T00:00:00> ;
+        <http://www.w3.org/2006/time#intervalMetBy>
+                <http://reference.data.gov.uk/id/year/2007> .
+
+<http://reference.data.gov.uk/id/gregorian-instant/2008-01-01T00:00:00>
+        a       <http://www.w3.org/2006/time#Instant> ;
+        <http://www.w3.org/2000/01/rdf-schema#comment>
+                "The instant at start of the 1st second of 1st minute of 1st hour of Tuesday the 1st January of the British calendar year 2008"@en ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "British Instant:2008-01-01T00:00:00"@en ;
+        <http://reference.data.gov.uk/def/intervals/dayOfWeek>
+                <http://www.w3.org/2006/time#Tuesday> ;
+        <http://reference.data.gov.uk/def/intervals/monthOfYear>
+                <http://reference.data.gov.uk/def/intervals/January> ;
+        <http://reference.data.gov.uk/def/intervals/ordinalDayOfMonth>
+                1 ;
+        <http://reference.data.gov.uk/def/intervals/ordinalDayOfWeek>
+                2 ;
+        <http://reference.data.gov.uk/def/intervals/ordinalDayOfYear>
+                1 ;
+        <http://reference.data.gov.uk/def/intervals/ordinalHalfOfYear>
+                1 ;
+        <http://reference.data.gov.uk/def/intervals/ordinalHourOfDay>
+                0 ;
+        <http://reference.data.gov.uk/def/intervals/ordinalMinuteOfHour>
+                0 ;
+        <http://reference.data.gov.uk/def/intervals/ordinalMonthOfYear>
+                1 ;
+        <http://reference.data.gov.uk/def/intervals/ordinalQuarterOfYear>
+                1 ;
+        <http://reference.data.gov.uk/def/intervals/ordinalSecondOfMinute>
+                0 ;
+        <http://reference.data.gov.uk/def/intervals/ordinalWeekOfYear>
+                1 ;
+        <http://reference.data.gov.uk/def/intervals/ordinalWeekOfYearYear>
+                2008 ;
+        <http://reference.data.gov.uk/def/intervals/ordinalYear>
+                2008 ;
+        <http://www.w3.org/2004/02/skos/core#prefLabel>
+                "British Instant:2008-01-01T00:00:00"@en ;
+        <http://www.w3.org/2006/time#inXSDDateTime>
+                "2008-01-01T00:00:00"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+
+<http://reference.data.gov.uk/id/year/2006>
+        a       <http://reference.data.gov.uk/def/intervals/CalendarYear> , <http://reference.data.gov.uk/def/intervals/Year> ;
+        <http://www.w3.org/2000/01/rdf-schema#comment>
+                "The British calendar year of 2006"@en ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "British Year:2006"@en ;
+        <http://reference.data.gov.uk/def/intervals/hasXsdDurationDescription>
+                "P1Y"^^<http://www.w3.org/2001/XMLSchema#duration> ;
+        <http://reference.data.gov.uk/def/intervals/ordinalYear>
+                2006 ;
+        <http://www.w3.org/2004/02/skos/core#prefLabel>
+                "British Year:2006"@en ;
+        <http://www.w3.org/2006/time#hasBeginning>
+                <http://reference.data.gov.uk/id/gregorian-instant/2006-01-01T00:00:00> ;
+        <http://www.w3.org/2006/time#hasDurationDescription>
+                <http://reference.data.gov.uk/def/intervals/one-year> ;
+        <http://www.w3.org/2006/time#hasEnd>
+                <http://reference.data.gov.uk/id/gregorian-instant/2007-01-01T00:00:00> ;
+        <http://www.w3.org/2006/time#intervalMeets>
+                <http://reference.data.gov.uk/id/year/2007> .
+
+<http://reference.data.gov.uk/id/gregorian-instant/2007-01-01T00:00:00>
+        a       <http://www.w3.org/2006/time#Instant> ;
+        <http://www.w3.org/2000/01/rdf-schema#comment>
+                "The instant at start of the 1st second of 1st minute of 1st hour of Monday the 1st January of the British calendar year 2007"@en ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "British Instant:2007-01-01T00:00:00"@en ;
+        <http://reference.data.gov.uk/def/intervals/dayOfWeek>
+                <http://www.w3.org/2006/time#Monday> ;
+        <http://reference.data.gov.uk/def/intervals/monthOfYear>
+                <http://reference.data.gov.uk/def/intervals/January> ;
+        <http://reference.data.gov.uk/def/intervals/ordinalDayOfMonth>
+                1 ;
+        <http://reference.data.gov.uk/def/intervals/ordinalDayOfWeek>
+                1 ;
+        <http://reference.data.gov.uk/def/intervals/ordinalDayOfYear>
+                1 ;
+        <http://reference.data.gov.uk/def/intervals/ordinalHalfOfYear>
+                1 ;
+        <http://reference.data.gov.uk/def/intervals/ordinalHourOfDay>
+                0 ;
+        <http://reference.data.gov.uk/def/intervals/ordinalMinuteOfHour>
+                0 ;
+        <http://reference.data.gov.uk/def/intervals/ordinalMonthOfYear>
+                1 ;
+        <http://reference.data.gov.uk/def/intervals/ordinalQuarterOfYear>
+                1 ;
+        <http://reference.data.gov.uk/def/intervals/ordinalSecondOfMinute>
+                0 ;
+        <http://reference.data.gov.uk/def/intervals/ordinalWeekOfYear>
+                1 ;
+        <http://reference.data.gov.uk/def/intervals/ordinalWeekOfYearYear>
+                2007 ;
+        <http://reference.data.gov.uk/def/intervals/ordinalYear>
+                2007 ;
+        <http://www.w3.org/2004/02/skos/core#prefLabel>
+                "British Instant:2007-01-01T00:00:00"@en ;
+        <http://www.w3.org/2006/time#inXSDDateTime>
+                "2007-01-01T00:00:00"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+
+
+<http://reference.data.gov.uk/id/gregorian-instant/2009-01-01T00:00:00>
+        a       <http://www.w3.org/2006/time#Instant> ;
+        <http://www.w3.org/2000/01/rdf-schema#comment>
+                "The instant at start of the 1st second of 1st minute of 1st hour of Thursday the 1st January of the British calendar year 2009"@en ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "British Instant:2009-01-01T00:00:00"@en ;
+        <http://reference.data.gov.uk/def/intervals/dayOfWeek>
+                <http://www.w3.org/2006/time#Thursday> ;
+        <http://reference.data.gov.uk/def/intervals/monthOfYear>
+                <http://reference.data.gov.uk/def/intervals/January> ;
+        <http://reference.data.gov.uk/def/intervals/ordinalDayOfMonth>
+                1 ;
+        <http://reference.data.gov.uk/def/intervals/ordinalDayOfWeek>
+                4 ;
+        <http://reference.data.gov.uk/def/intervals/ordinalDayOfYear>
+                1 ;
+        <http://reference.data.gov.uk/def/intervals/ordinalHalfOfYear>
+                1 ;
+        <http://reference.data.gov.uk/def/intervals/ordinalHourOfDay>
+                0 ;
+        <http://reference.data.gov.uk/def/intervals/ordinalMinuteOfHour>
+                0 ;
+        <http://reference.data.gov.uk/def/intervals/ordinalMonthOfYear>
+                1 ;
+        <http://reference.data.gov.uk/def/intervals/ordinalQuarterOfYear>
+                1 ;
+        <http://reference.data.gov.uk/def/intervals/ordinalSecondOfMinute>
+                0 ;
+        <http://reference.data.gov.uk/def/intervals/ordinalWeekOfYear>
+                1 ;
+        <http://reference.data.gov.uk/def/intervals/ordinalWeekOfYearYear>
+                2009 ;
+        <http://reference.data.gov.uk/def/intervals/ordinalYear>
+                2009 ;
+        <http://www.w3.org/2004/02/skos/core#prefLabel>
+                "British Instant:2009-01-01T00:00:00"@en ;
+        <http://www.w3.org/2006/time#inXSDDateTime>
+                "2009-01-01T00:00:00"^^<http://www.w3.org/2001/XMLSchema#dateTime> .

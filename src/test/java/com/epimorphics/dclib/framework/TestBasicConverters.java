@@ -147,6 +147,7 @@ public class TestBasicConverters {
     public void testDateHandling() throws IOException {
         checkAgainstExpected("test/dates/date.json", "test/dates/date.csv", "test/dates/date.ttl");
         checkAgainstExpected("test/dates/date2.yaml", "test/dates/date.csv", "test/dates/date2.ttl");
+        checkAgainstExpected("test/dates/date3.yaml", "test/dates/date.csv", "test/dates/date3.ttl");
     }
     
     @Test
