@@ -45,6 +45,7 @@
       </snapshots>
     </repository>
 
+<!-- 
     <repository>
       <releases>
         <enabled>true</enabled>
@@ -56,11 +57,12 @@
       <name>Epimorphics Public Repository</name>
       <url>http://repository.epimorphics.com</url>
     </repository>
-
+ -->
+ 
     <repository>  
      <id>epi-public-s3-snapshot</id>  
      <name>Epimorphics S3 snapshot repository</name>  
-     <url>s3://epi-repository/public/snapshot</url>  
+     <url>s3://epi-repository/snapshot</url>  
      <releases>  
        <enabled>false</enabled>  
      </releases>  
@@ -72,7 +74,7 @@
     <repository>  
      <id>epi-public-s3-release</id>  
      <name>Epimorphics S3 release repository</name>  
-     <url>s3://epi-repository/public/release</url>  
+     <url>s3://epi-repository/release</url>  
      <releases>  
        <enabled>true</enabled>  
      </releases>  
@@ -112,7 +114,7 @@
     <dependency>
       <groupId>com.epimorphics</groupId>
       <artifactId>appbase</artifactId>
-      <version>0.0.6</version>
+      <version>0.0.7</version>
     </dependency>
     <dependency>
       <groupId>org.apache.commons</groupId>
@@ -255,13 +257,13 @@
      <repository>  
          <id>epi-public-s3-release</id>  
          <name>Epimorphics S3 release repository</name>  
-         <url>s3://epi-repository/public/release</url>  
+         <url>s3://epi-repository/release</url>  
      </repository>
        
      <snapshotRepository>  
          <id>epi-public-s3-snapshot</id>  
          <name>Epimorphics S3 snapshot repository</name>  
-         <url>s3://epi-repository/public/snapshot</url>  
+         <url>s3://epi-repository/snapshot</url>  
      </snapshotRepository>  
 
     <!--
