@@ -64,7 +64,8 @@ public class RDFMapSource extends MapSourceBase implements MapSource {
         super(spec);
         Property keyProp = asProperty( getField(JSONConstants.KEY), proc);
         Property valueProp = asProperty( getField(JSONConstants.VALUE), proc);
-        Resource type = asResource( getField(JSONConstants.TYPE), proc);
+        
+        List<Resource> typeConstraints = getTypeConstraints(spec, proc);
         
         String sourceFile = getRequiredField(JSONConstants.SOURCE);
         rdf = FileManager.get().loadModel( "file:" + findFile(sourceFile, proc) );
@@ -72,7 +73,8 @@ public class RDFMapSource extends MapSourceBase implements MapSource {
         for (StmtIterator i = rdf.listStatements(null,  keyProp, (RDFNode)null); i.hasNext();) {
             Statement s = i.next();
             RDFNode keyNode = s.getObject();
-            if (type == null ||  s.getSubject().hasProperty(RDF.type, type)) {
+            
+            if ( matchesTypeConstraints(typeConstraints, s.getSubject()) ) {
                 String key = keyNode.isLiteral() ? keyNode.asLiteral().getLexicalForm() : keyNode.asResource().getURI();
                 Node value = s.getSubject().asNode();
                 if (valueProp != null) {
@@ -82,6 +84,44 @@ public class RDFMapSource extends MapSourceBase implements MapSource {
             }
         }
         
+        processEnrichSpec(spec, proc);
+        
+    }
+    
+    protected boolean matchesTypeConstraints(List<Resource> constraints, Resource root) {
+        if (constraints == null) return true;
+        for (Resource type : constraints) {
+            if (root.hasProperty(RDF.type, type)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    protected List<Resource> getTypeConstraints(JsonObject spec, ConverterProcess proc) {
+        JsonValue jv = spec.get(JSONConstants.TYPE);
+        if (jv == null) {
+            return null;
+        } else {
+            List<Resource> constraints = new ArrayList<>();
+            if (jv.isString()) {
+                constraints.add( asResource(jv.getAsString().value(), proc) );
+            } else if (jv.isArray()) {
+                for (Iterator<JsonValue> i = jv.getAsArray().iterator(); i.hasNext();) {
+                    JsonValue v = i.next();
+                    if (v.isString()) {
+                        constraints.add( asResource(v.getAsString().value(), proc) );
+                    } else {
+                        throw new EpiException("Bad source configuration, type constraint can only be a string or array of strings");
+                    }
+                }
+                
+            }
+            return constraints;
+        }
+    }
+
+    protected void processEnrichSpec(JsonObject spec, ConverterProcess proc) {
         JsonValue enrichSpec = spec.get(JSONConstants.ENRICH);
         if (enrichSpec != null) {
             if (enrichSpec.isString()) {
@@ -104,7 +144,6 @@ public class RDFMapSource extends MapSourceBase implements MapSource {
                 throw new EpiException("Bad source configuration, enrich can only be a string or array of strings");
             }
         }
-        
     }
     
     @Override
