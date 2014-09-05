@@ -215,13 +215,16 @@ public class ValueDate extends ValueNode implements Value {
         XSDDateTime time = getDateTime();
         BritishCalendar bcal = null;
         int syear = time.getYears();
+        Node ref = null;
         if (value.getLiteralDatatype().equals(XSDDatatype.XSDdateTime)) {
             bcal = new BritishCalendar(
                     time.getYears(), time.getMonths()-1, time.getDays(), 
                     time.getHours(), time.getMinutes(), time.getFullSeconds() );
+            ref = NodeFactory.createURI("http://reference.data.gov.uk/id/gregorian-instant/" + value.getLiteralLexicalForm());
         } else {
             bcal = new BritishCalendar(
                     time.getYears(), time.getMonths()-1, time.getDays()); 
+            ref = NodeFactory.createURI("http://reference.data.gov.uk/id/day/" + value.getLiteralLexicalForm());
         }
         
         Model model = ModelFactory.createDefaultModel();
@@ -238,7 +241,6 @@ public class ValueDate extends ValueNode implements Value {
             out.triple(it.next());
         }
 
-        Node ref = NodeFactory.createURI("http://reference.data.gov.uk/id/gregorian-instant/" + value.getLiteralLexicalForm());
         return new ValueNode(ref);
     }
     
