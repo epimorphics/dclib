@@ -277,27 +277,58 @@ public abstract class ValueBase<T> implements Value {
      * @return
      */
     public Value fetch() {
-        String uri = value.toString();
-        if (value instanceof Node && ((Node)value).isURI()) {
-            uri = ((Node)value).getURI();
-        } else if (value instanceof Resource) {
-            uri = ((Resource)value).getURI();
+        Model model = fetchModel();
+        if (model != null) {
+            StreamRDF out = ConverterProcess.get().getOutputStream();
+            ExtendedIterator<Triple> it = model.getGraph().find(null, null, null);
+            while (it.hasNext()) {
+                out.triple(it.next());
+            }
         }
+        return this;
+    }
+    
+    public Value fetch(String...strings) {
+        Model model = fetchModel();
+        if (model != null) {
+            ConverterProcess proc = ConverterProcess.get();
+            StreamRDF out = proc.getOutputStream();
+            for (String puri : strings) {
+                puri = proc.getDataContext().getPrefixes().expandPrefix(puri);
+                Node p = NodeFactory.createURI(puri);
+                ExtendedIterator<Triple> it = model.getGraph().find(null, p, null);
+                while (it.hasNext()) {
+                    out.triple(it.next());
+                }
+            }
+        }
+        return this;
+    }
+
+    protected Model fetchModel() {
+        String uri = asURI();
         try {
             Model model = RDFDataMgr.loadModel( uri );
             if (model == null || model.isEmpty()) {
-                ConverterProcess.get().getMessageReporter().report("Warning: no data found at " + uri);                    
+                ConverterProcess.get().getMessageReporter().report("Warning: no data found at " + uri);
+                return null;
             } else {
-                StreamRDF out = ConverterProcess.get().getOutputStream();
-                ExtendedIterator<Triple> it = model.getGraph().find(null, null, null);
-                while (it.hasNext()) {
-                    out.triple(it.next());
-                }                    
+                return model;
             }
         } catch (Exception e) {
             ConverterProcess.get().getMessageReporter().report("Warning: exception fetching " + uri + ", " + e);
+            return null;
         }
-        return this;
+    }
+    
+    protected String asURI() {
+        if (value instanceof Node && ((Node)value).isURI()) {
+            return ((Node)value).getURI();
+        } else if (value instanceof Resource) {
+            return ((Resource)value).getURI();
+        } else {
+            return value.toString();
+        }
     }
     
     @Override
