@@ -123,7 +123,7 @@ public class TestPattern {
     
     @Test
     public void testScripts() {
-        assertEquals("foo bar", eval("{={a;b}}").toString());
+        assertEquals("foo bar", eval("{{a;b}}").toString());
     }
     
     @Test

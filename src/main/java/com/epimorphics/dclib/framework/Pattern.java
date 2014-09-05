@@ -23,6 +23,7 @@ import com.epimorphics.dclib.values.Value;
 import com.epimorphics.dclib.values.ValueError;
 import com.epimorphics.dclib.values.ValueNumber;
 import com.epimorphics.dclib.values.ValueString;
+import com.epimorphics.rdfutil.RDFNodeWrapper;
 import com.epimorphics.tasks.ProgressReporter;
 import com.epimorphics.util.EpiException;
 import com.hp.hpl.jena.graph.Node;
@@ -59,8 +60,8 @@ public class Pattern {
      * @param dc DataContext used for things like prefix expansion
      */
     public Pattern(String pattern, DataContext dc) {
-       
-         if (pattern.startsWith("\\<") || pattern.startsWith("\\^")) {
+        pattern = pattern.trim();
+        if (pattern.startsWith("\\<") || pattern.startsWith("\\^")) {
             parse(pattern.substring(1));
         } else if (pattern.startsWith("<") && pattern.endsWith(">")) {
             isURI = true;
@@ -182,6 +183,8 @@ public class Pattern {
             n = ((Value)result).asNode();
         } else if (result instanceof Node) {
             n = (Node) result;
+        } else if (result instanceof RDFNodeWrapper) {
+            n = ((RDFNodeWrapper)result).asRDFNode().asNode();
         }
         if (n.isBlank() || n.isURI()) {
             return n;
@@ -198,6 +201,8 @@ public class Pattern {
             return asURINode(result);
         } else if (result instanceof Node) {
             return (Node) result;
+        } else if (result instanceof RDFNodeWrapper) {
+            return ((RDFNodeWrapper)result).asRDFNode().asNode();
         } else if (result instanceof String) {
             return NodeFactory.createLiteral( (String)result );
         } else if (result instanceof Number) {
@@ -270,16 +275,13 @@ public class Pattern {
                         components.add( block.toString() );
                     }
                     block = new StringBuilder();
-                    if (pattern.charAt(i+1) == '=') {
-                        isScript = true;
-                        i++;
-                    } else {
-                        isScript = false;
-                    }
                 } else {
                     block.append(c);
                 }
                 blockDepth++;
+                if (blockDepth > 1) {
+                    isScript = true;
+                }
                 break;
                 
             case '}' :

@@ -177,18 +177,27 @@ public class TestBasicConverters {
         Model converted = convert("test/rdf/fetch-test.yaml", "test/rdf/fetch-test.csv");
         Resource ss = converted.getResource("http://environment.data.gov.uk/def/bathing-water/sand-sediment");
         Literal sand = converted.createLiteral("sand", "en");
+        Resource sedimentType = converted.createResource("http://environment.data.gov.uk/def/bathing-water/SedimentType");
+        
         assertTrue( converted.contains(ss, DCTerms.description, "Sand-sediment") );
         assertTrue( converted.contains(ss, RDF.type, SKOS.Concept) );
-        assertTrue( converted.contains(ss, RDF.type, converted.createResource("http://environment.data.gov.uk/def/bathing-water/SedimentType") ) );
+        assertTrue( converted.contains(ss, RDF.type, sedimentType ) );
         assertTrue( converted.contains(ss, RDFS.label, sand ) );
         assertTrue( converted.contains(ss, SKOS.prefLabel, sand ) );
         
         converted = convert("test/rdf/fetch-test2.yaml", "test/rdf/fetch-test.csv");
         assertTrue( converted.contains(ss, DCTerms.description, "Sand-sediment") );
         assertTrue( converted.contains(ss, RDF.type, SKOS.Concept) );
-        assertTrue( converted.contains(ss, RDF.type, converted.createResource("http://environment.data.gov.uk/def/bathing-water/SedimentType") ) );
+        assertTrue( converted.contains(ss, RDF.type, sedimentType ) );
         assertFalse( converted.contains(ss, RDFS.label, sand ) );
         assertTrue( converted.contains(ss, SKOS.prefLabel, sand ) );
+        
+        converted = convert("test/rdf/node-test.yaml", "test/rdf/fetch-test.csv");
+//        converted.write(System.out, "Turtle");
+        assertTrue( converted.contains(ss, RDF.type, sedimentType ) );
+        assertTrue( converted.contains(ss, RDF.type, SKOS.Concept) );
+        assertTrue( converted.contains(ss, RDF.value, "yes" ) );
+        assertTrue( converted.contains(ss, DCTerms.description, "sand" ) );
     }
     
     @Test
