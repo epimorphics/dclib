@@ -41,5 +41,13 @@ public class ValueNode extends ValueBase<Node> implements Value{
             return null;
         }
     }
+    
+    /**
+     * If the node is a resource node then fetch the correspond
+     * @return
+     */
+    public Value fetch() {
+        return null;
+    }
 
 }
