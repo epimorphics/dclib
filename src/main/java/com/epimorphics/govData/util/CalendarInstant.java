@@ -19,8 +19,8 @@ package com.epimorphics.govData.util;
 import java.util.Calendar;
 import java.util.Locale;
 
-import com.epimorphics.govData.vocabulary.SKOS;
 import com.epimorphics.govData.vocabulary.TIME;
+import com.epimorphics.vocabs.SKOS;
 import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
 import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.Model;

@@ -19,8 +19,8 @@ package com.epimorphics.govData.util;
 import java.util.Calendar;
 
 import com.epimorphics.govData.vocabulary.INTERVALS;
-import com.epimorphics.govData.vocabulary.SKOS;
 import com.epimorphics.govData.vocabulary.TIME;
+import com.epimorphics.vocabs.SKOS;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.vocabulary.RDF;

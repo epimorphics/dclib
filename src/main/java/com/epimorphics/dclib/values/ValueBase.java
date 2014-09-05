@@ -12,6 +12,9 @@ package com.epimorphics.dclib.values;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.jena.riot.RDFDataMgr;
+import org.apache.jena.riot.system.StreamRDF;
+
 import com.epimorphics.dclib.framework.ConverterProcess;
 import com.epimorphics.dclib.framework.MapSource;
 import com.epimorphics.dclib.framework.MatchFailed;
@@ -23,6 +26,10 @@ import com.hp.hpl.jena.datatypes.RDFDatatype;
 import com.hp.hpl.jena.datatypes.TypeMapper;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.NodeFactory;
+import com.hp.hpl.jena.graph.Triple;
+import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 import com.hp.hpl.jena.vocabulary.XSD;
 
 /**
@@ -262,6 +269,35 @@ public abstract class ValueBase<T> implements Value {
     
     public Node lang(String lang) {
         return NodeFactory.createLiteral(toString(), lang, false);
+    }
+    
+    /**
+     * If the node is a URI node then fetch any data
+     * at that URI and merge that into the output model 
+     * @return
+     */
+    public Value fetch() {
+        String uri = value.toString();
+        if (value instanceof Node && ((Node)value).isURI()) {
+            uri = ((Node)value).getURI();
+        } else if (value instanceof Resource) {
+            uri = ((Resource)value).getURI();
+        }
+        try {
+            Model model = RDFDataMgr.loadModel( uri );
+            if (model == null || model.isEmpty()) {
+                ConverterProcess.get().getMessageReporter().report("Warning: no data found at " + uri);                    
+            } else {
+                StreamRDF out = ConverterProcess.get().getOutputStream();
+                ExtendedIterator<Triple> it = model.getGraph().find(null, null, null);
+                while (it.hasNext()) {
+                    out.triple(it.next());
+                }                    
+            }
+        } catch (Exception e) {
+            ConverterProcess.get().getMessageReporter().report("Warning: exception fetching " + uri + ", " + e);
+        }
+        return this;
     }
     
     @Override

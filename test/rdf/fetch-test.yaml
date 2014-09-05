@@ -1,0 +1,4 @@
+name              : Fetch test case
+required          : ["id","label" ]
+"@id"             : <{id.fetch()}>
+<dct:description> : "{label}"

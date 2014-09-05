@@ -21,8 +21,13 @@ import org.junit.Test;
 
 import com.epimorphics.rdfutil.RDFUtil;
 import com.epimorphics.tasks.SimpleProgressMonitor;
+import com.epimorphics.vocabs.SKOS;
 import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.util.FileManager;
+import com.hp.hpl.jena.vocabulary.DCTerms;
+import com.hp.hpl.jena.vocabulary.RDF;
+import com.hp.hpl.jena.vocabulary.RDFS;
 
 public class TestBasicConverters {
     
@@ -164,6 +169,16 @@ public class TestBasicConverters {
     @Test
     public void testLoadDirs() throws IOException {
         checkAgainstExpected("test/mapping/dept-type-rel.json", "test/mapping/dept-type-data.csv", ".,test/mapping", "test/mapping/dept-type-result.ttl");
+    }
+    
+    @Test
+    public void testFetch() throws IOException {
+        Model converted = convert("test/rdf/fetch-test.yaml", "test/rdf/fetch-test.csv");
+        Resource ss = converted.getResource("http://environment.data.gov.uk/def/bathing-water/sand-sediment");
+        assertTrue( converted.contains(ss, DCTerms.description, "Sand-sediment") );
+        assertTrue( converted.contains(ss, RDF.type, SKOS.Concept) );
+        assertTrue( converted.contains(ss, RDF.type, converted.createResource("http://environment.data.gov.uk/def/bathing-water/SedimentType") ) );
+        assertTrue( converted.contains(ss, RDFS.label, converted.createLiteral("sand", "en") ) );
     }
     
     @Test
