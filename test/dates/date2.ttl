@@ -1,6 +1,6 @@
 <http://example.org/01>
         <http://purl.org/dc/terms/date>
-                "2007-04-02T00:00:00.0"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+                <http://reference.data.gov.uk/id/gregorian-instant/2007-04-02T00:00:00.0> .
 
 <http://reference.data.gov.uk/id/day/2007-04-02>
         a       <http://reference.data.gov.uk/def/intervals/CalendarDay> , <http://reference.data.gov.uk/def/intervals/Day> ;

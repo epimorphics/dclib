@@ -209,7 +209,7 @@ public class ValueDate extends ValueNode implements Value {
     /**
      * Inject triples from the reference time service describing 
      * this date into the template output stream as a side effect.
-     * Returns the date, unchanged.
+     * Returns the date as a ref time URL
      */
     public Value referenceTime() {
         XSDDateTime time = getDateTime();
@@ -238,7 +238,8 @@ public class ValueDate extends ValueNode implements Value {
             out.triple(it.next());
         }
 
-        return this;
+        Node ref = NodeFactory.createURI("http://reference.data.gov.uk/id/gregorian-instant/" + value.getLiteralLexicalForm());
+        return new ValueNode(ref);
     }
     
     protected XSDDateTime getDateTime() {
