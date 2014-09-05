@@ -228,7 +228,7 @@ public class ValueDate extends ValueNode implements Value {
             new CalendarDay(model, bcal, true);
             new CalendarWeek(model, i_woy_year, i_woy_week, true, false);
             
-        } else if (value.getLiteralDatatype().equals(XSDDatatype.XSDdateTime)) {
+        } else if (value.getLiteralDatatype().equals(XSDDatatype.XSDdate)) {
             bcal = new BritishCalendar(
                     time.getYears(), time.getMonths()-1, time.getDays()); 
             ref = NodeFactory.createURI("http://reference.data.gov.uk/id/day/" + value.getLiteralLexicalForm());
