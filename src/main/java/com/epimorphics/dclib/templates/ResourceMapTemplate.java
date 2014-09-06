@@ -26,6 +26,7 @@ import com.epimorphics.dclib.framework.Pattern;
 import com.epimorphics.dclib.framework.Template;
 import com.epimorphics.dclib.values.Value;
 import com.epimorphics.dclib.values.ValueArray;
+import com.epimorphics.dclib.values.ValueNode;
 import com.epimorphics.util.EpiException;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.util.OneToManyMap;
@@ -77,6 +78,7 @@ public class ResourceMapTemplate extends TemplateBase implements Template {
         proc.debugCheck(row, rowNumber, root);
         Node subject = root.evaluateAsURINode(row, proc, rowNumber);
         if (subject == null) return subject;
+        proc.getEnv().put(ConverterProcess.ROOT_NAME, new ValueNode(subject));
         for (Map.Entry<Pattern, Pattern> entry : patterns.entrySet()) {
             Pattern propPattern = entry.getKey();
             proc.debugCheck(row, rowNumber, propPattern);

@@ -9,6 +9,7 @@
 
 package com.epimorphics.dclib.framework;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,6 +24,7 @@ import com.epimorphics.tasks.LiveProgressMonitor;
 import com.epimorphics.tasks.ProgressMonitorReporter;
 import com.epimorphics.tasks.SimpleProgressMonitor;
 import com.epimorphics.util.EpiException;
+import com.epimorphics.util.NameUtils;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.shared.PrefixMapping;
@@ -134,7 +136,13 @@ public class ConverterService extends ComponentBase {
     public Model simpleConvert(String templateFile, String dataFile, ProgressMonitorReporter reporter, boolean debug) throws IOException {
         Template template = TemplateFactory.templateFrom(templateFile, dc);
         
-        InputStream is = new FileInputStream(dataFile);
+        File dataFileF = new File(dataFile);
+        String filename = dataFileF.getName();
+        String filebasename = NameUtils.removeExtension(filename);
+        put(ConverterProcess.FILE_NAME, filename);
+        put(ConverterProcess.FILE_BASE_NAME, filebasename);
+        InputStream is = new FileInputStream(dataFileF);
+        
         ConverterProcess process = new ConverterProcess(dc, is);
         process.setDebug(debug);
         process.setTemplate( template );

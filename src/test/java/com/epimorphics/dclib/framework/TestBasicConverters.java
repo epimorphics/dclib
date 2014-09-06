@@ -36,6 +36,8 @@ public class TestBasicConverters {
     public void testResourceMap() throws IOException {
         checkAgainstExpected("test/simple-skos-template.json", "test/test-map.csv", "test/test-map-result.ttl");
         checkAgainstExpected("test/template-multi-value.json", "test/test-map.csv", "test/test-map-result-multi.ttl");
+        
+        checkAgainstExpected("test/simple-skos_with_file.yaml", "test/test-map.csv", "test/test-map-result-with-file.ttl");
     }
 
     

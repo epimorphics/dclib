@@ -1,0 +1,8 @@
+name : simple-skos-file
+"@id"             : <{$base}{notation}>
+<rdf:type>        : <skos:Concept>
+<skos:notation>   : "{notation.toString()}"
+<dct:description> : "{description}"
+<skos:prefLabel>  : "{label}"
+<dct:source>      : "{$filename}"
+

@@ -3,7 +3,7 @@ required          : ["id","label" ]
 "@id"             : <{id.fetch()}>
 <rdf:value>       : |
    { {
-        var x = id.asRDFNode();
+        var x = $root.asRDFNode();
         if (x.hasResourceValue('rdf:type','http://environment.data.gov.uk/def/bathing-water/SedimentType')) {
            return 'yes'
         } else {

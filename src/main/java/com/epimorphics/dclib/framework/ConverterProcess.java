@@ -46,6 +46,9 @@ public class ConverterProcess {
     public static final String ROW_OBJECT_NAME = "$row";
     public static final String BASE_OBJECT_NAME = "$base";
     public static final String DATASET_OBJECT_NAME = "$dataset";
+    public static final String FILE_NAME = "$filename";
+    public static final String FILE_BASE_NAME = "$filebasename";
+    public static final String ROOT_NAME = "$root";
     
     static final String META = "meta";
 
