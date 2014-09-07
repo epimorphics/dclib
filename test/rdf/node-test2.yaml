@@ -1,0 +1,12 @@
+name              : RDFNode processing test case
+required          : ["id","label" ]
+"@id"             : <{id.fetch()}>
+<rdf:value>       : |
+    { {
+        var x = $root.asRDFNode();
+        if (x.hasResourceValue('rdf:type','http://data.ordnancesurvey.co.uk/ontology/admingeo/County')) {
+           return x
+        } else {
+           return x.getPropertyValue('http://data.ordnancesurvey.co.uk/ontology/admingeo/inCounty')
+        }
+    } }
