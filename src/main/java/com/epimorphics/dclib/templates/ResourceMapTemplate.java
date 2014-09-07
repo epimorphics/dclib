@@ -78,16 +78,17 @@ public class ResourceMapTemplate extends TemplateBase implements Template {
         proc.debugCheck(row, rowNumber, root);
         Node subject = root.evaluateAsURINode(row, proc, rowNumber);
         if (subject == null) return subject;
-        proc.getEnv().put(ConverterProcess.ROOT_NAME, new ValueNode(subject));
+        BindingEnv env = new BindingEnv(row);
+        env.put(ConverterProcess.ROOT_NAME, new ValueNode(subject));
         for (Map.Entry<Pattern, Pattern> entry : patterns.entrySet()) {
             Pattern propPattern = entry.getKey();
-            proc.debugCheck(row, rowNumber, propPattern);
+            proc.debugCheck(env, rowNumber, propPattern);
             Pattern valPattern = entry.getValue();
-            proc.debugCheck(row, rowNumber, valPattern);
+            proc.debugCheck(env, rowNumber, valPattern);
             try {
-                Node prop = propPattern.evaluateAsNode(row, proc, rowNumber);
+                Node prop = propPattern.evaluateAsNode(env, proc, rowNumber);
                 validateNode(prop);
-                Object value = valPattern.evaluate(row, proc, rowNumber);
+                Object value = valPattern.evaluate(env, proc, rowNumber);
                 if (value instanceof Node) {
                     validateNode((Node)value);
                 }
