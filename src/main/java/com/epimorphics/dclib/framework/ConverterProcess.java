@@ -20,7 +20,9 @@ import org.slf4j.LoggerFactory;
 
 import com.epimorphics.dclib.sources.CSVInput;
 import com.epimorphics.dclib.values.Row;
+import com.epimorphics.dclib.values.ValueDate;
 import com.epimorphics.dclib.values.ValueFactory;
+import com.epimorphics.rdfutil.RDFUtil;
 import com.epimorphics.tasks.ProgressMonitorReporter;
 import com.epimorphics.tasks.SimpleProgressMonitor;
 import com.epimorphics.tasks.TaskState;
@@ -49,6 +51,7 @@ public class ConverterProcess {
     public static final String FILE_NAME = "$filename";
     public static final String FILE_BASE_NAME = "$filebasename";
     public static final String ROOT_NAME = "$root";
+    public static final String EXECUTION_TIME_NAME = "$exectime";
     
     static final String META = "meta";
 
@@ -123,6 +126,9 @@ public class ConverterProcess {
     public boolean process() {
         try {
             current.set(this);
+            Node now = RDFUtil.fromDateTime( System.currentTimeMillis() ).asNode();
+            ValueDate exectime = new ValueDate( now );
+            getEnv().put(EXECUTION_TIME_NAME, exectime);
             preprocess();
             
             // TODO locate a matching template it none is set

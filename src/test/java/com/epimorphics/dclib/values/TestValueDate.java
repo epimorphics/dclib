@@ -9,6 +9,8 @@
 
 package com.epimorphics.dclib.values;
 
+import java.io.IOException;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -16,7 +18,12 @@ import com.epimorphics.dclib.framework.BindingEnv;
 import com.epimorphics.dclib.framework.ConverterProcess;
 import com.epimorphics.dclib.framework.DataContext;
 import com.epimorphics.dclib.framework.Pattern;
+import com.epimorphics.dclib.framework.TestBasicConverters;
+import com.epimorphics.rdfutil.RDFUtil;
+import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.util.FileManager;
+import com.hp.hpl.jena.vocabulary.DCTerms;
 import com.hp.hpl.jena.vocabulary.XSD;
 
 import static org.junit.Assert.*;
@@ -158,6 +165,16 @@ public class TestValueDate {
         assertEquals( 21, evaluateInt("{datetime.fullSecond}") );
         
         assertEquals(21.23,  ((ValueNumber)evaluate("{datetime.second}")).toNumber().doubleValue(), 0.001);
+    }
+    
+    @Test
+    public void testExecTime() throws IOException {
+        Model m = TestBasicConverters.convert("test/dates/exectime.yaml", "test/dates/date.csv");
+        Resource r = m.getResource("http://example.org/01");
+        assertTrue(r.hasProperty(DCTerms.modified));
+        long time = RDFUtil.asTimestamp( r.getRequiredProperty(DCTerms.modified).getObject() );
+        long now = System.currentTimeMillis();
+        assertTrue (time <= now && time >= now-1000);
     }
     
     protected void printValue(Object val) {

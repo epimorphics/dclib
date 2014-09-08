@@ -1,0 +1,5 @@
+name        : Execution time test
+required   : ["id","date" ]
+"@id"      : <http://example.org/{id}>
+<dct:date> : "{date.asDate('dd/MM/yyyy HH:mm:ss', 'xsd:date')}"
+<dct:modified> : "{$exectime}"
