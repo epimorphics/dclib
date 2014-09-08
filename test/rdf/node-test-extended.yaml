@@ -1,0 +1,33 @@
+name              : RDFNode processing test case
+required          : ["id","label" ]
+"@id"             : <{id.fetch()}>
+<rdf:value>       : |
+   { {
+        if ($root.hasResourceValue('rdf:type','http://environment.data.gov.uk/def/bathing-water/SedimentType')) {
+           return 'yes'
+        } else {
+           return 'no'
+        }
+      }
+   }
+<dct:description> :  "{id.asRDFNode().name}"
+<rdf:value1>   : "{ $root.isLiteral() }"
+<rdf:value2>   : "{ $root.getPropertyValue('skos:prefLabel') }"
+<rdf:value3>   : "{ $root.getPropertyValue('skos:prefLabel').isLiteral() }"
+<rdf:value4>   : "{ $root.getPropertyValue('skos:prefLabel').lexicalForm }"
+<rdf:value5>   : "{ $root.getPropertyValue('skos:prefLabel').language }"
+<rdf:value6>   : "{ $root.getURI() }"
+<rdf:value7>   : "{ $root['rdfs:label'] }"
+<rdf:value8>   : "{ $root.listPropertyValues('rdf:type').size() }"
+<rdf:value9>   : "{ $root.listProperties().size() }"
+<rdf:value10>  : | 
+    {{
+        var scheme =  value('http://environment.data.gov.uk/def/bathing-water/sediment-type').asRDFNode();
+        var nodes = scheme.connectedNodes('^skos:inScheme');
+        return nodes.get(0);
+     }}
+
+
+
+
+

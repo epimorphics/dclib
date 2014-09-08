@@ -268,6 +268,9 @@ public class TemplateBase implements Template {
      * Check for things like unsubstituted URIs
      */
     public static void validateNode(Node n) {
+        if (n == null) {
+            throw new EvalFailed("Illegal or null RDF node result from pattern");
+        }
         if (n.isLiteral()) {
             if (n.getLiteralValue() == null) {  // throws exception of the datatype is ill-formed
                 throw new EvalFailed("Illegal or null literal node");

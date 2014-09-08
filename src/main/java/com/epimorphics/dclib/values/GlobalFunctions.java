@@ -72,7 +72,7 @@ public class GlobalFunctions {
     
     /** Debug aid - log the value  */
     public static Object print(Object value) {
-        log.info("Value = " + value + " [" + value.getClass() + "]");
+        log.info("Value = '" + value + "' [" + value.getClass() + "]");
         return value;
     }
     

@@ -24,7 +24,11 @@ import com.epimorphics.tasks.SimpleProgressMonitor;
 import com.epimorphics.vocabs.SKOS;
 import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.Property;
+import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.rdf.model.ResourceFactory;
+import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.util.FileManager;
 import com.hp.hpl.jena.vocabulary.DCTerms;
 import com.hp.hpl.jena.vocabulary.RDF;
@@ -176,6 +180,8 @@ public class TestBasicConverters {
     
     @Test
     public void testFetch() throws IOException {
+        // These test are selective instead of testing the whole model because the
+        // data source returns a conflation of the doc and id views and that might change
         Model converted = convert("test/rdf/fetch-test.yaml", "test/rdf/fetch-test.csv");
         Resource ss = converted.getResource("http://environment.data.gov.uk/def/bathing-water/sand-sediment");
         Literal sand = converted.createLiteral("sand", "en");
@@ -187,19 +193,41 @@ public class TestBasicConverters {
         assertTrue( converted.contains(ss, RDFS.label, sand ) );
         assertTrue( converted.contains(ss, SKOS.prefLabel, sand ) );
         
-        converted = convert("test/rdf/fetch-test2.yaml", "test/rdf/fetch-test.csv");
-        assertTrue( converted.contains(ss, DCTerms.description, "Sand-sediment") );
-        assertTrue( converted.contains(ss, RDF.type, SKOS.Concept) );
-        assertTrue( converted.contains(ss, RDF.type, sedimentType ) );
-        assertFalse( converted.contains(ss, RDFS.label, sand ) );
-        assertTrue( converted.contains(ss, SKOS.prefLabel, sand ) );
+//        converted = convert("test/rdf/fetch-test2.yaml", "test/rdf/fetch-test.csv");
+//        assertTrue( converted.contains(ss, DCTerms.description, "Sand-sediment") );
+//        assertTrue( converted.contains(ss, RDF.type, SKOS.Concept) );
+//        assertTrue( converted.contains(ss, RDF.type, sedimentType ) );
+//        assertFalse( converted.contains(ss, RDFS.label, sand ) );
+//        assertTrue( converted.contains(ss, SKOS.prefLabel, sand ) );
         
-        converted = convert("test/rdf/node-test.yaml", "test/rdf/fetch-test.csv");
+        converted = convert("test/rdf/node-test-extended.yaml", "test/rdf/fetch-test.csv");
 //        converted.write(System.out, "Turtle");
         assertTrue( converted.contains(ss, RDF.type, sedimentType ) );
         assertTrue( converted.contains(ss, RDF.type, SKOS.Concept) );
         assertTrue( converted.contains(ss, RDF.value, "yes" ) );
         assertTrue( converted.contains(ss, DCTerms.description, "sand" ) );
+        
+        assertEquals( ResourceFactory.createTypedLiteral(false), getRDFValue(converted, ss, 1) );
+        assertEquals( ResourceFactory.createLangLiteral("sand", "en"), getRDFValue(converted, ss, 2) );
+        assertEquals( ResourceFactory.createTypedLiteral(true), getRDFValue(converted, ss, 3) );
+        assertEquals( ResourceFactory.createPlainLiteral("sand"), getRDFValue(converted, ss, 4) );
+        assertEquals( ResourceFactory.createPlainLiteral("en"), getRDFValue(converted, ss, 5) );
+        assertEquals( ResourceFactory.createPlainLiteral("http://environment.data.gov.uk/def/bathing-water/sand-sediment"), getRDFValue(converted, ss, 6) );
+        assertEquals( ResourceFactory.createLangLiteral("sand", "en"), getRDFValue(converted, ss, 7) );
+        assertTrue( (int)getRDFValue(converted, ss, 8).asLiteral().getValue() >= 2 );
+        assertTrue( (int)getRDFValue(converted, ss, 9).asLiteral().getValue() >= 6 );
+        assertEquals( ss, getRDFValue(converted, ss, 10) );
+    }
+    
+    private RDFNode getRDFValue(Model model, Resource r, int i) {
+        Resource root = r.inModel(model);
+        Property p = model.createProperty(RDF.value.getURI() + i);
+        Statement s = root.getProperty(p);
+        if (s == null) {
+            return null;
+        } else {
+            return s.getObject();
+        }
     }
     
     @Test
