@@ -92,19 +92,19 @@ public class ValueNode extends ValueBase<Node> implements Value{
     }
 
     /** Return the lexical form for a literal, the URI of a resource, the anonID of a bNode */
-    public String getLexicalForm() {
-        return asRDFNode().getLexicalForm();
+    public ValueString getLexicalForm() {
+        return new ValueString( asRDFNode().getLexicalForm() );
     }
 
     /** Return a name for the resource, falling back on curies or localnames if no naming propery is found */
-    public String getName() {
-        return asRDFNode().getName();
+    public ValueString getName() {
+        return new ValueString( asRDFNode().getName() );
     }
 
 
     /** If this is a literal return its language, otherwise return null */
-    public String getLanguage() {
-        return asRDFNode().getLanguage();
+    public ValueString getLanguage() {
+        return new ValueString( asRDFNode().getLanguage() );
     }
 
 
@@ -124,13 +124,13 @@ public class ValueNode extends ValueBase<Node> implements Value{
     }
 
     /** Return the URI */
-    public String getURI() {
-        return asRDFNode().getURI();
+    public ValueString getURI() {
+        return new ValueString( asRDFNode().getURI() );
     }
 
     /** Return the shortform curi for the URI if possible, else the full URI */
-    public String getShortURI() {
-        return asRDFNode().getShortURI();
+    public ValueString getShortURI() {
+        return new ValueString( asRDFNode().getShortURI() );
     }
 
 
