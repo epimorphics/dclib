@@ -280,10 +280,11 @@ public abstract class ValueBase<T> implements Value {
      * @return
      */
     public Value fetch() {
+        ConverterProcess proc = ConverterProcess.get();
         String uri = asURI();
-        Model model = fetchModel(uri);
+        Model model = proc.fetchModel(uri);
         if (model != null) {
-            StreamRDF out = ConverterProcess.get().getOutputStream();
+            StreamRDF out = proc.getOutputStream();
             ExtendedIterator<Triple> it = model.getGraph().find(null, null, null);
             while (it.hasNext()) {
                 out.triple(it.next());
@@ -293,10 +294,10 @@ public abstract class ValueBase<T> implements Value {
     }
     
     public Value fetch(String...strings) {
+        ConverterProcess proc = ConverterProcess.get();
         String uri = asURI();
-        Model model = fetchModel(uri);
+        Model model = proc.fetchModel(uri);
         if (model != null) {
-            ConverterProcess proc = ConverterProcess.get();
             StreamRDF out = proc.getOutputStream();
             for (String puri : strings) {
                 puri = proc.getDataContext().getPrefixes().expandPrefix(puri);
@@ -309,21 +310,6 @@ public abstract class ValueBase<T> implements Value {
             }
         }
         return this;
-    }
-
-    protected Model fetchModel(String uri) {
-        try {
-            Model model = RDFDataMgr.loadModel( uri );
-            if (model == null || model.isEmpty()) {
-                ConverterProcess.get().getMessageReporter().report("Warning: no data found at " + uri);
-                return null;
-            } else {
-                return model;
-            }
-        } catch (Exception e) {
-            ConverterProcess.get().getMessageReporter().report("Warning: exception fetching " + uri + ", " + e);
-            return null;
-        }
     }
     
     /**

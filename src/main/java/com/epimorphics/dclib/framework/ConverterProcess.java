@@ -13,6 +13,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map.Entry;
 
+import org.apache.commons.collections.map.LRUMap;
+import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.riot.system.StreamRDF;
 import org.apache.jena.riot.system.StreamRDFLib;
 import org.slf4j.Logger;
@@ -42,8 +44,7 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
 public class ConverterProcess {
     static final Logger log = LoggerFactory.getLogger( ConverterProcess.class );
     
-    private static final ThreadLocal<ConverterProcess> current = new ThreadLocal<>();
-    private static final DataContext defaultDC = new DataContext();
+    public static final int MAX_FETCH_CACHE = 500;
     
     public static final String ROW_OBJECT_NAME = "$row";
     public static final String BASE_OBJECT_NAME = "$base";
@@ -54,6 +55,9 @@ public class ConverterProcess {
     public static final String EXECUTION_TIME_NAME = "$exectime";
     
     static final String META = "meta";
+    
+    private static final ThreadLocal<ConverterProcess> current = new ThreadLocal<>();
+    private static final DataContext defaultDC = new DataContext();
 
     protected int BATCH_SIZE = 100;
     protected DataContext dataContext;
@@ -69,6 +73,8 @@ public class ConverterProcess {
     
     protected StreamRDF   outputStream;
     protected Model  result;   // May not be used if the stream is set directly  
+    
+    protected LRUMap fetchCache = new LRUMap(MAX_FETCH_CACHE);
     
     public ConverterProcess(DataContext context, InputStream data) {
         dataContext = new DataContext( context );
@@ -387,4 +393,27 @@ public class ConverterProcess {
         result = model;
         outputStream = StreamRDFLib.graph( result.getGraph() );
     }
+    
+
+    /**
+     * Fetch a remote (possibly cached) model from the given URI.
+     * Return null if no data is found
+     */
+    public Model fetchModel(String uri) {
+        Model model = (Model) fetchCache.get(uri);
+        if (model == null) {
+            try {
+                model = RDFDataMgr.loadModel( uri );
+                if (model == null || model.isEmpty()) {
+                    getMessageReporter().report("Warning: no data found at " + uri);
+                } else {
+                    fetchCache.put(uri, model);
+                }
+            } catch (Exception e) {
+                getMessageReporter().report("Warning: exception fetching " + uri + ", " + e);
+            }
+        }
+        return model;
+    }
+
 }
