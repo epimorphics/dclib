@@ -180,6 +180,7 @@ public class TestPattern {
         
         assertEquals(NodeFactory.createLiteral("a string", "en", false), evalNode("{a.lang('en')}"));
         
+        assertEquals(NodeFactory.createLiteral("b", "en", false), evalNode("{'b'}@en") );
         assertEquals(NodeFactory.createLiteral("foo bar", "en", false), evalNode("{b}@en") );
         assertEquals(NodeFactory.createLiteral("foo bar@en"), evalNode("{b}@@en") );
         assertEquals(NodeFactory.createLiteral("foo bar@en"), evalNode("{b}\\@en") );
