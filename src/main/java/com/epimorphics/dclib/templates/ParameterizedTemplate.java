@@ -110,8 +110,10 @@ public class ParameterizedTemplate extends TemplateBase implements Template {
                     Object value = ent.getValue().evaluate(env, proc, rowNumber);
                     env.put(ent.getKey(), value);
                 } catch (NullResult e) {
-                    // TODO should this be a fatal error instead of an abort?
-                    throw new NullResult("Failed to bind variable " + ent.getKey());
+                    // fall through to allow missing bindings
+                    
+                    // TODO was an abort - 
+                    // throw new NullResult("Failed to bind variable " + ent.getKey());
                 }
             }
         }
