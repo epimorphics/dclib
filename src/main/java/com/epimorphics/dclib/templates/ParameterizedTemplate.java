@@ -9,6 +9,11 @@
 
 package com.epimorphics.dclib.templates;
 
+import static com.epimorphics.dclib.templates.JSONConstants.BIND;
+import static com.epimorphics.dclib.templates.JSONConstants.LET;
+import static com.epimorphics.dclib.templates.JSONConstants.TEMPLATE;
+import static com.epimorphics.dclib.templates.JSONConstants.TYPE;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -26,8 +31,6 @@ import com.epimorphics.dclib.framework.NullResult;
 import com.epimorphics.dclib.framework.Pattern;
 import com.epimorphics.dclib.framework.Template;
 import com.epimorphics.util.EpiException;
-
-import static com.epimorphics.dclib.templates.JSONConstants.*;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.NodeFactory;
 

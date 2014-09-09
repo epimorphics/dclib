@@ -9,9 +9,11 @@
 
 package com.epimorphics.dclib.framework;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
 import org.apache.jena.atlas.json.JsonObject;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 import com.epimorphics.dclib.templates.TemplateBase;
 

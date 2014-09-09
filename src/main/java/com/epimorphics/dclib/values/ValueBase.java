@@ -12,7 +12,6 @@ package com.epimorphics.dclib.values;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.riot.system.StreamRDF;
 
 import com.epimorphics.dclib.framework.ConverterProcess;

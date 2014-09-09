@@ -9,6 +9,10 @@
 
 package com.epimorphics.dclib.values;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import java.io.IOException;
 
 import org.junit.Before;
@@ -25,8 +29,6 @@ import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.util.FileManager;
 import com.hp.hpl.jena.vocabulary.DCTerms;
 import com.hp.hpl.jena.vocabulary.XSD;
-
-import static org.junit.Assert.*;
 
 public class TestValueDate {
     DataContext dc = new DataContext();
