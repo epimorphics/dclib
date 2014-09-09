@@ -12,9 +12,12 @@ package com.epimorphics.dclib.values;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.epimorphics.dclib.framework.ConverterProcess;
+import com.epimorphics.rdfutil.ModelWrapper;
 import com.epimorphics.rdfutil.RDFNodeWrapper;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.rdf.model.Literal;
+import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;
 
 public class ValueNode extends ValueBase<Node> implements Value{
@@ -58,34 +61,42 @@ public class ValueNode extends ValueBase<Node> implements Value{
         }
     }
 
-    @Override
-    public RDFNodeWrapper asRDFNode() {
+    public RDFNodeWrapper asRDFNodeWrapper() {
         if (wnode == null) {
-            wnode = super.asRDFNode();
+            ConverterProcess proc = ConverterProcess.get();
+            Model model = proc.getModel();
+            model.setNsPrefixes( proc.getDataContext().getPrefixes() );
+            ModelWrapper wmodel = new ModelWrapper(model);
+            wnode = wmodel.getNode( model.asRDFNode((Node)value) );
         }
         return wnode;
+    }
+    
+    @Override
+    public ValueNode asRDFNode() {
+        return this;   // Already an RDF Node
     }
 
 
     /** tests true of the node is a literal */
     public boolean isLiteral() {
-        return asRDFNode().isLiteral();
+        return asRDFNodeWrapper().isLiteral();
     }
 
     /** Return as a Jena Literal object */
     public Literal asLiteral() {
-        return asRDFNode().asLiteral();
+        return asRDFNodeWrapper().asLiteral();
     }
 
     /** Return true if the node is an RDF list */
     public boolean isList() {
-        return asRDFNode().isList();
+        return asRDFNodeWrapper().isList();
     }
 
     /** Return the contents of the RDF list as a list of wrapped nodes */
     public List<Value> asList() {
         List<Value> result = new ArrayList<>();
-        for (RDFNodeWrapper w : asRDFNode().asList()) {
+        for (RDFNodeWrapper w : asRDFNodeWrapper().asList()) {
             result.add( makeValue(w) );
         }
         return result;
@@ -93,24 +104,24 @@ public class ValueNode extends ValueBase<Node> implements Value{
 
     /** Return the lexical form for a literal, the URI of a resource, the anonID of a bNode */
     public ValueString getLexicalForm() {
-        return new ValueString( asRDFNode().getLexicalForm() );
+        return new ValueString( asRDFNodeWrapper().getLexicalForm() );
     }
 
     /** Return a name for the resource, falling back on curies or localnames if no naming propery is found */
     public ValueString getName() {
-        return new ValueString( asRDFNode().getName() );
+        return new ValueString( asRDFNodeWrapper().getName() );
     }
 
 
     /** If this is a literal return its language, otherwise return null */
     public ValueString getLanguage() {
-        return new ValueString( asRDFNode().getLanguage() );
+        return new ValueString( asRDFNodeWrapper().getLanguage() );
     }
 
 
     /** Return true if this is an RDF resource */
     public boolean isResource() {
-        return asRDFNode().isResource();
+        return asRDFNodeWrapper().isResource();
     }
 
     /** Return true if this is an anonymous resource */
@@ -120,17 +131,17 @@ public class ValueNode extends ValueBase<Node> implements Value{
 
     /** Return as a Jena Resource object */
     public Resource asResource() {
-        return asRDFNode().asResource();
+        return asRDFNodeWrapper().asResource();
     }
 
     /** Return the URI */
     public ValueString getURI() {
-        return new ValueString( asRDFNode().getURI() );
+        return new ValueString( asRDFNodeWrapper().getURI() );
     }
 
     /** Return the shortform curi for the URI if possible, else the full URI */
     public ValueString getShortURI() {
-        return new ValueString( asRDFNode().getShortURI() );
+        return new ValueString( asRDFNodeWrapper().getShortURI() );
     }
 
 
@@ -141,7 +152,7 @@ public class ValueNode extends ValueBase<Node> implements Value{
 
     /** Return a single value for the property of null if there is none, property can be specified using URI strings, curies or nodes */
     public ValueNode getPropertyValue(Object prop) {
-        RDFNodeWrapper w = asRDFNode().getPropertyValue( toProperty(prop) );
+        RDFNodeWrapper w = asRDFNodeWrapper().getPropertyValue( toProperty(prop) );
         if (w != null) {
             return makeValue(w);
         } else {
@@ -152,14 +163,14 @@ public class ValueNode extends ValueBase<Node> implements Value{
     /** Return true if the property has the given value */
     public boolean hasResourceValue(Object prop, Object value) {
         if (value instanceof ValueNode) {
-            value = ((ValueNode) value).asRDFNode();
+            value = ((ValueNode) value).asRDFNodeWrapper();
         }
-        return asRDFNode().hasResourceValue(toProperty(prop), value);
+        return asRDFNodeWrapper().hasResourceValue(toProperty(prop), value);
     }
 
     /** Return the value of the given property as a list of literal values or wrapped nodes, property can be specified using URI strings, curies or nodes */
     public List<ValueNode> listPropertyValues(Object prop) {
-        List<RDFNodeWrapper> l = asRDFNode().listPropertyValues(toProperty(prop));
+        List<RDFNodeWrapper> l = asRDFNodeWrapper().listPropertyValues(toProperty(prop));
         List<ValueNode> result = new ArrayList<ValueNode>( l.size() );
         for (RDFNodeWrapper w : l) {
             result.add( makeValue(w) );
@@ -171,7 +182,7 @@ public class ValueNode extends ValueBase<Node> implements Value{
      * Return the set of property values of this node as a ordered list of value bindings
      */
     public  List<PropertyValue> listProperties() {
-        return makePV( asRDFNode().listProperties() );
+        return makePV( asRDFNodeWrapper().listProperties() );
     }
 
     private static List<PropertyValue> makePV(List<com.epimorphics.rdfutil.PropertyValue> values) {
@@ -190,7 +201,7 @@ public class ValueNode extends ValueBase<Node> implements Value{
     
     /** Return list of nodes that point to us by the given property */
     public List<ValueNode> listInLinks(Object prop) {
-        List<RDFNodeWrapper> l = asRDFNode().listInLinks(toProperty(prop));
+        List<RDFNodeWrapper> l = asRDFNodeWrapper().listInLinks(toProperty(prop));
         List<ValueNode> result = new ArrayList<ValueNode>( l.size() );
         for (RDFNodeWrapper w : l) {
             result.add(  makeValue(w) );
@@ -200,7 +211,7 @@ public class ValueNode extends ValueBase<Node> implements Value{
 
     /** Return the set of nodes which point to us  */
     public  List<PropertyValue> listInLinks() {
-        return makePV( asRDFNode().listInLinks() );
+        return makePV( asRDFNodeWrapper().listInLinks() );
     }
 
     /**
@@ -208,7 +219,7 @@ public class ValueNode extends ValueBase<Node> implements Value{
      */
     public List<ValueNode> connectedNodes(Object pathv) {
         String path = pathv.toString();
-        List<RDFNodeWrapper> l = asRDFNode().connectedNodes(path);
+        List<RDFNodeWrapper> l = asRDFNodeWrapper().connectedNodes(path);
         List<ValueNode> result = new ArrayList<ValueNode>( l.size() );
         for (RDFNodeWrapper w : l) {
             result.add( makeValue(w) );
@@ -220,7 +231,7 @@ public class ValueNode extends ValueBase<Node> implements Value{
         if (prop instanceof ValueString) {
             return prop.toString();
         } else if (prop instanceof ValueNode) {
-            return ((ValueNode)prop).asRDFNode(); 
+            return ((ValueNode)prop).asRDFNodeWrapper(); 
         } else {
             return prop;
         }

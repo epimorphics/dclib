@@ -18,8 +18,6 @@ import com.epimorphics.dclib.framework.ConverterProcess;
 import com.epimorphics.dclib.framework.MapSource;
 import com.epimorphics.dclib.framework.MatchFailed;
 import com.epimorphics.dclib.framework.NullResult;
-import com.epimorphics.rdfutil.ModelWrapper;
-import com.epimorphics.rdfutil.RDFNodeWrapper;
 import com.epimorphics.rdfutil.RDFUtil;
 import com.epimorphics.tasks.ProgressReporter;
 import com.epimorphics.util.NameUtils;
@@ -29,7 +27,6 @@ import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.NodeFactory;
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 import com.hp.hpl.jena.vocabulary.XSD;
@@ -310,23 +307,11 @@ public abstract class ValueBase<T> implements Value {
         }
         return this;
     }
+
     
-    /**
-     * Return the value as a RDFNodeWrapper for RDF-specific scripting.
-     * Only works if not streaming.
-     */
-    public RDFNodeWrapper asRDFNode() {
-        ConverterProcess proc = ConverterProcess.get();
-        Model model = proc.getModel();
-        model.setNsPrefixes( proc.getDataContext().getPrefixes() );
-        ModelWrapper wmodel = new ModelWrapper(model);
-        if (value instanceof Node ) {
-            return wmodel.getNode( model.asRDFNode((Node)value) );
-        } else if (value instanceof RDFNode || value instanceof RDFNodeWrapper) {
-            return wmodel.getNode( value );
-        } else {
-            return wmodel.getNode( value.toString() );
-        }
+    /** Convert to a wrapped RDF node, treats strings as a URI and creates a resource node */
+    public ValueNode asRDFNode() {
+        return new ValueNode( NodeFactory.createURI( value.toString() ) );
     }
     
     protected String asURI() {
