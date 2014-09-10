@@ -240,6 +240,11 @@ public class TestBasicConverters {
         checkAgainstExpected("test/bugCases/lang.json", "test/test-ok.csv", "test/bugCases/lang.ttl");
         checkAgainstExpected("test/bugCases/null.json", "test/test-ok.csv", "test/bugCases/null.ttl");
     }
+    
+    @Test
+    public void testFunctions() throws IOException {
+        checkAgainstExpected("test/functions/function.yaml", "test/functions/data.csv", "test/functions/result.ttl");
+    }
 
     public static Model convert(String templateFile, String dataFile) throws IOException {
         return convert(templateFile, dataFile, null);

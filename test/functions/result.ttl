@@ -1,0 +1,7 @@
+<http://example.com/test>
+        a       <http://rdfs.org/ns/void#Dataset> ;
+        <http://www.w3.org/1999/02/22-rdf-syntax-ns#value1>
+                "barpre-" , "foopre-" ;
+        <http://www.w3.org/1999/02/22-rdf-syntax-ns#value2>
+                "http://purl.org/dc/terms" .
+                

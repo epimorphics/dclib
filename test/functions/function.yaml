@@ -1,0 +1,13 @@
+name : Test emission of namespace URIs
+type : Composite
+bind : 
+   - "$base" : "<http://example.com/test>"
+   - "$f" : "{= name.append($$)}"
+   - "$ns" : "{= asResource($$).replaceAll('[#/]$','')}"
+templates :
+   - "@id" : "{$base}"
+     "<rdf:type>"  : "<void:Dataset>"
+     "<rdf:value1>" : "{$f.apply(value('pre-'))}"
+     "<rdf:value2>" : "{$ns.apply('dct:')}"
+
+

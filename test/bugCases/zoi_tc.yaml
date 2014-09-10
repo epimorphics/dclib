@@ -30,7 +30,7 @@
         {   "name"                                    : "zone-of-influence",
             "@id"                                     : "<{$so_zoi}/{$eubwid}:1>",
             "<rdf:type>"                              : "<def-zoi:ZoneOfInfluence>",
-            "<geometry:extent>"                       : "<{empty(zoi_geometry) ? null : $geom}>"
+            "<geometry:extent>"                       : "<{empty(zoi_geometry) ? null : $so_zoi.toString() + '/' + $eubwid.toString() + ':1/extent'}>"
         },
     #############################################################################################################################
     # Zone of influence extent 

@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import com.epimorphics.dclib.values.GlobalFunctions;
 import com.epimorphics.dclib.values.Value;
 import com.epimorphics.dclib.values.ValueError;
+import com.epimorphics.dclib.values.ValueFunction;
 import com.epimorphics.dclib.values.ValueNode;
 import com.epimorphics.dclib.values.ValueNumber;
 import com.epimorphics.dclib.values.ValueString;
@@ -235,6 +236,9 @@ public class Pattern {
             result = ((Expression)component).evaluate(env);
         } else if (component instanceof Script) {
             result = ((Script)component).execute(env);
+        } else if (component instanceof ValueFunction) {
+            ((ValueFunction)component).setBindingEnv(env);
+            return component;
         }  else {
             // Can't happen
             throw new EpiException("Internal state error in pattern evaluation");
@@ -251,11 +255,12 @@ public class Pattern {
         }
     }
     
-    protected static final String ESCAPED = "<>{}";
+    protected static final String ESCAPED = "<>{}=";
 
     protected void parse(String pattern) {
         boolean escaped = false;
         boolean isScript = false;
+        boolean isFunction = false;
         int blockDepth = 0;
         int len = pattern.length();
         StringBuilder block = new StringBuilder();
@@ -291,6 +296,10 @@ public class Pattern {
                 if (blockDepth > 1) {
                     isScript = true;
                 }
+                if (pattern.charAt(i+1) == '=') {
+                    i++;
+                    isFunction = true;
+                }
                 break;
                 
             case '}' :
@@ -299,10 +308,16 @@ public class Pattern {
                     // Finish an expression block
                     String src = block.toString();
                     try {
-                        components.add( isScript ? engine.createScript(src) : engine.createExpression(src) );
+                        if (isFunction) {
+                            components.add( new ValueFunction( engine.createScript(src)) );
+                        } else {
+                            components.add( isScript ? engine.createScript(src) : engine.createExpression(src) );
+                        }
                     } catch (Exception e) {
                         log.error("Failed to parse pattern: " + src, e);
                     }
+                    isScript = false;
+                    isFunction = false;
                     block = new StringBuilder();
                 } else {
                     block.append(c);
