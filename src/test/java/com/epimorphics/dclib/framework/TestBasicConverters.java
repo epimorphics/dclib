@@ -232,6 +232,8 @@ public class TestBasicConverters {
     
     @Test
     public void testBugs() throws IOException {
+        checkAgainstExpected("test/bugCases/ns-test.yaml", "test/test-ok.csv", "test/bugCases/ns-test-result.ttl");
+
         checkAgainstExpected("test/bugCases/mailto.json", "test/test-ok.csv", "test/bugCases/mailto.ttl");
         checkAgainstExpected("test/bugCases/lang.json", "test/test-ok.csv", "test/bugCases/lang.ttl");
         checkAgainstExpected("test/bugCases/null.json", "test/test-ok.csv", "test/bugCases/null.ttl");

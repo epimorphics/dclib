@@ -1,0 +1,10 @@
+name : Test emission of namespace URIs
+type : Composite
+bind : 
+   - "$base" : "<http://example.com/test>"
+oneOffs :
+   - "@id" : "<{$base}>"
+     "<rdf:type>" : "<void:Dataset>"
+     "<dct:vocabulary>" : [ "<rdf:>", "<rdfs:>", "<dct:>" ]
+templates : [ { "@id" : "{$base}" } ]
+
