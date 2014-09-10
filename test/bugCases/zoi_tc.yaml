@@ -1,0 +1,44 @@
+{
+    type : "Composite",
+    "name" : "sites",
+    "required" : [ 
+        "eubwid",
+    ],
+    "prefixes" : {
+        "geometry" : "http://data.ordnancesurvey.co.uk/ontology/geometry/",
+        "def-zoi" : "http://location.data.gov.uk/def/ef/ZoneOfInfluence/"
+    },
+    "bind" : [
+        {
+            "$so_zoi"  : "http://location.data.gov.uk/so/ef/ZoneOfInfluence/bwzoi.eaew",
+            "$eubwid"  : "{eubwid.trim().toLowerCase().replaceAll('\\s+','-')}", # replace running whitespace with a single '-'
+        },
+        {
+            "$geom"  :   "{$so_zoi}/{$eubwid}:1/extent"
+        }
+    ],
+    "templates" : [ "zone-of-influence","zoi-extent" ],
+    "referenced" : [
+    #############################################################################################################################
+    # Bathing-water zone of influence
+    #
+    # Currently generates a Zoi even of there is no polygon available
+    # but supresses extend to be compatible with current modal generator
+    # However, should supress generation of the whole Zoi thing. This will affect bathing waters too
+    # and could affect bwdx if implemented (skw 9/9/2014)
+    #############################################################################################################################
+        {   "name"                                    : "zone-of-influence",
+            "@id"                                     : "<{$so_zoi}/{$eubwid}:1>",
+            "<rdf:type>"                              : "<def-zoi:ZoneOfInfluence>",
+            "<geometry:extent>"                       : "<{empty(zoi_geometry) ? null : $geom}>"
+        },
+    #############################################################################################################################
+    # Zone of influence extent 
+    #############################################################################################################################
+        {   "name"                                    : "zoi-extent",
+            "@id"                                     : "<{empty(zoi_geometry) ? null : $geom}>",
+            "<rdf:type>"                              : "<geometry:AbstractGeometry>",
+            "<geometry:asGML>"                        : "{zoi_geometry}^^rdf:XMLLiteral"
+        }        
+    ]
+}

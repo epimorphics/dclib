@@ -1,5 +1,5 @@
 <http://example.com/test>
         a      <http://rdfs.org/ns/void#Dataset> ;
         <http://purl.org/dc/terms/vocabulary>
-                <http://www.w3.org/1999/02/22-rdf-syntax-ns#> , <http://www.w3.org/2000/01/rdf-schema#> , <http://purl.org/dc/terms/> .
+                <http://www.w3.org/1999/02/22-rdf-syntax-ns#> , <http://www.w3.org/2000/01/rdf-schema#> , <http://purl.org/dc/terms>  .
                 
