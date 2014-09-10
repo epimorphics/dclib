@@ -72,9 +72,9 @@ public class TestPattern {
         p = new Pattern("\\<rdf:type>", dc);
         assertFalse(p.isURI());
         assertFalse(p.isInverse());
-        assertEquals("<rdf:type>", p.evaluate(env, proc, 0));
+        assertEquals("<rdf:type>", p.evaluate(env, proc, 0).toString());
         
-        assertEquals("^<rdf:type>", eval("\\^<rdf:type>"));
+        assertEquals("^<rdf:type>", eval("\\^<rdf:type>").toString());
         
         assertEquals(RDF.type.getURI(), eval("<rdf:{'type'}>").toString());
     }
@@ -89,7 +89,7 @@ public class TestPattern {
         
         assertEquals("foo barbaz", eval("{b.toString() + 'baz'}").toString());
         
-        assertEquals("foo \\ bar", eval("foo \\ bar"));
+        assertEquals("foo \\ bar", eval("foo \\ bar").toString());
     }
         
     @Test
@@ -180,7 +180,7 @@ public class TestPattern {
         
         assertEquals(NodeFactory.createLiteral("a string", "en", false), evalNode("{a.lang('en')}"));
         
-        assertEquals(NodeFactory.createLiteral("b", "en", false), evalNode("{'b'}@en") );
+        assertEquals(NodeFactory.createLiteral("b", "en", false), evalNode("b@en") );
         assertEquals(NodeFactory.createLiteral("foo bar", "en", false), evalNode("{b}@en") );
         assertEquals(NodeFactory.createLiteral("foo bar@en"), evalNode("{b}@@en") );
         assertEquals(NodeFactory.createLiteral("foo bar@en"), evalNode("{b}\\@en") );

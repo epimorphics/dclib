@@ -93,7 +93,7 @@ public class Pattern {
     public Object evaluate(BindingEnv env, ConverterProcess proc, int rowNumber) {
         if (isConstant) {
 //            return ValueFactory.asValue( components.get(0).toString(), proc);
-            return components.get(0);
+            return new ValueString(components.get(0).toString());
         } else if (components.size() == 1) {
             Object result = evaluateComponent(0, env);
             checkForError(result, proc, rowNumber);
