@@ -6,6 +6,9 @@ bind :
 oneOffs :
    - "@id" : "{$base}"
      "<rdf:type>" : "<void:Dataset>"
-     "<dct:vocabulary>" : [ "<rdf:>", "<rdfs:>", "<{$dct.getURI().replaceAll('[/#]$','')}>" ]
+     "<dct:vocabulary>" : [ 
+         "<rdf:>", 
+         "<{asResource('rdfs:').getURI().replaceAll('[/#]$','')}>", 
+         "<{$dct.getURI().replaceAll('[/#]$','')}>" ]
 templates : [ { "@id" : "{$base}" } ]
 

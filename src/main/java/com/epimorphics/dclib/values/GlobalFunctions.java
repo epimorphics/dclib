@@ -17,6 +17,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.epimorphics.dclib.framework.ConverterProcess;
 import com.epimorphics.dclib.framework.EvalFailed;
 import com.epimorphics.util.EpiException;
 import com.hp.hpl.jena.datatypes.RDFDatatype;
@@ -101,4 +102,13 @@ public class GlobalFunctions {
         }
     }
     
+    /** Convert a URI string to a resource, expanding any prefixes */
+    public static ValueNode asResource(Object value) {
+        if (value instanceof ValueNode) {
+            return (ValueNode) value;
+        } else {
+            String uri = ConverterProcess.get().getDataContext().expandURI( value.toString() );
+            return new ValueNode( NodeFactory.createURI(uri) );
+        }
+    }
 }
