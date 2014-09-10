@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import com.epimorphics.dclib.values.GlobalFunctions;
 import com.epimorphics.dclib.values.Value;
 import com.epimorphics.dclib.values.ValueError;
+import com.epimorphics.dclib.values.ValueNode;
 import com.epimorphics.dclib.values.ValueNumber;
 import com.epimorphics.dclib.values.ValueString;
 import com.epimorphics.rdfutil.RDFNodeWrapper;
@@ -92,16 +93,13 @@ public class Pattern {
      */
     public Object evaluate(BindingEnv env, ConverterProcess proc, int rowNumber) {
         if (isConstant) {
-            return new ValueString(components.get(0).toString());
+            return wrapResult( components.get(0) );
+            
         } else if (components.size() == 1) {
             Object result = evaluateComponent(0, env);
             checkForError(result, proc, rowNumber);
-//            return result;
-            if (result instanceof String) {
-                return new ValueString((String)result);
-            } else {
-                return result;
-            }
+            return wrapResult(result);
+
         } else {
             // Multiple components concatenated a strings
             boolean multiValued = false;
@@ -134,9 +132,21 @@ public class Pattern {
                 if (isURI()) {
                     result = ConverterProcess.getGlobalDataContext().expandURI(result);
                 }
-                return new ValueString(result);
+                return wrapResult(result);
             }
         }
+    }
+    
+    private Object wrapResult(Object result) {
+        if (isURI) {
+            if (result instanceof String || result instanceof ValueString) {
+                return new ValueNode( NodeFactory.createURI(result.toString()) );
+            }
+        } 
+        if (result instanceof String) {
+            return new ValueString( (String)result );
+        }
+        return result;
     }
     
     private void checkForError(Object result, ConverterProcess proc, int rowNumber) {

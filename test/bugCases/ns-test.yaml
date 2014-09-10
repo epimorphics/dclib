@@ -3,7 +3,7 @@ type : Composite
 bind : 
    - "$base" : "<http://example.com/test>"
 oneOffs :
-   - "@id" : "<{$base}>"
+   - "@id" : "{$base}"
      "<rdf:type>" : "<void:Dataset>"
      "<dct:vocabulary>" : [ "<rdf:>", "<rdfs:>", "<dct:>" ]
 templates : [ { "@id" : "{$base}" } ]
