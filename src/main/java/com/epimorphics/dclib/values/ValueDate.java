@@ -226,7 +226,7 @@ public class ValueDate extends ValueNode implements Value {
             int i_woy_week = bcal.get(Calendar.WEEK_OF_YEAR);
             new CalendarInstant(model, bcal, true);       
             new CalendarDay(model, bcal, true);
-            new CalendarWeek(model, i_woy_year, i_woy_week, true, false);
+            new CalendarWeek(model, i_woy_year, i_woy_week, false, false);
             
         } else if (value.getLiteralDatatype().equals(XSDDatatype.XSDdate)) {
             bcal = new BritishCalendar(
@@ -235,12 +235,12 @@ public class ValueDate extends ValueNode implements Value {
             int i_woy_year = CalendarUtils.getWeekOfYearYear(bcal);
             int i_woy_week = bcal.get(Calendar.WEEK_OF_YEAR);
             new CalendarDay(model, bcal, true);
-            new CalendarWeek(model, i_woy_year, i_woy_week, true, false);
+            new CalendarWeek(model, i_woy_year, i_woy_week, false, false);
         } else {
             ref = NodeFactory.createURI("http://reference.data.gov.uk/id/year/" + time.getYears());
         }
         
-        new CalendarYear(model, time.getYears(), true, false);
+        new CalendarYear(model, time.getYears(), false, false);
         
         StreamRDF out = ConverterProcess.get().getOutputStream();
         ExtendedIterator<Triple> it = model.getGraph().find(null, null, null);
