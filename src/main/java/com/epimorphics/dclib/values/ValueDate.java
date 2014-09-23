@@ -114,28 +114,34 @@ public class ValueDate extends ValueNode implements Value {
                     p = p.withOffsetParsed();
                 }
                 DateTime time = p.parseDateTime(lex);
-                String formatted = lex;
-                if (typeURI.equals(XSD.dateTime.getURI())) {
-                    formatted = (withTZ ? DATETIME_TZ_FMT : DATETIME_FMT).print(time);
-                } else if (typeURI.equals(XSD.date.getURI())) {
-                    formatted = (withTZ ? DATE_TZ_FMT : DATE_FMT).print(time);
-                } else if (typeURI.equals(XSD.time.getURI())) {
-                    formatted = (withTZ ? TIME_TZ_FMT : TIME_FMT).print(time);
-                } else if (typeURI.equals(XSD.gYearMonth.getURI())) {
-                    formatted = GYEARMONTH_FMT.print(time);
-                } else if (typeURI.equals(XSD.gYear.getURI())) {
-                    formatted = GYEAR_FMT.print(time);
-                }
-                if (formatted.endsWith("UTC")) {
-                    formatted = formatted.replace("UTC", "Z");
-                }
-                Node n = NodeFactory.createLiteral(formatted, TypeMapper.getInstance().getSafeTypeByName(typeURI));
-                return new ValueDate(n);
+                return fromDateTime(time, typeURI, withTZ);
             } catch(Exception e) {
                 // Ignore and loop round to try the next pattern
             }
         }
         return new ValueNull();
+    }
+    
+    private static Value fromDateTime(DateTime time, String typeURI, boolean withTZ) {
+        String formatted;
+        if (typeURI.equals(XSD.dateTime.getURI())) {
+            formatted = (withTZ ? DATETIME_TZ_FMT : DATETIME_FMT).print(time);
+        } else if (typeURI.equals(XSD.date.getURI())) {
+            formatted = (withTZ ? DATE_TZ_FMT : DATE_FMT).print(time);
+        } else if (typeURI.equals(XSD.time.getURI())) {
+            formatted = (withTZ ? TIME_TZ_FMT : TIME_FMT).print(time);
+        } else if (typeURI.equals(XSD.gYearMonth.getURI())) {
+            formatted = GYEARMONTH_FMT.print(time);
+        } else if (typeURI.equals(XSD.gYear.getURI())) {
+            formatted = GYEAR_FMT.print(time);
+        } else {
+            throw new EpiException("Unrecognized datetime type");
+        }
+        if (formatted.endsWith("UTC")) {
+            formatted = formatted.replace("UTC", "Z");
+        }
+        Node n = NodeFactory.createLiteral(formatted, TypeMapper.getInstance().getSafeTypeByName(typeURI));
+        return new ValueDate(n);        
     }
     
     /**
