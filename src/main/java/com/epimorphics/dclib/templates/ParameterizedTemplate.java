@@ -84,8 +84,13 @@ public class ParameterizedTemplate extends TemplateBase implements Template {
     protected Map<String, Pattern> getBindingSet(JsonObject binding) {
         Map<String, Pattern> map = new HashMap<>();
         for (Entry<String, JsonValue> ent : binding.entrySet()) {
-            Pattern p = new Pattern(ent.getValue().getAsString().value(), dc);
-            map.put(ent.getKey(), p);
+            JsonValue jv = ent.getValue();
+            if (jv.isString()) {
+                Pattern p = new Pattern(jv.getAsString().value(), dc);
+                map.put(ent.getKey(), p);
+            } else {
+                throw new EpiException("Expected binding value to be a string but found: " + jv);
+            }
         }
         return map;
     }
