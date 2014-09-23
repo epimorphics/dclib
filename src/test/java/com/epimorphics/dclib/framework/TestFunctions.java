@@ -31,15 +31,16 @@ public class TestFunctions {
     public void testRow() {
         Row row = new Row(42);
         assertEquals(42, row.getNumber());
-        assertTrue( row.getBnode().isBlank() );
-        Node a1 = row.bnodeFor("a");
-        Node a2 = row.bnodeFor("a");
-        Node b1 = row.bnodeFor("b");
+        assertTrue( row.getBnode().asNode().isBlank() );
+        Node a1 = row.bnodeFor("a").asNode();
+        Node a2 = row.bnodeFor("a").asNode();
+        Node b1 = row.bnodeFor("b").asNode();
         assertEquals(a1, a2);
         assertNotSame(a1, b1);
         assertTrue( a1.isBlank() );
         assertNotNull( row.getUuid() );
     }
+
     
     @Test
     public void testRowVariable() throws IOException {

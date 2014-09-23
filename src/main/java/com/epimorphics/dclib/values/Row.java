@@ -35,21 +35,21 @@ public class Row {
         return number;
     }
     
-    public String getUuid() {
+    public ValueString getUuid() {
         if (uuid == null) {
             uuid = UUID.randomUUID().toString();
         }
-        return uuid;
+        return new ValueString(uuid);
     }
     
-    public Node getBnode() {
+    public ValueNode getBnode() {
         if (bNode == null) {
             bNode = NodeFactory.createAnon();
         }
-        return bNode;
+        return new ValueNode(bNode);
     }
     
-    public Node bnodeFor(Object key) {
+    public ValueNode bnodeFor(Object key) {
         if (bNodes == null) {
             bNodes = new HashMap<Object, Node>();
         }
@@ -58,6 +58,6 @@ public class Row {
             bnode = NodeFactory.createAnon();
             bNodes.put(key, bnode);
         }
-        return bnode;
+        return new ValueNode(bnode);
     }
 }
