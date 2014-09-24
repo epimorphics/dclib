@@ -15,6 +15,7 @@ import java.util.regex.Pattern;
 import org.apache.jena.riot.system.StreamRDF;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
+import org.joda.time.LocalDateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
@@ -151,6 +152,34 @@ public class ValueDate extends ValueNode implements Value {
         if (formatted.endsWith("UTC")) {
             formatted = formatted.replace("UTC", "Z");
         }
+        Node n = NodeFactory.createLiteral(formatted, TypeMapper.getInstance().getSafeTypeByName(typeURI));
+        return new ValueDate(n);        
+    }
+    
+    protected static Value fromDateTime(LocalDateTime time, String typeURI) {
+        String formatted;
+        if (typeURI.equals(XSD.dateTime.getURI())) {
+            if (time.getMillisOfSecond() == 0) {
+                formatted = DATETIME_FMT.print(time);
+            } else {
+                formatted = DATETIME_FMT_MS.print(time);
+            }
+        } else if (typeURI.equals(XSD.date.getURI())) {
+            formatted = DATE_FMT.print(time);
+        } else if (typeURI.equals(XSD.time.getURI())) {
+            if (time.getMillisOfSecond() == 0) {
+                formatted = TIME_FMT.print(time);
+            } else {
+                formatted =  TIME_FMT_MS.print(time);
+            }
+        } else if (typeURI.equals(XSD.gYearMonth.getURI())) {
+            formatted = GYEARMONTH_FMT.print(time);
+        } else if (typeURI.equals(XSD.gYear.getURI())) {
+            formatted = GYEAR_FMT.print(time);
+        } else {
+            throw new EpiException("Unrecognized datetime type");
+        }
+
         Node n = NodeFactory.createLiteral(formatted, TypeMapper.getInstance().getSafeTypeByName(typeURI));
         return new ValueDate(n);        
     }
@@ -319,6 +348,19 @@ public class ValueDate extends ValueNode implements Value {
         DateTime dt = getJDateTime();
         dt = dt.minusMillis( dt.getMillisOfSecond() );
         return fromDateTime(dt, value.getLiteralDatatypeURI(), hasTimezone());
+    }
+    
+    public Value toLocalTime() {
+        if (hasTimezone()) {
+            XSDDateTime xdt = getXSDDateTime();
+            int ms = (int)Math.round( 1000.0 * (xdt.getSeconds() - xdt.getFullSeconds()) );
+            DateTime jdt =  
+                new DateTime(xdt.getYears(), xdt.getMonths(), xdt.getDays(), xdt.getHours(), xdt.getMinutes(), xdt.getFullSeconds(), ms, DateTimeZone.UTC);
+            jdt = jdt.withZone( DateTimeZone.getDefault() );
+            return fromDateTime(jdt, value.getLiteralDatatypeURI(), false);
+        } else {
+            return this;
+        }
     }
     
 }
