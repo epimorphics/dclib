@@ -14,6 +14,7 @@ import java.util.regex.Pattern;
 
 import org.apache.jena.riot.system.StreamRDF;
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
@@ -41,16 +42,14 @@ import com.hp.hpl.jena.vocabulary.XSD;
  */
 public class ValueDate extends ValueNode implements Value {
     
-    protected String lexical;
+    protected DateTime jdt;
     
     public ValueDate(String value) {
         super(stringToDate(value));
-        lexical = value;
     }
     
     public ValueDate(Node node) {
         super(node);
-        lexical = node.getLiteralLexicalForm();
     }
     
     private static Node stringToDate(String value) {
@@ -86,12 +85,16 @@ public class ValueDate extends ValueNode implements Value {
     protected static final Pattern GYEARMONTH_PATTERN = Pattern.compile( String.format("%s(%s)?", GYM_BLOCK, TZONE_BLOCK) );
     protected static final Pattern ANYDATE_PATTERN = Pattern.compile( String.format("-?(%sT%s|%s|%s|%s)(%s)?", DATE_BLOCK, TIME_BLOCK, DATE_BLOCK, TIME_BLOCK, GYM_BLOCK, TZONE_BLOCK) );
     
-    protected static final DateTimeFormatter DATETIME_FMT = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss.S");
-    protected static final DateTimeFormatter DATETIME_TZ_FMT = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss.SZZZ").withOffsetParsed();
+    protected static final DateTimeFormatter DATETIME_FMT = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss");
+    protected static final DateTimeFormatter DATETIME_TZ_FMT = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ssZZZ").withOffsetParsed();
+    protected static final DateTimeFormatter DATETIME_FMT_MS = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss.SSS");
+    protected static final DateTimeFormatter DATETIME_TZ_FMT_MS = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZZZ").withOffsetParsed();
     protected static final DateTimeFormatter DATE_FMT = DateTimeFormat.forPattern("yyyy-MM-dd");
     protected static final DateTimeFormatter DATE_TZ_FMT = DateTimeFormat.forPattern("yyyy-MM-ddZZZ").withOffsetParsed();
-    protected static final DateTimeFormatter TIME_FMT = DateTimeFormat.forPattern("HH:mm:ss.S");
-    protected static final DateTimeFormatter TIME_TZ_FMT = DateTimeFormat.forPattern("HH:mm:ss.SZZZ").withOffsetParsed();
+    protected static final DateTimeFormatter TIME_FMT = DateTimeFormat.forPattern("HH:mm:ss");
+    protected static final DateTimeFormatter TIME_TZ_FMT = DateTimeFormat.forPattern("HH:mm:ssZZZ").withOffsetParsed();
+    protected static final DateTimeFormatter TIME_FMT_MS = DateTimeFormat.forPattern("HH:mm:ss.SSS");
+    protected static final DateTimeFormatter TIME_TZ_FMT_MS = DateTimeFormat.forPattern("HH:mm:ss.SSSZZZ").withOffsetParsed();
     protected static final DateTimeFormatter GYEARMONTH_FMT = DateTimeFormat.forPattern("yyyy-MM");
     protected static final DateTimeFormatter GYEAR_FMT = DateTimeFormat.forPattern("yyyy");
     
@@ -122,14 +125,22 @@ public class ValueDate extends ValueNode implements Value {
         return new ValueNull();
     }
     
-    private static Value fromDateTime(DateTime time, String typeURI, boolean withTZ) {
+    protected static Value fromDateTime(DateTime time, String typeURI, boolean withTZ) {
         String formatted;
         if (typeURI.equals(XSD.dateTime.getURI())) {
-            formatted = (withTZ ? DATETIME_TZ_FMT : DATETIME_FMT).print(time);
+            if (time.getMillisOfSecond() == 0) {
+                formatted = (withTZ ? DATETIME_TZ_FMT : DATETIME_FMT).print(time);
+            } else {
+                formatted = (withTZ ? DATETIME_TZ_FMT_MS : DATETIME_FMT_MS).print(time);
+            }
         } else if (typeURI.equals(XSD.date.getURI())) {
             formatted = (withTZ ? DATE_TZ_FMT : DATE_FMT).print(time);
         } else if (typeURI.equals(XSD.time.getURI())) {
-            formatted = (withTZ ? TIME_TZ_FMT : TIME_FMT).print(time);
+            if (time.getMillisOfSecond() == 0) {
+                formatted = (withTZ ? TIME_TZ_FMT : TIME_FMT).print(time);
+            } else {
+                formatted = (withTZ ? TIME_TZ_FMT_MS : TIME_FMT_MS).print(time);
+            }
         } else if (typeURI.equals(XSD.gYearMonth.getURI())) {
             formatted = GYEARMONTH_FMT.print(time);
         } else if (typeURI.equals(XSD.gYear.getURI())) {
@@ -167,49 +178,49 @@ public class ValueDate extends ValueNode implements Value {
      * Access the years part (if any) of the date
      */
     public Value getYear() {
-        return new ValueNumber( getDateTime().getYears() );
+        return new ValueNumber( getXSDDateTime().getYears() );
     }
     
     /**
      * Access the month part (if any) of the date
      */
     public Value getMonth() {
-        return new ValueNumber( getDateTime().getMonths() );
+        return new ValueNumber( getXSDDateTime().getMonths() );
     }
     
     /**
      * Access the day part (if any) of the date
      */
     public Value getDay() {
-        return new ValueNumber( getDateTime().getDays() );
+        return new ValueNumber( getXSDDateTime().getDays() );
     }
     
     /**
      * Access the hours part (if any) of the datetime
      */
     public Value getHour() {
-        return new ValueNumber( getDateTime().getHours() );
+        return new ValueNumber( getXSDDateTime().getHours() );
     }
     
     /**
      * Access the minue part (if any) of the datetime
      */
     public Value getMinute() {
-        return new ValueNumber( getDateTime().getMinutes() );
+        return new ValueNumber( getXSDDateTime().getMinutes() );
     }
     
     /**
      * Access the whole seconds part (if any) of the datetime
      */
     public Value getFullSecond() {
-        return new ValueNumber( getDateTime().getFullSeconds() );
+        return new ValueNumber( getXSDDateTime().getFullSeconds() );
     }
     
     /**
      * Access the seconds part (if any) of the datetime
      */
     public Value getSecond() {
-        return new ValueNumber( getDateTime().getSeconds() );
+        return new ValueNumber( getXSDDateTime().getSeconds() );
     }
 
     /**
@@ -218,7 +229,7 @@ public class ValueDate extends ValueNode implements Value {
      * Returns the date as a ref time URL
      */
     public Value referenceTime() {
-        XSDDateTime time = getDateTime();
+        XSDDateTime time = getXSDDateTime();
         BritishCalendar bcal = null;
         Node ref = null;
         Model model = ModelFactory.createDefaultModel();
@@ -257,22 +268,51 @@ public class ValueDate extends ValueNode implements Value {
         return new ValueNode(ref);
     }
     
-    protected XSDDateTime getDateTime() {
+    protected XSDDateTime getXSDDateTime() {
         Object val = value.getLiteralValue();
         if (val instanceof XSDDateTime) {
             return (XSDDateTime)val;
         } else {
             throw new EpiException("Not a date/time node");
         }
-        
     }
     
-    public static void main(String[] args) {
-        DateTimeFormatter p = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ").withOffsetParsed();
-        DateTime time = p.parseDateTime("2014-03-01T12:05:10.23+01:00");
-        System.out.println("Time with +1 offset: " + time);
-        time = p.parseDateTime("2014-03-01T12:05:10.23");
-        System.out.println("Time with no offset: " + time);
+    // Warning: jDateTime doesn't support timezone less times so all times will appear as UTC
+    protected DateTime getJDateTime() {
+        XSDDateTime xdt = getXSDDateTime();
+        int ms = (int)Math.round( 1000.0 * (xdt.getSeconds() - xdt.getFullSeconds()) );
+        DateTime jdt =  
+                new DateTime(xdt.getYears(), xdt.getMonths(), xdt.getDays(), xdt.getHours(), xdt.getMinutes(), xdt.getFullSeconds(), ms, DateTimeZone.UTC);
+        return jdt;
+    }
+    
+    
+    protected boolean hasTimezone() {
+        return getXSDDateTime().toString().endsWith("Z");
+    }
+    
+    public Value plusYearDays(int years, int days) {
+        DateTime dt = getJDateTime();
+        dt = dt.plusDays(days).plusYears(years);
+        return fromDateTime(dt, value.getLiteralDatatypeURI(), hasTimezone());
+    }
+    
+    public Value minusYearDays(int years, int days) {
+        DateTime dt = getJDateTime();
+        dt = dt.minusDays(days).minusYears(years);
+        return fromDateTime(dt, value.getLiteralDatatypeURI(), hasTimezone());
+    }
+    
+    public Value plus(int hours, int minutes, int seconds) {
+        DateTime dt = getJDateTime();
+        dt = dt.plusHours(hours).plusMinutes(minutes).plusSeconds(seconds);
+        return fromDateTime(dt, value.getLiteralDatatypeURI(), hasTimezone());
+    }
+    
+    public Value minus(int hours, int minutes, int seconds) {
+        DateTime dt = getJDateTime();
+        dt = dt.minusHours(hours).minusMinutes(minutes).minusSeconds(seconds);
+        return fromDateTime(dt, value.getLiteralDatatypeURI(), hasTimezone());
     }
 
 }

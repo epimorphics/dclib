@@ -15,6 +15,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 
+import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -125,13 +126,13 @@ public class TestValueDate {
         doTestCoercion("2014 02 03", "yyyy dd MM", XSD.date.getURI(), "2014-03-02");
         doTestCoercion("2014 02 03 -05:00", "yyyy dd MM Z", XSD.date.getURI(), "2014-03-02-05:00");
         
-        doTestCoercion("12 59 03", "HH mm ss", XSD.time.getURI(), "12:59:03.0");
-        doTestCoercion("12 59", "HH mm", XSD.time.getURI(), "12:59:00.0");
-        doTestCoercion("12 59 03 +0600", "HH mm ss Z", XSD.time.getURI(), "12:59:03.0+06:00");
+        doTestCoercion("12 59 03", "HH mm ss", XSD.time.getURI(), "12:59:03");
+        doTestCoercion("12 59", "HH mm", XSD.time.getURI(), "12:59:00");
+        doTestCoercion("12 59 03 +0600", "HH mm ss Z", XSD.time.getURI(), "12:59:03+06:00");
         
-        doTestCoercion("02 03 2014 15-34-03", "dd MM yyyy HH-mm-ss", XSD.dateTime.getURI(), "2014-03-02T15:34:03.0");
-        doTestCoercion("02 03 2014 15-34-03 +0100", "dd MM yyyy HH-mm-ss Z", XSD.dateTime.getURI(), "2014-03-02T15:34:03.0+01:00");
-        doTestCoercion("02 03 2014 15-34-03 Z", "dd MM yyyy HH-mm-ss Z", XSD.dateTime.getURI(), "2014-03-02T15:34:03.0Z");
+        doTestCoercion("02 03 2014 15-34-03", "dd MM yyyy HH-mm-ss", XSD.dateTime.getURI(), "2014-03-02T15:34:03");
+        doTestCoercion("02 03 2014 15-34-03 +0100", "dd MM yyyy HH-mm-ss Z", XSD.dateTime.getURI(), "2014-03-02T15:34:03+01:00");
+        doTestCoercion("02 03 2014 15-34-03 Z", "dd MM yyyy HH-mm-ss Z", XSD.dateTime.getURI(), "2014-03-02T15:34:03Z");
     }
     
     private void doTestCoercion(String src, String typeURI, String expected) {
@@ -189,5 +190,30 @@ public class TestValueDate {
     
     protected int evaluateInt(String pattern) {
          return ((ValueNumber)proc.evaluate(new Pattern(pattern, dc), env, 0)).toNumber().intValue();
+    }
+    
+    @Test
+    public void testJodaDateTimeRoundTrip() {
+        doTestJodaDateTimeRoundTrip("2014-09-24T10:20:30", "2014-09-24T10:20:30");
+        doTestJodaDateTimeRoundTrip("2014-09-24T10:20:30.123", "2014-09-24T10:20:30.123");
+        doTestJodaDateTimeRoundTrip("2014-09-24T10:20:30Z", "2014-09-24T10:20:30Z");
+        doTestJodaDateTimeRoundTrip("2014-09-24T10:20:30+05:00", "2014-09-24T05:20:30Z");
+    }
+    
+    protected void doTestJodaDateTimeRoundTrip(String lex, String expected) {
+        ValueDate value = new ValueDate(lex);
+        DateTime dt = value.getJDateTime();
+        Value result = ValueDate.fromDateTime(dt, value.asNode().getLiteralDatatypeURI(), value.hasTimezone());
+        assertEquals(expected, result.toString());
+    }
+
+    @Test
+    public void testDateArithmetic() {
+        assertEquals("2014-09-24T12:02:33", new ValueDate("2014-09-24T10:20:30").plus(1, 42, 3).toString()); 
+        assertEquals("2014-09-24T12:02:33Z", new ValueDate("2014-09-24T10:20:30Z").plus(1, 42, 3).toString()); 
+        assertEquals("2015-10-02T10:20:30", new ValueDate("2014-09-24T10:20:30").plusYearDays(1, 8).toString());
+        ValueDate v = (ValueDate) new ValueDate("2014-09-24T10:20:30").plus(24,0,0);
+        v = (ValueDate) v.minus(0,0,1);
+        assertEquals("2014-09-25T10:20:29", v.toString()); 
     }
 }
