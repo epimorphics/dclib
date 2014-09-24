@@ -215,5 +215,9 @@ public class TestValueDate {
         ValueDate v = (ValueDate) new ValueDate("2014-09-24T10:20:30").plus(24,0,0);
         v = (ValueDate) v.minus(0,0,1);
         assertEquals("2014-09-25T10:20:29", v.toString()); 
+        
+        assertEquals("2014-09-24T10:20:30", new ValueDate("2014-09-24T10:20:30.123").toWholeSeconds().toString());
+        assertEquals("2014-09-24T10:20:30Z", new ValueDate("2014-09-24T10:20:30.123Z").toWholeSeconds().toString());
+        
     }
 }

@@ -314,5 +314,11 @@ public class ValueDate extends ValueNode implements Value {
         dt = dt.minusHours(hours).minusMinutes(minutes).minusSeconds(seconds);
         return fromDateTime(dt, value.getLiteralDatatypeURI(), hasTimezone());
     }
-
+    
+    public Value toWholeSeconds() {
+        DateTime dt = getJDateTime();
+        dt = dt.minusMillis( dt.getMillisOfSecond() );
+        return fromDateTime(dt, value.getLiteralDatatypeURI(), hasTimezone());
+    }
+    
 }
