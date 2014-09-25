@@ -222,5 +222,8 @@ public class TestValueDate {
         assertEquals("2014-09-24T10:20:30", new ValueDate("2014-09-24T10:20:30").toLocalTime().toString());
         
         assertFalse( new ValueDate("2014-09-24T14:20:30Z").toLocalTime().toString().endsWith("Z") );
+        
+        assertEquals("2014-09-24-10-20-30", new ValueDate("2014-09-24T10:20:30").format("yyyy-MM-dd-HH-mm-ss").toString());
+        assertEquals("2014-09-24-10-20-30", new ValueDate("2014-09-24T10:20:30Z").format("yyyy-MM-dd-HH-mm-ss").toString());
     }
 }

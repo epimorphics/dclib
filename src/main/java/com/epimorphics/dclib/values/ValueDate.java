@@ -352,10 +352,7 @@ public class ValueDate extends ValueNode implements Value {
     
     public Value toLocalTime() {
         if (hasTimezone()) {
-            XSDDateTime xdt = getXSDDateTime();
-            int ms = (int)Math.round( 1000.0 * (xdt.getSeconds() - xdt.getFullSeconds()) );
-            DateTime jdt =  
-                new DateTime(xdt.getYears(), xdt.getMonths(), xdt.getDays(), xdt.getHours(), xdt.getMinutes(), xdt.getFullSeconds(), ms, DateTimeZone.UTC);
+            DateTime jdt = getJDateTime();
             jdt = jdt.withZone( DateTimeZone.getDefault() );
             return fromDateTime(jdt, value.getLiteralDatatypeURI(), false);
         } else {
@@ -363,4 +360,11 @@ public class ValueDate extends ValueNode implements Value {
         }
     }
     
+    @Override
+    public Object format(String format) {
+        DateTimeFormatter formatter = DateTimeFormat.forPattern(format);
+        DateTime jdt = getJDateTime();
+        String result = hasTimezone() ? formatter.print(jdt) : formatter.print(jdt.toLocalDateTime());
+        return new ValueString(result);
+    }
 }
