@@ -182,12 +182,7 @@ public class DataContext {
      * Locate a file, source as a source data file, using any configured load directories
      */
     public File findFile(String source) {
-        if (loadDirectories == null) {
-            File src = new File(source);
-            if (src.exists()) {
-                return src;
-            }
-        } else {
+        if (loadDirectories != null) {
             for (String dirname : loadDirectories) {
                 File dir = new File(dirname.trim());
                 File src = new File(dir, source);
@@ -195,6 +190,10 @@ public class DataContext {
                     return src;
                 }
             }
+        }
+        File src = new File(source);
+        if (src.exists()) {
+            return src;
         }
         return null;
     }
