@@ -90,6 +90,7 @@ public class ConverterProcess {
 
             // Default is to converter into an in-memory model, can override by setting explicit StreamRDF dest
             setModel( ModelFactory.createDefaultModel() );
+            result.setNsPrefixes( dataContext.getPrefixes() );
             
         } catch (IOException e) {
             messageReporter.reportError("Failed read headerline of data");
