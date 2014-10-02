@@ -23,6 +23,8 @@ public class MapSourceFactory {
             return new CSVMapSource(spec, proc);
         } else if (RDFMapSource.isSpec(spec)) {
             return new RDFMapSource(spec, proc);
+        } else if (RDFSparqlMapSource.isSpec(spec)) {
+            return new RDFSparqlMapSource(spec, proc);
         }
         return null;
     }

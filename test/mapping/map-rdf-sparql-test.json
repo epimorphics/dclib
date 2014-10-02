@@ -1,0 +1,14 @@
+{       
+    "type"  : "Composite",
+    "bind" : {"$base" : "http://example.com/test"},
+     "templates" : {
+        "@id" : "{key.map('test-map-rdf-sparql', true)}",
+        "<rdfs:label>" : "{key.map('test-map-rdf-sparql', 'label', false)}"
+    },
+    "sources" : {
+        "sourceType" : "RDFSparql",
+        "name" : "test-map-rdf-sparql",
+        "source" : "test/mapping/map-rdf-sparql.ttl",
+        "query" : "SELECT ?key ?value ?label WHERE { ?value a skos:Concept; skos:notation ?key; rdf:value [rdfs:label ?label] }"
+    }
+}

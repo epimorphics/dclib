@@ -38,8 +38,11 @@ public class JSONConstants {
     public static final String SOURCE       = "source";
     public static final String CSV          = "CSV";
     public static final String RDF          = "RDF";
+    public static final String RDF_SPARQL   = "RDFSparql";
     public static final String KEY          = "key";
     public static final String VALUE        = "value";
     public static final String MAKE_URI     = "makeURI";
     public static final String ENRICH       = "enrich";
+    public static final String QUERY        = "query";
+    
 }

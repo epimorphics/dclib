@@ -147,11 +147,16 @@ public abstract class ValueBase<T> implements Value {
     public Boolean asBoolean() {
         return Boolean.valueOf(toString());
     }
+
     
     public Value map(String mapsource, boolean matchRequried) {
+        return map(mapsource, "value", matchRequried);
+    }
+    
+    public Value map(String mapsource, String valueToReturn, boolean matchRequried) {
         ConverterProcess proc = ConverterProcess.get();
         MapSource source = proc.getDataContext().getSource(mapsource);
-        Node n = source.lookup(toString());
+        Node n = source.lookup(toString(), valueToReturn);
         if (n == null) {
             String msg = "Value '" + value + "' not found in source " + mapsource;
             if (matchRequried) {

@@ -27,6 +27,12 @@ public interface MapSource extends ConfigInstance {
      * match (or no unambiguous match)
      */
     public Node lookup(String key);
+
+    /**
+     * Return the matching normalized RDF value or none if there no
+     * match (or no unambiguous match)
+     */
+    public Node lookup(String key, String valueToReturn);
     
     
     /**

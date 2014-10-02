@@ -1,0 +1,22 @@
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix dct:  <http://purl.org/dc/terms/> .
+@prefix dc:   <http://purl.org/dc/elements/1.1/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix : <http://example.com/map/> .
+
+:one a skos:Concept;
+    skos:notation "key1";
+    rdf:value [ rdfs:label "foo-entry"; rdfs:comment "foo entry" ] .
+
+:two a skos:Concept;
+    skos:notation "key2";
+    rdf:value [ rdfs:label "bar-entry"; rdfs:comment "bar entry" ] .
+
+:three a skos:Concept;
+    skos:notation "key3";
+    rdf:value [ rdfs:label "fubar-entry"; rdfs:comment "fubar entry" ] .
+    

@@ -1,0 +1,12 @@
+<http://example.com/map/two>
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "bar-entry" .
+
+<http://example.com/map/one>
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "foo-entry" .
+
+<http://example.com/map/three>
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "fubar-entry" .
+                
