@@ -11,6 +11,7 @@ package com.epimorphics.dclib.framework;
 
 import org.apache.jena.riot.system.StreamRDF;
 
+import com.epimorphics.appbase.monitor.ConfigInstance;
 import com.hp.hpl.jena.graph.Node;
 
 /**
@@ -19,7 +20,7 @@ import com.hp.hpl.jena.graph.Node;
  * 
  * @author <a href="mailto:dave@epimorphics.com">Dave Reynolds</a>
  */
-public interface MapSource {
+public interface MapSource extends ConfigInstance {
 
     /**
      * Return the matching normalized RDF value or none if there no
