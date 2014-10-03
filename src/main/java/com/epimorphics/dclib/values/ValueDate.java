@@ -27,6 +27,7 @@ import com.epimorphics.govData.util.CalendarUtils;
 import com.epimorphics.govData.util.CalendarWeek;
 import com.epimorphics.govData.util.CalendarYear;
 import com.epimorphics.util.EpiException;
+import com.hp.hpl.jena.datatypes.RDFDatatype;
 import com.hp.hpl.jena.datatypes.TypeMapper;
 import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
 import com.hp.hpl.jena.datatypes.xsd.XSDDateTime;
@@ -44,6 +45,7 @@ import com.hp.hpl.jena.vocabulary.XSD;
 public class ValueDate extends ValueNode implements Value {
     
     protected DateTime jdt;
+    protected RefTimeRepresentation reftime;
     
     public ValueDate(String value) {
         super(stringToDate(value));
@@ -258,43 +260,32 @@ public class ValueDate extends ValueNode implements Value {
      * Returns the date as a ref time URL
      */
     public Value referenceTime() {
-        XSDDateTime time = getXSDDateTime();
-        BritishCalendar bcal = null;
-        Node ref = null;
-        Model model = ModelFactory.createDefaultModel();
-
-        if (value.getLiteralDatatype().equals(XSDDatatype.XSDdateTime)) {
-            bcal = new BritishCalendar(
-                    time.getYears(), time.getMonths()-1, time.getDays(), 
-                    time.getHours(), time.getMinutes(), time.getFullSeconds() );
-            ref = NodeFactory.createURI("http://reference.data.gov.uk/id/gregorian-instant/" + value.getLiteralLexicalForm());
-            int i_woy_year = CalendarUtils.getWeekOfYearYear(bcal);
-            int i_woy_week = bcal.get(Calendar.WEEK_OF_YEAR);
-            new CalendarInstant(model, bcal, true);       
-            new CalendarDay(model, bcal, true);
-            new CalendarWeek(model, i_woy_year, i_woy_week, false, false);
-            
-        } else if (value.getLiteralDatatype().equals(XSDDatatype.XSDdate)) {
-            bcal = new BritishCalendar(
-                    time.getYears(), time.getMonths()-1, time.getDays()); 
-            ref = NodeFactory.createURI("http://reference.data.gov.uk/id/day/" + value.getLiteralLexicalForm());
-            int i_woy_year = CalendarUtils.getWeekOfYearYear(bcal);
-            int i_woy_week = bcal.get(Calendar.WEEK_OF_YEAR);
-            new CalendarDay(model, bcal, true);
-            new CalendarWeek(model, i_woy_year, i_woy_week, false, false);
-        } else {
-            ref = NodeFactory.createURI("http://reference.data.gov.uk/id/year/" + time.getYears());
+        return new ValueNode( getRefTime().getRepresentation() );
+    }
+    
+    protected RefTimeRepresentation getRefTime() {
+        if (reftime == null) {
+            reftime = new RefTimeRepresentation(getXSDDateTime(), value.getLiteralDatatype());
+            injectRefTimeTriples();
         }
-        
-        new CalendarYear(model, time.getYears(), false, false);
-        
+        return reftime;
+    }
+    
+    protected void injectRefTimeTriples() {
         StreamRDF out = ConverterProcess.get().getOutputStream();
-        ExtendedIterator<Triple> it = model.getGraph().find(null, null, null);
+        ExtendedIterator<Triple> it = getRefTime().getModel().getGraph().find(null, null, null);
         while (it.hasNext()) {
             out.triple(it.next());
         }
+    }
 
-        return new ValueNode(ref);
+    /**
+     * Inject triples from the reference time service describing 
+     * this date into the template output stream as a side effect.
+     * Returns the week for this date as a ref time URL
+     */
+    public Value referenceTimeWeek() {
+        return new ValueNode( getRefTime().getWeek() );
     }
     
     protected XSDDateTime getXSDDateTime() {
@@ -366,5 +357,63 @@ public class ValueDate extends ValueNode implements Value {
         DateTime jdt = getJDateTime();
         String result = hasTimezone() ? formatter.print(jdt) : formatter.print(jdt.toLocalDateTime());
         return new ValueString(result);
+    }
+    
+    public class RefTimeRepresentation {
+        XSDDateTime time;
+        BritishCalendar bcal = null;
+        Model model = ModelFactory.createDefaultModel();
+        
+        Node week;
+        Node ref = null;
+        
+        public RefTimeRepresentation(XSDDateTime time, RDFDatatype type) {
+            this.time = time;
+            int i_woy_year = 0;
+            int i_woy_week = 0;
+            
+            if (type.equals(XSDDatatype.XSDdateTime)) {
+                bcal = new BritishCalendar(
+                        time.getYears(), time.getMonths()-1, time.getDays(), 
+                        time.getHours(), time.getMinutes(), time.getFullSeconds() );
+                ref = NodeFactory.createURI("http://reference.data.gov.uk/id/gregorian-instant/" + value.getLiteralLexicalForm());
+                i_woy_year = CalendarUtils.getWeekOfYearYear(bcal);
+                i_woy_week = bcal.get(Calendar.WEEK_OF_YEAR);
+                new CalendarInstant(model, bcal, true);       
+                new CalendarDay(model, bcal, true);
+                new CalendarWeek(model, i_woy_year, i_woy_week, false, false);
+                
+            } else if (type.equals(XSDDatatype.XSDdate)) {
+                bcal = new BritishCalendar(
+                        time.getYears(), time.getMonths()-1, time.getDays()); 
+                ref = NodeFactory.createURI("http://reference.data.gov.uk/id/day/" + value.getLiteralLexicalForm());
+                i_woy_year = CalendarUtils.getWeekOfYearYear(bcal);
+                i_woy_week = bcal.get(Calendar.WEEK_OF_YEAR);
+                new CalendarDay(model, bcal, true);
+                new CalendarWeek(model, i_woy_year, i_woy_week, false, false);
+                
+            } else {
+                ref = NodeFactory.createURI("http://reference.data.gov.uk/id/year/" + time.getYears());
+            }
+            
+            week = NodeFactory.createURI("http://reference.data.gov.uk/id/week/"
+                    + String.format("%04d", i_woy_year) 
+                    + "-W" + String.format("%02d", i_woy_week));
+            
+            new CalendarYear(model, time.getYears(), false, false);
+        }
+        
+        public Model getModel() {
+            return model;
+        }
+        
+        public Node getRepresentation() {
+            return ref;
+        }
+        
+        public Node getWeek() {
+            return week;
+        }
+        
     }
 }
