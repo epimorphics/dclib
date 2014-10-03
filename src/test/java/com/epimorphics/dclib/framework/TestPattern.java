@@ -53,6 +53,7 @@ public class TestPattern {
         env.set("m", ValueFactory.asValue("Fo o,Bar "));
         env.set("f", ValueFactory.asValue("12.7"));
         env.set("ml", ValueFactory.asValue("foo\nbar"));
+        env.set("date", ValueFactory.asValue("2014-10-03"));
         
         dc.setPrefixes( FileManager.get().loadModel("prefixes.ttl") );
     }
@@ -197,6 +198,9 @@ public class TestPattern {
     @Test
     public void testFormatting() {
        assertEquals("00042", eval("{i.format('%05d')}").toString());
+       
+       assertEquals("2014 10 03", eval("{date.asDate('yyyy-MM-dd','xsd:date').format('yyyy MM dd')}").toString());
+       assertEquals("2014 10 03", eval("{date.asDate('yyyy-MM-dd','xsd:dateTime').format('yyyy MM dd')}").toString());
     }
     
     @Test

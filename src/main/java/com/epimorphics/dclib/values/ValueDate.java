@@ -300,10 +300,20 @@ public class ValueDate extends ValueNode implements Value {
     // Warning: jDateTime doesn't support timezone less times so all times will appear as UTC
     protected DateTime getJDateTime() {
         XSDDateTime xdt = getXSDDateTime();
-        int ms = (int)Math.round( 1000.0 * (xdt.getSeconds() - xdt.getFullSeconds()) );
-        DateTime jdt =  
-                new DateTime(xdt.getYears(), xdt.getMonths(), xdt.getDays(), xdt.getHours(), xdt.getMinutes(), xdt.getFullSeconds(), ms, DateTimeZone.UTC);
-        return jdt;
+        if (getDatatype().equals(XSD.dateTime.getURI())) {
+            int ms = (int)Math.round( 1000.0 * (xdt.getSeconds() - xdt.getFullSeconds()) );
+            DateTime jdt =  
+                    new DateTime(xdt.getYears(), xdt.getMonths(), xdt.getDays(), xdt.getHours(), xdt.getMinutes(), xdt.getFullSeconds(), ms, DateTimeZone.UTC);
+            return jdt;
+        } else if (getDatatype().equals(XSD.date.getURI())) {
+            return new DateTime(xdt.getYears(), xdt.getMonths(), xdt.getDays(), 0, 0);
+        } else if (getDatatype().equals(XSD.gYearMonth.getURI())) {
+            return new DateTime(xdt.getYears(), xdt.getMonths(), 0, 0, 0);
+        } else if (getDatatype().equals(XSD.gYear.getURI())) {
+            return new DateTime(xdt.getYears(), 1, 0, 0, 0);
+        } else {
+            throw new EpiException("Unsupport date time format: " + getDatatype());
+        }
     }
     
     
