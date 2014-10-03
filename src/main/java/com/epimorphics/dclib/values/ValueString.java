@@ -48,7 +48,7 @@ public class ValueString extends ValueBase<String> implements Value {
     @Override
     public Node asNode() {
         Matcher matcher = LANGSTR.matcher(value);
-        if (matcher.matches()) {
+        if (matcher.find()) {
             String lang = matcher.group(1);
             int split = value.length() - lang.length() - 1;
 //            char pre = value.charAt(split-1);

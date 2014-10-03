@@ -52,6 +52,7 @@ public class TestPattern {
         env.set("q", ValueFactory.asValue("foo's - bar __ baz()"));
         env.set("m", ValueFactory.asValue("Fo o,Bar "));
         env.set("f", ValueFactory.asValue("12.7"));
+        env.set("ml", ValueFactory.asValue("foo\nbar"));
         
         dc.setPrefixes( FileManager.get().loadModel("prefixes.ttl") );
     }
@@ -168,6 +169,8 @@ public class TestPattern {
     
     @Test
     public void testNodeValues() {
+        assertEquals(NodeFactory.createLiteral("foo\nbar", "en", false), evalNode("{ml}@en") );
+
         assertEquals(NodeFactory.createURI("http://example.com/foo"), evalNode("<{u}>"));
         assertEquals(NodeFactory.createLiteral("42", XSDDatatype.XSDinteger), evalNode("{i}"));
         assertEquals(NodeFactory.createLiteral("true", XSDDatatype.XSDboolean), evalNode("{true}"));

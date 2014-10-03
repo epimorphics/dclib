@@ -1,0 +1,4 @@
+name : multi-line literal test
+"@id" : "<http://example.com/root>"
+#"<rdfs:label>" : "{name}@en"
+"<dct:description>" : "{description}@en"

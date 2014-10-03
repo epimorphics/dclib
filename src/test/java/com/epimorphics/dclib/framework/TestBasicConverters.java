@@ -52,6 +52,11 @@ public class TestBasicConverters {
     }
 
     @Test
+    public void testMultiLineData() throws IOException {
+        checkAgainstExpected("test/bugCases/multi-line-test.yaml", "test/bugCases/multi-line-literal.csv", "test/bugCases/multi-line-expected.ttl");
+    }
+
+    @Test
     public void testParameterized() throws IOException {
         checkAgainstExpected("test/parameterized-template.json", "test/test-parameterized.csv", "test/test-map-result.ttl");
         
