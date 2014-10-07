@@ -1,0 +1,23 @@
+{       
+    "type"  : "Composite",
+    "bind" : {"$base" : "http://example.com"},
+     "templates" : [
+       {
+        "required" : ["notation"],
+        "requiredColumns" : ["foobar"],
+        "@id" : "<{$base}/{notation}>",
+        "<rdf:value>" : "{foobar}"
+       },
+       {
+        "requiredColumns" : ["notation", "label"],
+        "@id" : "<{$base}/{notation}>",
+        "<rdfs:label>" : "{label}"
+       },
+       {
+        "required" : ["notation"],
+        "requiredColumns" : ["description"],
+        "@id" : "<{$base}/{notation}>",
+        "<dct:description>" : "{empty(description) ? 'no description' : description}"
+       }
+    ]
+}

@@ -160,6 +160,7 @@ public class TestBasicConverters {
     public void testConditionalComposites() throws IOException {
         checkAgainstExpected("test/composite/cond-composite.json", "test/test-map.csv", "test/test-map-result.ttl");
         checkAgainstExpected("test/composite/cond-composite-err.json", "test/test-map.csv", "test/test-map-result.ttl");
+        checkAgainstExpected("test/composite/cond-composite2.json", "test/test-map.csv", "test/composite/expected-composite2.ttl");
     }
     
     @Test

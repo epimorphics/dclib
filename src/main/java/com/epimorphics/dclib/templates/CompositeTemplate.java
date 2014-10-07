@@ -80,7 +80,7 @@ public class CompositeTemplate extends ParameterizedTemplate implements Template
         Node result = null;
         for (Template template : templates) {
             template = template.deref();
-            if (template.isApplicableTo(env)) {
+            if (template.isApplicableTo(proc.getHeaders()) && template.isApplicableTo(env)) {
                 reportApplying(proc, template, rowNumber);
                 try {
                     Node n = template.convertRow(proc, env, rowNumber);

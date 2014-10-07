@@ -14,6 +14,7 @@ public class JSONConstants {
     public static final String NAME         = "name";
     public static final String DESCRIPTION  = "description";
     public static final String REQUIRED     = "required";
+    public static final String REQUIRED_COL     = "requiredColumns";
     public static final String OPTIONAL     = "optional";
     public static final String SOURCES      = "sources";
     public static final String ID           = "@id";
