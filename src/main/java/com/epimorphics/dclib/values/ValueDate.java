@@ -16,6 +16,7 @@ import org.apache.jena.riot.system.StreamRDF;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDateTime;
+import org.joda.time.LocalTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
@@ -364,8 +365,17 @@ public class ValueDate extends ValueNode implements Value {
     @Override
     public Object format(String format) {
         DateTimeFormatter formatter = DateTimeFormat.forPattern(format);
-        DateTime jdt = getJDateTime();
-        String result = hasTimezone() ? formatter.print(jdt) : formatter.print(jdt.toLocalDateTime());
+        String result = null;
+        if (value.getLiteralDatatypeURI().equals(XSD.time.getURI())) {
+            // Times are not datetimes and have to treated separately
+            XSDDateTime xdt = getXSDDateTime();
+            int ms = (int)Math.round( 1000.0 * (xdt.getSeconds() - xdt.getFullSeconds()) );
+            LocalTime time = new LocalTime(xdt.getHours(), xdt.getMinutes(), xdt.getFullSeconds(), ms);
+            result = formatter.print(time);
+        } else {
+            DateTime jdt = getJDateTime();
+            result = hasTimezone() ? formatter.print(jdt) : formatter.print(jdt.toLocalDateTime());
+        }
         return new ValueString(result);
     }
     
