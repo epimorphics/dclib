@@ -21,6 +21,7 @@ import org.junit.Test;
 
 import com.epimorphics.rdfutil.RDFUtil;
 import com.epimorphics.tasks.SimpleProgressMonitor;
+import com.epimorphics.util.NameUtils;
 import com.epimorphics.vocabs.SKOS;
 import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.Model;
@@ -253,6 +254,20 @@ public class TestBasicConverters {
     @Test
     public void testFunctions() throws IOException {
         checkAgainstExpected("test/functions/function.yaml", "test/functions/data.csv", "test/functions/result.ttl");
+    }
+    
+    @Test
+    public void testPerformanceProblem() throws IOException {
+        long start = System.currentTimeMillis();
+        ConverterService service = new ConverterService();
+        SimpleProgressMonitor monitor = new SimpleProgressMonitor();
+        Model m = service.simpleConvert("test/bugCases/zoi_tc.yaml", "test/bugCases/ea-ref-data.csv", monitor);
+        assertNotNull(m);
+        long duration = System.currentTimeMillis() - start;
+        if (duration > 30000) {
+            System.out.println("Took " + NameUtils.formatDuration(duration));
+            assertTrue("Conversion exceed 30s, should be less than 1s", false);
+        }
     }
 
     public static Model convert(String templateFile, String dataFile) throws IOException {

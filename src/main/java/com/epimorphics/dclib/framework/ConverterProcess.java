@@ -28,6 +28,7 @@ import com.epimorphics.rdfutil.RDFUtil;
 import com.epimorphics.tasks.ProgressMonitorReporter;
 import com.epimorphics.tasks.SimpleProgressMonitor;
 import com.epimorphics.tasks.TaskState;
+import com.epimorphics.util.NameUtils;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.NodeFactory;
 import com.hp.hpl.jena.graph.Triple;
@@ -147,6 +148,7 @@ public class ConverterProcess {
     
             while(true) {
                 int lineNumber = dataSource.getLineNumber();
+//                log.debug("Line " + lineNumber);
                 if (lineNumber % BATCH_SIZE == 0) {
                     messageReporter.report("Processing row " + lineNumber);
                 }
@@ -404,7 +406,10 @@ public class ConverterProcess {
         Model model = (Model) fetchCache.get(uri);
         if (model == null) {
             try {
+                log.info("fetching " + uri);  // TODO: TEMP
+                long start = System.currentTimeMillis();
                 model = RDFDataMgr.loadModel( uri );
+                log.info("Fetched in " + NameUtils.formatDuration(System.currentTimeMillis() - start));
                 if (model == null || model.isEmpty()) {
                     getMessageReporter().report("Warning: no data found at " + uri);
                 } else {

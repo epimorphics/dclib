@@ -44,38 +44,45 @@ public class ValueString extends ValueBase<String> implements Value {
     }
     
     static Pattern LANGSTR =  Pattern.compile(".*@([a-z\\-]+)$");
-
+    
+    // This strange test is because blindly applying LANGSTR to a large literal can take minutes
+    // Technically BCP47 strings are unbounded (unlimited number of extensions) in practice they are not
+    static int MAX_LANGSTR = 16;
+    
     @Override
     public Node asNode() {
-        Matcher matcher = LANGSTR.matcher(value);
-        if (matcher.find()) {
-            String lang = matcher.group(1);
-            int split = value.length() - lang.length() - 1;
-//            char pre = value.charAt(split-1);
-            if (value.charAt(split-1) == '@') {
-                return NodeFactory.createLiteral( value.substring(0, split) + lang );
-            } else if (value.charAt(split-1) == '\\') {
-                return NodeFactory.createLiteral( value.substring(0, split-1) + "@" + lang );
-            } else {
-                return NodeFactory.createLiteral(value.substring(0, split), lang, false);
-            }
-        } else {
-            // Check for typed literal
-            int split = value.lastIndexOf("^^");
-            if (split != -1) {
-                if (value.charAt(split-1) != '\\') {
-                    String lex = value.substring(0, split);
-                    String dt = value.substring(split+2);
-                    if (dt.startsWith("<") && dt.endsWith(">")) {
-                        dt = dt.substring(1, dt.length() - 1);
-                    }
-                    dt = ConverterProcess.getGlobalDataContext().expandURI(dt);
-                    return NodeFactory.createLiteral(lex, TypeMapper.getInstance().getSafeTypeByName(dt));
+        int split = value.lastIndexOf("@");
+        if (split != -1 && (value.length() - split < MAX_LANGSTR)) {
+            String possLangTag = value.substring(split);
+            Matcher matcher = LANGSTR.matcher(possLangTag);
+            if (matcher.find()) {
+                String lang = matcher.group(1);
+                if (value.charAt(split-1) == '@') {
+                    return NodeFactory.createLiteral( value.substring(0, split) + lang );
+                } else if (value.charAt(split-1) == '\\') {
+                    return NodeFactory.createLiteral( value.substring(0, split-1) + "@" + lang );
                 } else {
-                    return NodeFactory.createLiteral(value.substring(0,split-1) + value.substring(split));
+                    return NodeFactory.createLiteral(value.substring(0, split), lang, false);
                 }
             }
         }
+        
+        // Check for typed literal
+        split = value.lastIndexOf("^^");
+        if (split != -1) {
+            if (value.charAt(split-1) != '\\') {
+                String lex = value.substring(0, split);
+                String dt = value.substring(split+2);
+                if (dt.startsWith("<") && dt.endsWith(">")) {
+                    dt = dt.substring(1, dt.length() - 1);
+                }
+                dt = ConverterProcess.getGlobalDataContext().expandURI(dt);
+                return NodeFactory.createLiteral(lex, TypeMapper.getInstance().getSafeTypeByName(dt));
+            } else {
+                return NodeFactory.createLiteral(value.substring(0,split-1) + value.substring(split));
+            }
+        }
+
         return NodeFactory.createLiteral( value );
     }
 
