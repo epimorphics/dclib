@@ -196,6 +196,9 @@ public class Pattern {
         } else if (result instanceof RDFNodeWrapper) {
             n = ((RDFNodeWrapper)result).asRDFNode().asNode();
         }
+        if (n == null) {
+            throw new EpiException("Pattern " + this + " returned null result");
+        }
         if (n.isBlank() || n.isURI()) {
             return n;
         }
