@@ -146,6 +146,7 @@ public class ConverterProcess {
             }
             messageReporter.setState( TaskState.Running );
     
+            boolean started = false;
             while(true) {
                 int lineNumber = dataSource.getLineNumber();
 //                log.debug("Line " + lineNumber);
@@ -154,6 +155,7 @@ public class ConverterProcess {
                 }
                 BindingEnv row = nextRow();
                 if (row != null) {
+                    started = true;
                     row.put(ROW_OBJECT_NAME, new Row(lineNumber));
                     try {
                         Node result = template.convertRow(this, row, lineNumber);
@@ -172,6 +174,12 @@ public class ConverterProcess {
                     break;
                 }
             }
+            
+            if (!started) {
+                // No data rows, which means header shape hasn't been tested, disallow empty data 
+                messageReporter.reportError("No data content to convert");
+            }
+            
         } catch (IOException e) {
             messageReporter.reportError("Problem reading next line of source");
         } finally {
