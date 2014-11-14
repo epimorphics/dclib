@@ -18,6 +18,7 @@ import java.nio.charset.StandardCharsets;
 import au.com.bytecode.opencsv.CSVReader;
 
 import com.epimorphics.dclib.framework.BindingEnv;
+import com.epimorphics.util.EpiException;
 import com.epimorphics.util.NameUtils;
 
 /**
@@ -39,6 +40,9 @@ public class CSVInput {
         in = new CSVReader( new InputStreamReader(ins, StandardCharsets.UTF_8) );
         
         String[] headerLine = in.readNext();
+        if (headerLine == null) {
+            throw new EpiException("No data, cannot read header line");
+        }
         headers = new String[headerLine.length];
         for(int i = 0; i < headerLine.length; i++) {
             headers[i] = safeColName( headerLine[i].trim() );

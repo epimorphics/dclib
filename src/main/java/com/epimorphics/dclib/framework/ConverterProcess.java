@@ -28,6 +28,7 @@ import com.epimorphics.rdfutil.RDFUtil;
 import com.epimorphics.tasks.ProgressMonitorReporter;
 import com.epimorphics.tasks.SimpleProgressMonitor;
 import com.epimorphics.tasks.TaskState;
+import com.epimorphics.util.EpiException;
 import com.epimorphics.util.NameUtils;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.NodeFactory;
@@ -93,9 +94,10 @@ public class ConverterProcess {
             setModel( ModelFactory.createDefaultModel() );
             result.setNsPrefixes( dataContext.getPrefixes() );
             
-        } catch (IOException e) {
-            messageReporter.reportError("Failed read headerline of data");
+        } catch (Exception e) {
+            messageReporter.reportError("Failed to read headerline of data");
             close();
+            throw new EpiException("Failed to open data or read header line");
         }
     }
     
@@ -310,7 +312,9 @@ public class ConverterProcess {
     }
     
     private void close() {
-        dataSource.close();
+        if (dataSource != null) {
+            dataSource.close();
+        }
         dataSource = null;
         messageReporter.setState(TaskState.Terminated);
     }
