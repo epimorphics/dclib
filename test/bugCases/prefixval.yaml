@@ -1,0 +1,8 @@
+# test emmission of prefixed values from source sheet
+name : test
+type : Composite
+templates :
+  "@id" : "<http://example.com/test>"
+  "<rdfs:range>" : "<{range}>"
+  
+

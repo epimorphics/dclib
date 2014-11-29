@@ -130,9 +130,6 @@ public class Pattern {
                 return ans;
             } else {
                 String result = ansString.toString();
-                if (isURI()) {
-                    result = ConverterProcess.getGlobalDataContext().expandURI(result);
-                }
                 return wrapResult(result);
             }
         }
@@ -141,7 +138,8 @@ public class Pattern {
     private Object wrapResult(Object result) {
         if (isURI) {
             if (result instanceof String || result instanceof ValueString) {
-                return new ValueNode( NodeFactory.createURI(result.toString()) );
+                String val = ConverterProcess.getGlobalDataContext().expandURI( result.toString() );
+                return new ValueNode( NodeFactory.createURI(val) );
             }
         } 
         if (result instanceof String) {
