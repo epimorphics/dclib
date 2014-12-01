@@ -69,5 +69,10 @@ public class ValueNull implements Value
     public String getDatatype() {
         return null;
     }
+    
+    @Override
+    public String toString() {
+        return "null";
+    }
 
 }

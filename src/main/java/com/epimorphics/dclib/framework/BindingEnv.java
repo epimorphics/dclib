@@ -105,11 +105,16 @@ public class BindingEnv extends HashMap<String, Object> implements Map<String, O
      * Summary print of whole inherited environment
      */
     public String toStringDeep() {
+        return toStringDeep("");
+    }
+    
+    public String toStringDeep(String indent) {
         StringBuffer buff = new StringBuffer();
-        buff.append( toString() );
+        for (Entry<String, Object> ent : entrySet()) {
+            buff.append(String.format("%s %30s = %s\n", indent, ent.getKey(), ent.getValue().toString()));
+        }
         if (parent != null) {
-            buff.append(" U ");
-            buff.append( parent.toStringDeep() );
+            buff.append( parent.toStringDeep(indent + "  ") );
         }
         return buff.toString();
     }

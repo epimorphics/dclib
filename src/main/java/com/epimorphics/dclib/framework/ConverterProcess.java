@@ -328,9 +328,9 @@ public class ConverterProcess {
             try {
                 p.evaluate(row, this, rowNumber);
             } catch (Exception e) {
-                String msg = "Debug: pattern " + p + " failed to match environment " + row.toStringDeep();
+                String msg = "Debug: On line [" + rowNumber + "] pattern " + p + " failed to match environment:\n" + row.toStringDeep();
                 log.warn(msg);
-                getMessageReporter().report(msg, rowNumber);
+//                getMessageReporter().report(msg, rowNumber);
             }
         }
     }
