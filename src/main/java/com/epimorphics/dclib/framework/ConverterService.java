@@ -131,9 +131,14 @@ public class ConverterService extends ComponentBase {
      * Simple invocation. Load template and data from a file, run process
      * and return memory model containing results or null if there was a problem.
      * Problems/progress reporting live to given reporter
+     * @param templateFile the name of the template file to use
+     * @param dataFile  the name of the data file to process
+     * @param report the message reporter
+     * @param debug set to true to enable voluminous debug message
+     * @param allowNullRows set to true to allow output even if some rows don't match
      * @throws IOException 
      */
-    public Model simpleConvert(String templateFile, String dataFile, ProgressMonitorReporter reporter, boolean debug) throws IOException {
+    public Model simpleConvert(String templateFile, String dataFile, ProgressMonitorReporter reporter, boolean debug, boolean allowNullRows) throws IOException {
         Template template = TemplateFactory.templateFrom(templateFile, dc);
         
         File dataFileF = new File(dataFile);
@@ -147,9 +152,20 @@ public class ConverterService extends ComponentBase {
         process.setDebug(debug);
         process.setTemplate( template );
         process.setMessageReporter( reporter );
+        process.setAllowNullRows(allowNullRows);
         boolean ok = process.process();
         
         return ok ?  process.getModel() : null;
+    }
+    
+    /**
+     * Simple invocation. Load template and data from a file, run process
+     * and return memory model containing results or null if there was a problem.
+     * Problems/progress reporting live to given reporter
+     * @throws IOException 
+     */
+    public Model simpleConvert(String templateFile, String dataFile, ProgressMonitorReporter reporter, boolean debug) throws IOException {
+        return simpleConvert(templateFile, dataFile, reporter, debug, false);
     }
     
     /**

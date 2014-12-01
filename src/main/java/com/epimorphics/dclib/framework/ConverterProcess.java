@@ -68,6 +68,7 @@ public class ConverterProcess {
     protected CSVInput dataSource;
 
     protected boolean debug = false;
+    protected boolean allowNullRows = false;
     
     protected Template template;
     protected BindingEnv env;
@@ -128,6 +129,13 @@ public class ConverterProcess {
     public boolean isDebugging() {
         return debug;
     }
+    
+    /**
+     * Set to true to allow some rows to generate no results without error (just a warning)
+     */
+    public void setAllowNullRows(boolean allowed) {
+        this.allowNullRows = allowed;
+    }
 
     /**
      * Run the conversion process
@@ -147,6 +155,10 @@ public class ConverterProcess {
                 return messageReporter.succeeded();
             }
             messageReporter.setState( TaskState.Running );
+            
+            if ( ! template.isApplicableTo(getHeaders()) ) {
+                throw new EpiException("Main template is not appicable to this shape of data");
+            }
     
             boolean started = false;
             while(true) {
@@ -162,16 +174,22 @@ public class ConverterProcess {
                     try {
                         Node result = template.convertRow(this, row, lineNumber);
                         if (result == null) {
-                            messageReporter.report("Warning: no templates matched line " + lineNumber, lineNumber);
-//                            messageReporter.reportError("Error: no templates matched line " + lineNumber, lineNumber);
+                            if (allowNullRows) {
+                                messageReporter.report("Warning: no templates matched line " + lineNumber, lineNumber);
+                            } else {
+                                messageReporter.reportError("Error: no templates matched line " + lineNumber, lineNumber);
+                            }
                         }
                     } catch (Exception e) {
                         if (!(e instanceof NullResult)) {
                             messageReporter.reportError("Error: " + e, lineNumber);
 //                            log.error("Error processing line " + lineNumber, e);
                         } else {
-//                            messageReporter.reportError("Warning: no templates matched line " + lineNumber + ", " + e, lineNumber);
-                            messageReporter.report("Warning: no templates matched line " + lineNumber + ", " + e, lineNumber);
+                            if (allowNullRows) {
+                                messageReporter.report("Warning: no templates matched line " + lineNumber + ", " + e, lineNumber);
+                            } else {
+                                messageReporter.reportError("Warning: no templates matched line " + lineNumber + ", " + e, lineNumber);
+                            }
                         }
                     }
                 } else {

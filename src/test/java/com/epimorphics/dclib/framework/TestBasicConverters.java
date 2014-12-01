@@ -294,7 +294,7 @@ public class TestBasicConverters {
         service.getDataContext().registerTemplate("test/simple-skos-template.json");
         service.put("$base", "http://example.com/");
         SimpleProgressMonitor monitor = new SimpleProgressMonitor();
-        Model m = service.simpleConvert(templateFile, dataFile, monitor);
+        Model m = service.simpleConvert(templateFile, dataFile, monitor, false, true);
 //        for (ProgressMessage message : monitor.getMessages()) System.err.println(message.toString());
         return m;
     }
