@@ -234,6 +234,11 @@ public class TestBasicConverters {
         checkAgainstExpected("test/geo/test.yaml", "test/geo/test.csv", "test/geo/test.ttl");
     }
     
+    @Test
+    public void testGuards() throws IOException {
+        checkAgainstExpected("test/composite/guardTest.yaml", "test/composite/guardTest.csv", "test/composite/guardTest.ttl");
+    }
+    
     private RDFNode getRDFValue(Model model, Resource r, int i) {
         Resource root = r.inModel(model);
         Property p = model.createProperty(RDF.value.getURI() + i);

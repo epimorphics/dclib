@@ -1,0 +1,7 @@
+# Test composite template with a guard on when it is applicable
+name : TestGuard
+type : Composite
+onlyIf : "{flag == 'T'}"
+templates :
+    "@id" : "<http://example.com/{id}>"
+    "<rdf:value>" : "{value}"

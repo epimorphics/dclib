@@ -74,8 +74,8 @@ public class TemplateRef implements Template {
     }
 
     @Override
-    public boolean isApplicableTo(BindingEnv row) {
-        return getTemplate().isApplicableTo(row);
+    public boolean isApplicableTo(ConverterProcess config, BindingEnv row, int rowNumber) {
+        return getTemplate().isApplicableTo(config, row, rowNumber);
     }
 
     @Override

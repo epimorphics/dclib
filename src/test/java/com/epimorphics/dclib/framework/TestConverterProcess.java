@@ -126,7 +126,7 @@ public class TestConverterProcess {
         }
 
         @Override
-        public boolean isApplicableTo(BindingEnv row) {
+        public boolean isApplicableTo(ConverterProcess config, BindingEnv row, int rowNumber) {
             return true;
         }
 

@@ -25,6 +25,7 @@ import com.epimorphics.dclib.framework.ConverterProcess;
 import com.epimorphics.dclib.framework.DataContext;
 import com.epimorphics.dclib.framework.EvalFailed;
 import com.epimorphics.dclib.framework.MapSource;
+import com.epimorphics.dclib.framework.NullResult;
 import com.epimorphics.dclib.framework.Pattern;
 import com.epimorphics.dclib.framework.Template;
 import com.epimorphics.dclib.sources.MapSourceFactory;
@@ -109,7 +110,7 @@ public class TemplateBase implements Template {
     }
     
     @Override
-    public boolean isApplicableTo(BindingEnv row) {
+    public boolean isApplicableTo(ConverterProcess config, BindingEnv row, int rowNumber) {
         if (requiredColumns != null) {
             for (String required : requiredColumns) {
                 Object value = row.get(required);
@@ -123,14 +124,17 @@ public class TemplateBase implements Template {
 
     @Override
     public Node convertRow(ConverterProcess config, BindingEnv row, int rowNumber) {
-        if (requiredColumns != null) {
-            for (String required : requiredColumns) {
-                Object binding = row.get(required);
-                if (binding == null || binding instanceof ValueNull) {
-                    throw new EpiException("Missing parameter '" + required + "' required for template " + getName());
-                }
-            }
+        if (!isApplicableTo(config, row, rowNumber) || !isApplicableTo(config.getHeaders())) {
+            throw new NullResult("Template " + getName() + " is not applicable");
         }
+//        if (requiredColumns != null) {
+//            for (String required : requiredColumns) {
+//                Object binding = row.get(required);
+//                if (binding == null || binding instanceof ValueNull) {
+//                    throw new EpiException("Missing parameter '" + required + "' required for template " + getName());
+//                }
+//            }
+//        }
         return null;
     }
     

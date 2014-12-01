@@ -21,6 +21,7 @@ import com.epimorphics.dclib.framework.BindingEnv;
 import com.epimorphics.dclib.framework.ConverterProcess;
 import com.epimorphics.dclib.framework.DataContext;
 import com.epimorphics.dclib.framework.NullResult;
+import com.epimorphics.dclib.framework.Pattern;
 import com.epimorphics.dclib.framework.Template;
 import com.epimorphics.dclib.values.Value;
 import com.epimorphics.dclib.values.ValueFactory;
@@ -31,6 +32,7 @@ import com.hp.hpl.jena.graph.Triple;
 
 public class CompositeTemplate extends ParameterizedTemplate implements Template {
     protected List<Template> templates;
+    protected Pattern guard;
     
     /**
      * Test if a json object specifies on of these templates
@@ -57,6 +59,10 @@ public class CompositeTemplate extends ParameterizedTemplate implements Template
                 throw new EpiException("Couldn't parse prefix declaration in composite template", e);
             }
         }
+         
+        if (spec.get(JSONConstants.GUARD) != null) {
+            guard = new Pattern( spec.get(JSONConstants.GUARD).getAsString().value(), dc);
+        }
         
         // Extract the list of to level templates to run
         templates = getTemplates(spec.get(JSONConstants.TEMPLATES), dc);
@@ -67,20 +73,33 @@ public class CompositeTemplate extends ParameterizedTemplate implements Template
         }
         
     }
+    
+    @Override
+    public boolean isApplicableTo(ConverterProcess config, BindingEnv row, int rowNumber) {
+        if ( ! super.isApplicableTo(config, row, rowNumber) ) return false;
+        
+        if (guard != null) {
+            Object result = guard.evaluate(row, config, rowNumber);
+            if (result instanceof Boolean && ((Boolean)result)) {
+                return true;
+            }
+            return false;
+        }
+        return true;
+    }
 
     @Override
     public Node convertRow(ConverterProcess proc, BindingEnv row, int rowNumber) {
-        super.convertRow(proc, row, rowNumber);
+        Node result = super.convertRow(proc, row, rowNumber);
 
         BindingEnv env = bindParameters(proc, row, rowNumber);
         if (proc.isDebugging()) {
             proc.getMessageReporter().report("Bindings for " + getName() + ": " + env);
         }
 
-        Node result = null;
         for (Template template : templates) {
             template = template.deref();
-            if (template.isApplicableTo(proc.getHeaders()) && template.isApplicableTo(env)) {
+            if (template.isApplicableTo(proc.getHeaders()) && template.isApplicableTo(proc, row, rowNumber)) {
                 reportApplying(proc, template, rowNumber);
                 try {
                     Node n = template.convertRow(proc, env, rowNumber);
@@ -170,7 +189,7 @@ public class CompositeTemplate extends ParameterizedTemplate implements Template
         }
         
         for (Template t : templates) {
-            if (t.isApplicableTo(env)) {
+            if (t.isApplicableTo(proc, env, 0)) {
                 t.preamble(proc, env);
             }
         }

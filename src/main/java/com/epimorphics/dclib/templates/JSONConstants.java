@@ -29,6 +29,7 @@ public class JSONConstants {
     public static final String ONE_OFFS     = "oneOffs";
     public static final String REFERENCED   = "referenced";
     public static final String PREFIXES     = "prefixes";
+    public static final String GUARD        = "onlyIf" ;
     
     public static final String TYPE         = "type";
     public static final String HIERARCHY    = "Hierarchy";

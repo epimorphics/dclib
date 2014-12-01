@@ -30,7 +30,7 @@ public interface Template extends ConfigInstance {
     /**
      * Test if this template can be applied to the given row
      */
-    public boolean isApplicableTo(BindingEnv row);
+    public boolean isApplicableTo(ConverterProcess config, BindingEnv row, int rowNumber);
 
     /**
      * Execute the template on one row of data, in the context of a fully configured conversion process.

@@ -162,14 +162,16 @@ public class ConverterProcess {
                     try {
                         Node result = template.convertRow(this, row, lineNumber);
                         if (result == null) {
-                            messageReporter.reportError("Error: no templates matched line " + lineNumber, lineNumber);
+                            messageReporter.report("Warning: no templates matched line " + lineNumber, lineNumber);
+//                            messageReporter.reportError("Error: no templates matched line " + lineNumber, lineNumber);
                         }
                     } catch (Exception e) {
                         if (!(e instanceof NullResult)) {
                             messageReporter.reportError("Error: " + e, lineNumber);
 //                            log.error("Error processing line " + lineNumber, e);
                         } else {
-                            messageReporter.reportError("Warning: no templates matched line " + lineNumber + ", " + e, lineNumber);
+//                            messageReporter.reportError("Warning: no templates matched line " + lineNumber + ", " + e, lineNumber);
+                            messageReporter.report("Warning: no templates matched line " + lineNumber + ", " + e, lineNumber);
                         }
                     }
                 } else {
@@ -269,7 +271,7 @@ public class ConverterProcess {
                 initialEnv = getEnv();
             }
             initialEnv.put(ROW_OBJECT_NAME, new Row(0));
-            if ( getTemplate().isApplicableTo(initialEnv) ) {
+            if ( getTemplate().isApplicableTo(this, initialEnv, 0) ) {
                 getTemplate().preamble(this, initialEnv);
             }
         } catch (Exception e) {
@@ -328,9 +330,9 @@ public class ConverterProcess {
             try {
                 p.evaluate(row, this, rowNumber);
             } catch (Exception e) {
-                String msg = "Debug: On line [" + rowNumber + "] pattern " + p + " failed to match environment:\n" + row.toStringDeep();
-                log.warn(msg);
-//                getMessageReporter().report(msg, rowNumber);
+                String msg = "Debug: Pattern " + p + " failed to match environment:\n" + row.toStringDeep();
+//                log.warn(msg);
+                getMessageReporter().report(msg, rowNumber);
             }
         }
     }
