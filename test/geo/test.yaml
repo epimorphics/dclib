@@ -1,0 +1,15 @@
+# Test creation and conversion of geo points
+name : TestGeoPointConversion
+type : Composite
+prefixes :
+    spatial : "http://data.ordnancesurvey.co.uk/ontology/spatialrelations/"
+bind:
+    "$point" : "{empty(ngr) ? fromLatLon(lat,lon) : fromGridRef(ngr)}"
+#    "$point" : "{fromLatLon(lat,lon)}"
+#    "$point" : "{fromGridRef(ngr)}"
+templates :
+    "@id" : "<http://example.com/{id}>"
+    "<spatial:easting>"   : "{$point.easting}"
+    "<spatial:northing>"   : "{$point.northing}"
+    
+    

@@ -52,6 +52,7 @@ public class TestPattern {
         env.set("q", ValueFactory.asValue("foo's - bar __ baz()"));
         env.set("m", ValueFactory.asValue("Fo o,Bar "));
         env.set("f", ValueFactory.asValue("12.7"));
+        env.set("neg", ValueFactory.asValue("-12"));
         env.set("ml", ValueFactory.asValue("foo\nbar"));
         env.set("date", ValueFactory.asValue("2014-10-03"));
         env.set("time", ValueFactory.asValue("10:50:23"));
@@ -87,6 +88,8 @@ public class TestPattern {
         assertEquals("this is a string", eval("this is {a}").toString());
         assertEquals("this is 42", eval("this is {i}").toString());
         assertEquals("this is 40", eval("this is {i.value - 2}").toString());
+        assertEquals("this is -14", eval("this is {neg.value - 2}").toString());
+        
         assertEquals("bar = 42", eval("{b.value.split(' ').1} = {i}").toString());
         assertEquals("big", eval("{i.value > 10 ? 'big' : 'little'}").toString());
         

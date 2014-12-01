@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 
 import com.epimorphics.dclib.framework.ConverterProcess;
 import com.epimorphics.dclib.framework.EvalFailed;
+import com.epimorphics.geo.GeoPoint;
 import com.epimorphics.util.EpiException;
 import com.hp.hpl.jena.datatypes.RDFDatatype;
 import com.hp.hpl.jena.datatypes.TypeMapper;
@@ -110,5 +111,47 @@ public class GlobalFunctions {
             String uri = ConverterProcess.get().getDataContext().expandURI( value.toString() );
             return new ValueNode( NodeFactory.createURI(uri) );
         }
+    }
+    
+    /**
+     * Wrap a lat/lon pair as a geographic point
+     */
+    public static ValueGeoPoint fromLatLonRaw(Number lat, Number lon) {
+        return new ValueGeoPoint( GeoPoint.fromLatLon(lat.doubleValue(), lon.doubleValue()) );
+    }
+    
+    /**
+     * Wrap a lat/lon pair as a geographic point
+     */
+    public static ValueGeoPoint fromLatLon(ValueNumber lat, ValueNumber lon) {
+        return fromLatLonRaw( lat.toNumber(), lon.toNumber() );
+    }
+    
+    /**
+     * Wrap easting/northing pair as a geographic point
+     */
+    public static ValueGeoPoint fromEastingNorthing(ValueNumber e, ValueNumber n) {
+        return fromEastingNorthingRaw(e.toNumber(), n.toNumber());
+    }
+    
+    /**
+     * Wrap easting/northing pair as a geographic point
+     */
+    public static ValueGeoPoint fromEastingNorthingRaw(Number e, Number n) {
+        return new ValueGeoPoint( GeoPoint.fromLatLon(e.longValue(), n.longValue()) );
+    }
+    
+    /**
+     * Wrap an OS grid reference as a geographic point
+     */
+    public static ValueGeoPoint fromGridRefRaw(String gridref) {
+        return new ValueGeoPoint( GeoPoint.fromGridRef(gridref) );
+    }
+    
+    /**
+     * Wrap an OS grid reference as a geographic point
+     */
+    public static ValueGeoPoint fromGridRef(Value gridref) {
+        return fromGridRefRaw( gridref.toString() );
     }
 }

@@ -19,10 +19,10 @@ import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.NodeFactory;
 
 public class ValueNumber extends ValueBase<Number> implements Value {
-    protected static final Pattern INTEGER_PATTERN = Pattern.compile("[0-9]+");
-    protected static final Pattern DECIMAL_PATTERN = Pattern.compile("[0-9]+\\.[0-9]+");
-    protected static final Pattern FLOAT_PATTERN = Pattern.compile("[0-9]+(\\.[0-9]+)?[eE][-+]?[0-9]+(\\.[0-9]+)?");
-    protected static final Pattern NUMBER_PATTERN = Pattern.compile("[0-9]+(\\.[0-9]+)?([eE][-+]?[0-9]+(\\.[0-9]+)?)?");
+    protected static final Pattern INTEGER_PATTERN = Pattern.compile("(-\\s*)?[0-9]+");
+    protected static final Pattern DECIMAL_PATTERN = Pattern.compile("(-\\s*)?[0-9]+\\.[0-9]+");
+    protected static final Pattern FLOAT_PATTERN = Pattern.compile("(-\\s*)?[0-9]+(\\.[0-9]+)?[eE][-+]?[0-9]+(\\.[0-9]+)?");
+    protected static final Pattern NUMBER_PATTERN = Pattern.compile("(-\\s*)?[0-9]+(\\.[0-9]+)?([eE][-+]?[0-9]+(\\.[0-9]+)?)?");
 
     protected String lexical;
     

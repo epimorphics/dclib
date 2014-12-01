@@ -229,6 +229,11 @@ public class TestBasicConverters {
         assertEquals( ss, getRDFValue(converted, ss, 10) );
     }
     
+    @Test
+    public void testGeo() throws IOException {
+        checkAgainstExpected("test/geo/test.yaml", "test/geo/test.csv", "test/geo/test.ttl");
+    }
+    
     private RDFNode getRDFValue(Model model, Resource r, int i) {
         Resource root = r.inModel(model);
         Property p = model.createProperty(RDF.value.getURI() + i);
