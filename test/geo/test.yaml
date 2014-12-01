@@ -3,6 +3,7 @@ name : TestGeoPointConversion
 type : Composite
 prefixes :
     spatial : "http://data.ordnancesurvey.co.uk/ontology/spatialrelations/"
+    geo:      "http://www.w3.org/2003/01/geo/wgs84_pos#"
 bind:
     "$point" : "{empty(ngr) ? fromLatLon(lat,lon) : fromGridRef(ngr)}"
 #    "$point" : "{fromLatLon(lat,lon)}"
@@ -10,6 +11,9 @@ bind:
 templates :
     "@id" : "<http://example.com/{id}>"
     "<spatial:easting>"   : "{$point.easting}"
-    "<spatial:northing>"   : "{$point.northing}"
+    "<spatial:northing>"  : "{$point.northing}"
+#    "<geo:lat>"           : "{$point.lat}"
+#    "<geo:long>"          : "{$point.lon}"
+    
     
     

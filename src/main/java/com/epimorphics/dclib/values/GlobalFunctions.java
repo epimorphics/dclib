@@ -138,7 +138,7 @@ public class GlobalFunctions {
      * Wrap easting/northing pair as a geographic point
      */
     public static ValueGeoPoint fromEastingNorthingRaw(Number e, Number n) {
-        return new ValueGeoPoint( GeoPoint.fromLatLon(e.longValue(), n.longValue()) );
+        return new ValueGeoPoint( GeoPoint.fromEastingNorthing(e.longValue(), n.longValue()) );
     }
     
     /**
