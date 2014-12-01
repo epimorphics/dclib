@@ -55,5 +55,9 @@ public class ValueGeoPoint extends ValueBase<GeoPoint> {
     public Value getGridRef() {
         return new ValueString( value.getGridRefString() );
     }
+    
+    public Value getGridRef(int digits) {
+        return new ValueString( value.getGridRefString(digits) );
+    }
 
 }
