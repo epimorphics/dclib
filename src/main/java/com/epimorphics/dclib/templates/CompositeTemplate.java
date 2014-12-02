@@ -99,7 +99,7 @@ public class CompositeTemplate extends ParameterizedTemplate implements Template
 
         for (Template template : templates) {
             template = template.deref();
-            if (template.isApplicableTo(proc.getHeaders()) && template.isApplicableTo(proc, row, rowNumber)) {
+            if (template.isApplicableTo(proc.getHeaders()) && template.isApplicableTo(proc, env, rowNumber)) {
                 reportApplying(proc, template, rowNumber);
                 try {
                     Node n = template.convertRow(proc, env, rowNumber);
