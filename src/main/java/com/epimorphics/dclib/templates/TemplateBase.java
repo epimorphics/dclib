@@ -92,6 +92,31 @@ public class TemplateBase implements Template {
         requiredColumnNames = required;
     }
     
+    public String[] getRequiredColumnNames() {
+        return requiredColumnNames;
+    }
+    
+    public String listMissingColumns(String[] columnNames) {
+        StringBuffer missing = new StringBuffer();
+        if (requiredColumnNames != null) {
+            for (String required : requiredColumnNames) {
+                boolean ok = false; 
+                for (String col : columnNames) {
+                    if (col.equals(required)) {
+                        ok = true;
+                        break;
+                    }
+                }
+                if (!ok) {
+                    missing.append(required);
+                    missing.append(" ");
+                }
+            }
+        }
+        return missing.toString();
+        
+    }
+    
     @Override
     public boolean isApplicableTo(String[] columnNames) {
         if (requiredColumnNames != null) {

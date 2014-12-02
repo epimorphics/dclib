@@ -21,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.epimorphics.dclib.sources.CSVInput;
+import com.epimorphics.dclib.templates.TemplateBase;
 import com.epimorphics.dclib.values.Row;
 import com.epimorphics.dclib.values.ValueDate;
 import com.epimorphics.dclib.values.ValueFactory;
@@ -157,7 +158,8 @@ public class ConverterProcess {
             messageReporter.setState( TaskState.Running );
             
             if ( ! template.isApplicableTo(getHeaders()) ) {
-                throw new EpiException("Main template is not appicable to this shape of data");
+                messageReporter.reportError("Data shape does not match template, missing columns: " + ((TemplateBase)template).listMissingColumns(getHeaders()));
+                return false;
             }
     
             boolean started = false;
