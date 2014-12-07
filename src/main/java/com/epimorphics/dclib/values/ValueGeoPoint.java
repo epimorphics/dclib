@@ -52,6 +52,14 @@ public class ValueGeoPoint extends ValueBase<GeoPoint> {
         return new ValueNumber( value.getLon() );
     }
     
+    public Value getLatLiteral() {
+        return new ValueNode( value.getLatLiteral().asNode() );
+    }
+    
+    public Value getLonLiteral() {
+        return new ValueNode( value.getLonLiteral().asNode() );
+    }
+    
     public Value getGridRef() {
         return new ValueString( value.getGridRefString() );
     }
