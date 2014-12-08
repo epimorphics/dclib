@@ -297,6 +297,7 @@ public class TemplateBase implements Template {
         ACCEPTED_URI_SCHEMES.add("sftp");
         ACCEPTED_URI_SCHEMES.add("urn");
         ACCEPTED_URI_SCHEMES.add("mailto");
+        ACCEPTED_URI_SCHEMES.add("tel");
     }
     
     /**
