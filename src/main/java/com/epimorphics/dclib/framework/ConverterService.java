@@ -165,7 +165,7 @@ public class ConverterService extends ComponentBase {
      * @throws IOException 
      */
     public Model simpleConvert(String templateFile, String dataFile, ProgressMonitorReporter reporter, boolean debug) throws IOException {
-        return simpleConvert(templateFile, dataFile, reporter, debug, false);
+        return simpleConvert(templateFile, dataFile, reporter, debug, true);
     }
     
     /**
