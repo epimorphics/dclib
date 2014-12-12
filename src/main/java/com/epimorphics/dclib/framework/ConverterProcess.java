@@ -69,7 +69,7 @@ public class ConverterProcess {
     protected CSVInput dataSource;
 
     protected boolean debug = false;
-    protected boolean allowNullRows = false;
+    protected boolean allowNullRows = true;
     
     protected Template template;
     protected BindingEnv env;

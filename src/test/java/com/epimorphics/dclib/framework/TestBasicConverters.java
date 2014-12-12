@@ -253,6 +253,7 @@ public class TestBasicConverters {
     @Test
     public void testBugs() throws IOException {
         checkAgainstExpected("test/bugCases/nullcell.yaml", "test/bugCases/nullcell.csv", "test/bugCases/nullcell.ttl");
+        checkAgainstExpected("test/bugCases/testNullRows.yaml", "test/test-map.csv", "test/bugCases/testNullRows.ttl");
         
         checkAgainstExpected("test/bugCases/prefixval.yaml", "test/bugCases/prefixval.csv", "test/bugCases/prefixval.ttl");
         
@@ -296,7 +297,7 @@ public class TestBasicConverters {
         service.getDataContext().registerTemplate("test/simple-skos-template.json");
         service.put("$base", "http://example.com/");
         SimpleProgressMonitor monitor = new SimpleProgressMonitor();
-        Model m = service.simpleConvert(templateFile, dataFile, monitor, false, true);
+        Model m = service.simpleConvert(templateFile, dataFile, monitor, false);
 //        for (ProgressMessage message : monitor.getMessages()) System.err.println(message.toString());
         return m;
     }

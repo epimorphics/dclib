@@ -1,0 +1,9 @@
+name : Test Allow Null rows
+type : Composite
+bind : 
+  "id" : "http://localhost/{notation}"
+templates :
+  - "@id" : "<{empty(description) ? null : id}>"
+    "<rdfs:label>" : "{label}"
+    "<dct:description>" : "{description}"
+    
