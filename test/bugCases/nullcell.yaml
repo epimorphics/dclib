@@ -1,0 +1,5 @@
+# Test null cell handling when generating URLs
+name : test-nullcell
+"@id" : "<http://example.com/{notation}>"
+"<rdfs:label>" : "{label}"
+"<rdf:value>"  : "<{link}>"
