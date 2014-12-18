@@ -252,6 +252,8 @@ public class TestBasicConverters {
     
     @Test
     public void testBugs() throws IOException {
+        checkAgainstExpected("test/bugCases/businessTypeTest.yaml", "test/bugCases/businessTypeTest.csv", "test/bugCases/businessTypeTest.ttl");
+
         checkAgainstExpected("test/bugCases/nullcell.yaml", "test/bugCases/nullcell.csv", "test/bugCases/nullcell.ttl");
         checkAgainstExpected("test/bugCases/testNullRows.yaml", "test/test-map.csv", "test/bugCases/testNullRows.ttl");
         

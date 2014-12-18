@@ -1,0 +1,29 @@
+{ "name" : "epr-serr-sim-csv" ,
+  "type" : "Composite" ,
+  "sources" : [
+     { "name" : "epr-serr-sim-business_type",
+       "sourceType" : "CSV",
+       "source" :   "test/bugCases/businessType.csv",
+       "key"  :     "business_type",
+       "value"  :   "id",
+       "makeURI" : true
+     },{ "name" : "epr-serr-sim-applicant_type",
+       "sourceType" : "CSV",
+       "source" :   "test/bugCases/businessType.csv",
+       "key"  :     "business_type",
+       "value"  :   "at_id",
+       "makeURI" : true
+     }
+  ],
+  "templates" : [
+      "epr-serr-sim-registration"
+      ],
+  "referenced" : [
+    { "name"                         : "epr-serr-sim-registration",
+      "@id"                          : "<http://localhost/id/{id}>",
+      "<rdf:type>"                   : "<rdfs:Resource>",
+      "<rdf:value>"                  : "<{business_type.map('epr-serr-sim-applicant_type')}>"
+    }
+  ]
+}
+

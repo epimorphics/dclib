@@ -1,0 +1,7 @@
+ircode,business_type,id,at_id
+4,partnership,https://www.thegazette.co.uk/def/organisation#Partnership,http://environment.data.gov.uk/public-register/def/applicant-type/organisation-of-individuals
+1,limitedCompany,https://www.thegazette.co.uk/def/organisation#LimitedCompany,http://environment.data.gov.uk/public-register/def/applicant-type/company
+2,soleTrader,https://www.thegazette.co.uk/def/organisation#SoleTrader,http://environment.data.gov.uk/public-register/def/applicant-type/person
+3,publicBody,http://reference.data.gov.uk/def/public-body/PublicBody,http://environment.data.gov.uk/public-register/def/applicant-type/public-body
+,charity,http://www.ontotext.com/proton/protonext#Charity,http://environment.data.gov.uk/public-register/def/applicant-type/charity
+,authority,https://www.thegazette.co.uk/def/organisation#RegionalAdministration,http://environment.data.gov.uk/public-register/def/applicant-type/authority
