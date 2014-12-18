@@ -14,12 +14,8 @@
 @prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix api:   <http://purl.org/linked-data/api/vocab#> .
 @prefix skos:  <http://www.w3.org/2004/02/skos/core#> .
+@prefix at:    <http://environment.data.gov.uk/public-register/def/applicant-type/> .
 
-<http://localhost/id/2>
-        a          rdfs:Resource ;
-        rdf:value  <http://environment.data.gov.uk/public-register/def/applicant-type/organisation-of-individuals> .
-
-<http://localhost/id/1>
-        a          rdfs:Resource ;
-        rdf:value  <http://environment.data.gov.uk/public-register/def/applicant-type/public-body> .
-        
+<http://environment.data.gov.uk/public-register/waste/id/CBDU1475>
+        a       <http://environment.data.gov.uk/public-register/def/registration/Registration> ;
+         at:applicantType  at:public-body .

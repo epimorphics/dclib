@@ -14,3 +14,4 @@
 @prefix reg:  <http://purl.org/linked-data/registry#> .
 @prefix qb:   <http://purl.org/linked-data/cube#> .
 @prefix org:  <http://www.w3.org/ns/org#> .
+@prefix at:        <http://environment.data.gov.uk/public-register/def/applicant-type/> .

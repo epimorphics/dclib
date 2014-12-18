@@ -291,9 +291,7 @@ public class ConverterProcess {
                 initialEnv = getEnv();
             }
             initialEnv.put(ROW_OBJECT_NAME, new Row(0));
-            if ( getTemplate().isApplicableTo(this, initialEnv, 0) ) {
-                getTemplate().preamble(this, initialEnv);
-            }
+            getTemplate().preamble(this, initialEnv);
         } catch (Exception e) {
             messageReporter.reportError("Problem with one-off preprocessing of template: " + e);
             log.error("Problem with one-off preprocessing of template", e);

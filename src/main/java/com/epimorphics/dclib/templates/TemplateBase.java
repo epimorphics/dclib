@@ -180,7 +180,7 @@ public class TemplateBase implements Template {
             }
         }
     }
-    
+
     private void processSourceSpec(JsonValue spec, ConverterProcess config) {
         try {
             MapSource source = null;
