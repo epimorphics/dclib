@@ -37,6 +37,7 @@ import com.hp.hpl.jena.vocabulary.XSD;
  * @author <a href="mailto:dave@epimorphics.com">Dave Reynolds</a>
  */
 public abstract class ValueBase<T> implements Value {
+    
     protected T value;
     
     public ValueBase(T value) {

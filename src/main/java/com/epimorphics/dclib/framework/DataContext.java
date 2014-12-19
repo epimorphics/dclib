@@ -18,6 +18,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.epimorphics.dclib.templates.TemplateFactory;
 import com.epimorphics.util.EpiException;
 import com.hp.hpl.jena.shared.PrefixMapping;
@@ -30,6 +33,8 @@ import com.hp.hpl.jena.shared.impl.PrefixMappingImpl;
  * @author <a href="mailto:dave@epimorphics.com">Dave Reynolds</a>
  */
 public class DataContext {
+    static final Logger log = LoggerFactory.getLogger( DataContext.class );
+
     protected Map<String, Template> templates = new HashMap<String, Template>();
     protected PrefixMapping prefixes = new PrefixMappingImpl();
     protected BindingEnv env = new BindingEnv();
@@ -174,6 +179,10 @@ public class DataContext {
         MapSource source = sources.get(name);
         if (source == null && parent != null) {
             source = parent.getSource(name);
+        }
+        if (source == null) {
+            log.error("Failed to locate mapSource: " + name);
+            throw new EpiException("Failed to locate mapSource: " + name);
         }
         return source;
     }
