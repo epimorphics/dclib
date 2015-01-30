@@ -183,7 +183,7 @@ public class ValueArray extends ValueBase<Value[]> implements Value {
     public Value asDate(final String format, final String typeURI) {
         return applyFunction(new MapValue() {
             public Value map(Value value) {
-                return ValueDate.parse(this.toString(), format, expandTypeURI(typeURI));
+                return ValueDate.parse(value.toString(), format, expandTypeURI(typeURI));
             }
         });        
     }
@@ -191,7 +191,19 @@ public class ValueArray extends ValueBase<Value[]> implements Value {
     public Value asDate(final String typeURI) {
         return applyFunction(new MapValue() {
             public Value map(Value value) {
-                return ValueDate.parse(this.toString(), expandTypeURI(typeURI));
+                return ValueDate.parse(value.toString(), expandTypeURI(typeURI));
+            }
+        });
+    }
+    
+    public Value referenceTime() {
+        return applyFunction(new MapValue() {
+            public Value map(Value value) {
+            	if(value instanceof ValueDate ) {
+                   return ((ValueDate)value).referenceTime();
+            	}
+                reportError("Could not generate reference time for " + value + " not a ValueDate");
+                return null;
             }
         });
     }
