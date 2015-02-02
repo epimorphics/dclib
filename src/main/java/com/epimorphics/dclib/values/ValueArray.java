@@ -203,7 +203,7 @@ public class ValueArray extends ValueBase<Value[]> implements Value {
                    return ((ValueDate)value).referenceTime();
             	}
                 reportError("Could not generate reference time for " + value + " not a ValueDate");
-                return null;
+                return new ValueNull();
             }
         });
     }
