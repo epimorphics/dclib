@@ -15,6 +15,8 @@ import java.util.regex.Pattern;
 import org.apache.jena.riot.system.StreamRDF;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
+import org.joda.time.Days;
+import org.joda.time.Duration;
 import org.joda.time.LocalDateTime;
 import org.joda.time.LocalTime;
 import org.joda.time.format.DateTimeFormat;
@@ -279,7 +281,17 @@ public class ValueDate extends ValueNode implements Value {
             out.triple(it.next());
         }
     }
+    
+    public ValueNumber diffMilliSeconds(ValueDate other) {
+    	long difference  = other.getJDateTime().getMillis()-this.getJDateTime().getMillis();
+    	return new ValueNumber(difference) ;
+    }
 
+    public ValueNumber diffWholeDays(ValueDate other) {
+    	long difference = Days.daysBetween(this.getJDateTime().toLocalDate(), other.getJDateTime().toLocalDate()).getDays();  
+      	return new ValueNumber(difference) ;
+    }
+    
     /**
      * Inject triples from the reference time service describing 
      * this date into the template output stream as a side effect.
