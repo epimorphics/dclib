@@ -283,11 +283,17 @@ public class ValueDate extends ValueNode implements Value {
     }
     
     public ValueNumber diffMilliSeconds(ValueDate other) {
+    	if(!(other instanceof ValueDate)) {
+    		throw new EpiException("diffMilliSeconds(): other value is not a date/time");
+    	}
     	long difference  = other.getJDateTime().getMillis()-this.getJDateTime().getMillis();
     	return new ValueNumber(difference) ;
     }
 
     public ValueNumber diffWholeDays(ValueDate other) {
+    	if(!(other instanceof ValueDate)) {
+    		throw new EpiException("diffWholeDays(): other value is not a date/time");
+    	}
     	long difference = Days.daysBetween(this.getJDateTime().toLocalDate(), other.getJDateTime().toLocalDate()).getDays();  
       	return new ValueNumber(difference) ;
     }
@@ -408,7 +414,8 @@ public class ValueDate extends ValueNode implements Value {
                 bcal = new BritishCalendar(
                         time.getYears(), time.getMonths()-1, time.getDays(), 
                         time.getHours(), time.getMinutes(), time.getFullSeconds() );
-                ref = NodeFactory.createURI("http://reference.data.gov.uk/id/gregorian-instant/" + value.getLiteralLexicalForm());
+                // Remove any trailing fractional seconds if present
+                ref = NodeFactory.createURI("http://reference.data.gov.uk/id/gregorian-instant/" + value.getLiteralLexicalForm().replaceAll("\\.[0-9]*$", ""));
                 i_woy_year = CalendarUtils.getWeekOfYearYear(bcal);
                 i_woy_week = bcal.get(Calendar.WEEK_OF_YEAR);
                 new CalendarInstant(model, bcal, true);       
