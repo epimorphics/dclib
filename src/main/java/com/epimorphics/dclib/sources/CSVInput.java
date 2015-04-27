@@ -57,6 +57,9 @@ public class CSVInput {
         if (col.startsWith("<") && col.endsWith(">")) {
             // Let through URI wrapped column names raw
             return col;
+        } else if (col.isEmpty()) {
+            // Allow empty column names as special favour to organograms
+            return "_";
         } else {
             return NameUtils.safeVarName(col);
         }
