@@ -89,6 +89,7 @@ public class Main {
             process.setOutputStream( stream );
             
             succeeded = process.process();
+            stream.finish();
             
         } else {
             Model m = service.simpleConvert(templateName, dataFile, reporter, debug);
