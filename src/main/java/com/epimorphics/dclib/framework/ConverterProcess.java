@@ -62,7 +62,7 @@ public class ConverterProcess {
     private static final ThreadLocal<ConverterProcess> current = new ThreadLocal<>();
     private static final DataContext defaultDC = new DataContext();
 
-    protected int BATCH_SIZE = 100;
+    protected int BATCH_SIZE = 1000;
     protected DataContext dataContext;
     protected ProgressMonitorReporter messageReporter = new SimpleProgressMonitor();
     
