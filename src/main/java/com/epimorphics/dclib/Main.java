@@ -16,8 +16,10 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.jena.riot.Lang;
+import org.apache.jena.riot.RDFLanguages;
 import org.apache.jena.riot.system.StreamRDF;
-import org.apache.jena.riot.writer.WriterStreamRDFBlocks;
+import org.apache.jena.riot.system.StreamRDFWriter;
 
 import com.epimorphics.dclib.framework.ConverterProcess;
 import com.epimorphics.dclib.framework.ConverterService;
@@ -33,10 +35,12 @@ import com.hp.hpl.jena.rdf.model.Model;
 public class Main {
     public static final String DEBUG_FLAG = "--debug";
     public static final String STREAMING_FLAG = "--streaming";
+    public static final String NTRIPLE_FLAG = "--ntriples";
     
     public static void main(String[] argsIn) throws IOException {
         boolean debug = false;
         boolean streaming = false;
+        boolean ntriples = false;
         
         // TODO proper command line parsing
         
@@ -51,9 +55,13 @@ public class Main {
             streaming = true;
             args.remove(STREAMING_FLAG);
         }
+        if (args.contains(NTRIPLE_FLAG)) {
+            ntriples = true;
+            args.remove(NTRIPLE_FLAG);
+        }
 
         if (args.size() < 2) {
-            System.err.println("Usage:  java -jar dclib.jar [--debug] [--streaming] template.json ... data.csv");
+            System.err.println("Usage:  java -jar dclib.jar [--debug] [--streaming] [--ntriples] template.json ... data.csv");
             System.exit(1);
         }
         String templateName = args.get(0);
@@ -85,7 +93,7 @@ public class Main {
             process.setMessageReporter( reporter );
             process.setAllowNullRows(true);
             
-            StreamRDF stream = new WriterStreamRDFBlocks( System.out );
+            StreamRDF stream = StreamRDFWriter.getWriterStream(System.out,  ntriples ? Lang.NTRIPLES : Lang.TURTLE);
             process.setOutputStream( stream );
             
             succeeded = process.process();
@@ -94,7 +102,7 @@ public class Main {
         } else {
             Model m = service.simpleConvert(templateName, dataFile, reporter, debug);
             if (m != null) {
-                m.write(System.out, "Turtle");
+                m.write(System.out, ntriples ? RDFLanguages.strLangNTriples : RDFLanguages.strLangTurtle);
             } else {
                 succeeded = false;
             }
