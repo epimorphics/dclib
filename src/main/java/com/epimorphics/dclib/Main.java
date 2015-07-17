@@ -103,6 +103,7 @@ public class Main {
             Model m = service.simpleConvert(templateName, dataFile, reporter, debug);
             if (m != null) {
                 m.write(System.out, ntriples ? RDFLanguages.strLangNTriples : RDFLanguages.strLangTurtle);
+                succeeded=true;
             } else {
                 succeeded = false;
             }
