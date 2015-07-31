@@ -15,6 +15,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 
+import au.com.bytecode.opencsv.CSVParser;
 import au.com.bytecode.opencsv.CSVReader;
 
 import com.epimorphics.dclib.framework.BindingEnv;
@@ -37,7 +38,7 @@ public class CSVInput {
     }
     
     public CSVInput(InputStream ins) throws IOException {
-        in = new CSVReader( new InputStreamReader(ins, StandardCharsets.UTF_8) );
+        in = new CSVReader( new InputStreamReader(ins, StandardCharsets.UTF_8), CSVParser.DEFAULT_SEPARATOR, CSVParser.DEFAULT_QUOTE_CHARACTER, '\0' );
         
         String[] headerLine = in.readNext();
         if (headerLine == null) {
