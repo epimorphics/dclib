@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.hp.hpl.jena.util.OneToManyMap;
+import org.apache.jena.util.OneToManyMap;
 
 /**
  * Utility to provide in-memory lookups of values based on a 

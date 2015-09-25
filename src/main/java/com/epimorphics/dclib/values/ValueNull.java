@@ -9,7 +9,7 @@
 
 package com.epimorphics.dclib.values;
 
-import com.hp.hpl.jena.graph.Node;
+import org.apache.jena.graph.Node;
 
 /**
  * Represent a missing value. Will typically get changed into a simple java null

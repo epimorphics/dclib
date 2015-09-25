@@ -9,7 +9,7 @@
 
 package com.epimorphics.dclib.values;
 
-import com.hp.hpl.jena.graph.Node;
+import org.apache.jena.graph.Node;
 
 public class ValueError implements Value {
     protected String errorMessage;

@@ -15,8 +15,8 @@ import java.util.Map;
 import org.apache.commons.jexl2.JexlContext;
 
 import com.epimorphics.dclib.values.ValueNull;
-import com.hp.hpl.jena.util.iterator.ExtendedIterator;
-import com.hp.hpl.jena.util.iterator.WrappedIterator;
+import org.apache.jena.util.iterator.ExtendedIterator;
+import org.apache.jena.util.iterator.WrappedIterator;
 
 /**
  * Represents a set of name to value mappings. Can be chained so it's 

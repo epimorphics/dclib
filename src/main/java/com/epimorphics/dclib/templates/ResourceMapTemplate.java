@@ -28,8 +28,8 @@ import com.epimorphics.dclib.values.Value;
 import com.epimorphics.dclib.values.ValueArray;
 import com.epimorphics.dclib.values.ValueNode;
 import com.epimorphics.util.EpiException;
-import com.hp.hpl.jena.graph.Node;
-import com.hp.hpl.jena.util.OneToManyMap;
+import org.apache.jena.graph.Node;
+import org.apache.jena.util.OneToManyMap;
 
 /**
  * A template what generates triples based on pattners for the root resource and a set of property/value pairs.

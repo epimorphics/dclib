@@ -13,8 +13,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import com.hp.hpl.jena.graph.Node;
-import com.hp.hpl.jena.graph.NodeFactory;
+import org.apache.jena.graph.Node;
+import org.apache.jena.graph.NodeFactory;
 
 /**
  * Represent information on the current row.
@@ -44,7 +44,7 @@ public class Row {
     
     public ValueNode getBnode() {
         if (bNode == null) {
-            bNode = NodeFactory.createAnon();
+            bNode = NodeFactory.createBlankNode();
         }
         return new ValueNode(bNode);
     }
@@ -55,7 +55,7 @@ public class Row {
         }
         Node bnode = bNodes.get(key);
         if (bnode == null) {
-            bnode = NodeFactory.createAnon();
+            bnode = NodeFactory.createBlankNode();
             bNodes.put(key, bnode);
         }
         return new ValueNode(bnode);

@@ -28,9 +28,9 @@ import com.epimorphics.dclib.values.ValueString;
 import com.epimorphics.rdfutil.RDFNodeWrapper;
 import com.epimorphics.tasks.ProgressReporter;
 import com.epimorphics.util.EpiException;
-import com.hp.hpl.jena.graph.Node;
-import com.hp.hpl.jena.graph.NodeFactory;
-import com.hp.hpl.jena.graph.impl.LiteralLabelFactory;
+import org.apache.jena.graph.Node;
+import org.apache.jena.graph.NodeFactory;
+import org.apache.jena.graph.impl.LiteralLabelFactory;
 
 /**
  * Represents a string pattern in a Template, e.g. for constructing property values.
@@ -219,7 +219,7 @@ public class Pattern {
         } else if (result instanceof Number) {
             return ValueNumber.nodeFromNumber( (Number)result );
         } else if (result instanceof Boolean) {
-            return NodeFactory.createLiteral( LiteralLabelFactory.create(result) );
+            return NodeFactory.createLiteral( LiteralLabelFactory.createTypedLiteral(result) );
         } else if (result instanceof Value) {
             return ((Value)result).asNode();
         } else {

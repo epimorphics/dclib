@@ -12,7 +12,7 @@ package com.epimorphics.dclib.framework;
 import org.apache.jena.riot.system.StreamRDF;
 
 import com.epimorphics.appbase.monitor.ConfigInstance;
-import com.hp.hpl.jena.graph.Node;
+import org.apache.jena.graph.Node;
 
 /**
  * Signature for utilities the support mapping of input values 

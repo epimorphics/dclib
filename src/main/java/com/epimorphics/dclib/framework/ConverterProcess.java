@@ -31,11 +31,11 @@ import com.epimorphics.tasks.SimpleProgressMonitor;
 import com.epimorphics.tasks.TaskState;
 import com.epimorphics.util.EpiException;
 import com.epimorphics.util.NameUtils;
-import com.hp.hpl.jena.graph.Node;
-import com.hp.hpl.jena.graph.NodeFactory;
-import com.hp.hpl.jena.graph.Triple;
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
+import org.apache.jena.graph.Node;
+import org.apache.jena.graph.NodeFactory;
+import org.apache.jena.graph.Triple;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
 
 /**
  * An instance of a converter running on a specific data configuration.
@@ -276,7 +276,7 @@ public class ConverterProcess {
     }
     
     protected void preprocess() throws IOException {        
-        Node dataset = NodeFactory.createAnon();
+        Node dataset = NodeFactory.createBlankNode();
         
         Object baseURI = env.get(BASE_OBJECT_NAME);
         if (baseURI != null) {

@@ -32,8 +32,8 @@ import com.epimorphics.dclib.sources.MapSourceFactory;
 import com.epimorphics.dclib.values.ValueNull;
 import com.epimorphics.util.EpiException;
 import com.epimorphics.util.NameUtils;
-import com.hp.hpl.jena.graph.Node;
-import com.hp.hpl.jena.graph.Triple;
+import org.apache.jena.graph.Node;
+import org.apache.jena.graph.Triple;
 
 /**
  * Base implementation of a Template that can be instantiated from 

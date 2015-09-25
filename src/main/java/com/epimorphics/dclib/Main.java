@@ -30,7 +30,7 @@ import com.epimorphics.tasks.LiveProgressMonitor;
 import com.epimorphics.tasks.ProgressMessage;
 import com.epimorphics.tasks.SimpleProgressMonitor;
 import com.epimorphics.util.NameUtils;
-import com.hp.hpl.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.Model;
 
 public class Main {
     public static final String DEBUG_FLAG = "--debug";
