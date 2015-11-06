@@ -60,6 +60,22 @@ public class ValueNumber extends ValueBase<Number> implements Value {
         return this;
     }
     
+    public Value asDecimal() {
+        BigDecimal decimal = null;
+        if (value instanceof Long) {
+            decimal = new BigDecimal( (Long)value );
+        } else if (value instanceof Double) {
+            decimal = new BigDecimal( (Double)value );
+        } else if (value instanceof BigDecimal) {
+            decimal = (BigDecimal) value;
+        }
+        if (decimal == null) {
+            return null;
+        } else {
+            return new ValueNumber( decimal );
+        }
+    }
+    
     public Number toNumber() {
         return value;
     }

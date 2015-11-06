@@ -138,11 +138,21 @@ public abstract class ValueBase<T> implements Value {
     }
     
     public Value asNumber() {
-        ValueNumber v = new ValueNumber(toString());
+        String lex = toString();
+        if (lex.startsWith(".")) {
+            // Allow missing leading 0 on decimals
+            lex = "0" + lex;
+        }
+        ValueNumber v = new ValueNumber(lex);
         if (v.isNull()) {
             reportError("Could not convert " + value + " to a number");
         }
         return v;
+    }
+    
+    public Value asDecimal() {
+        ValueNumber value = (ValueNumber) asNumber();
+        return value == null ? null : value.asDecimal();
     }
     
     public Boolean asBoolean() {

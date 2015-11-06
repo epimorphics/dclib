@@ -56,6 +56,8 @@ public class TestPattern {
         env.set("ml", ValueFactory.asValue("foo\nbar"));
         env.set("date", ValueFactory.asValue("2014-10-03"));
         env.set("time", ValueFactory.asValue("10:50:23"));
+        env.set("d1", ValueFactory.asValue(".6"));
+        env.set("d2", ValueFactory.asValue("4.6e2"));
         
         dc.setPrefixes( FileManager.get().loadModel("prefixes.ttl") );
     }
@@ -197,6 +199,10 @@ public class TestPattern {
         assertEquals(NodeFactory.createLiteral("foo bar^^xsd:string"), evalNode("{b}\\^^xsd:string"));
         assertEquals(NodeFactory.createLiteral("foo bar", XSDDatatype.XSDstring), evalNode("{b}^^http://www.w3.org/2001/XMLSchema#string"));
         assertEquals(NodeFactory.createLiteral("foo bar", XSDDatatype.XSDstring), evalNode("{b}^^<http://www.w3.org/2001/XMLSchema#string>"));
+        
+        assertEquals(NodeFactory.createLiteral("42", XSDDatatype.XSDdecimal), evalNode("{i.asDecimal()}") );
+        assertEquals(NodeFactory.createLiteral("0.6", XSDDatatype.XSDdecimal), evalNode("{d1.asDecimal()}") );
+        assertEquals(NodeFactory.createLiteral("460", XSDDatatype.XSDdecimal), evalNode("{d2.asDecimal()}") );
     }
   
     @Test
