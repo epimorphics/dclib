@@ -62,9 +62,6 @@ public class ValueNumber extends ValueBase<Number> implements Value {
     
     public Value asDecimal() {
         BigDecimal decimal = null;
-        // Added clause for BigInteger, not sure that clause for Long is relevant, but left for now.
-        // typeFromNumber only covers Long by default
-        // stringToNumber does makes BigInteger values, but not Long values, but Jexl evaluation might - skw 2015-11-10
         if (value instanceof Long) {
             decimal = new BigDecimal( (Long)value );
         } else if (value instanceof BigInteger) {
