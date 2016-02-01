@@ -9,9 +9,13 @@
 
 package com.epimorphics.dclib.values;
 
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.jena.riot.system.StreamRDF;
 
 import com.epimorphics.dclib.framework.ConverterProcess;
@@ -20,6 +24,7 @@ import com.epimorphics.dclib.framework.MatchFailed;
 import com.epimorphics.dclib.framework.NullResult;
 import com.epimorphics.rdfutil.RDFUtil;
 import com.epimorphics.tasks.ProgressReporter;
+import com.epimorphics.util.EpiException;
 import com.epimorphics.util.NameUtils;
 import org.apache.jena.datatypes.RDFDatatype;
 import org.apache.jena.datatypes.TypeMapper;
@@ -343,6 +348,51 @@ public abstract class ValueBase<T> implements Value {
     @Override
     public int hashCode() {
         return value.hashCode();
+    }
+    
+    public ValueString digest() {
+    	return digest("MD5",false);
+    }
+    
+    public ValueString digest(String alg) {
+    	return digest(alg, false);
+    }
+    public ValueString digest(boolean base64) {
+    	return digest("MD5",base64);
+    }
+    private final static String nibbleToChar = "0123456789abcdef";
+    
+    public ValueString digest(String algorithm, boolean base64) {
+    	MessageDigest md;
+    	ValueString res; 
+    	byte[] bytes;
+
+    	try {
+			md = MessageDigest.getInstance(algorithm);
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			throw new EpiException("Unknown digest algorithm '"+algorithm+"'",e);
+		}
+    	
+		try {
+			bytes = md.digest(value.toString().getBytes("UTF-8"));
+			if ( base64 ) {
+			  res = new ValueString( new String( Base64.encodeBase64URLSafe(bytes), "UTF-8"));
+			} else {
+				StringBuffer sb = new StringBuffer();
+				for (byte b : bytes) {
+					int upper = (b>>4) & 0xf;
+					int lower = b & 0xf;
+					sb.append(nibbleToChar.charAt(upper));
+					sb.append(nibbleToChar.charAt(lower));
+				}
+				res = new ValueString(sb.toString());
+			}
+		//	res   = new ValueString( new String(Base64.encodeBase64(bytes), "UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+			throw new EpiException("Unknown character encoding 'UTF-8'",e);
+		}
+		return res;    	
     }
     
     @Override

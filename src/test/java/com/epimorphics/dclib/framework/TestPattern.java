@@ -60,6 +60,8 @@ public class TestPattern {
         env.set("d2", ValueFactory.asValue("4.6e2"));
         env.set("d3", ValueFactory.asValue("4.6e20"));
         env.set("d4", ValueFactory.asValue("0.1"));
+        env.set("str",ValueFactory.asValue("South Tees Hospitals NHS Foundation Trust"));
+
 
         dc.setPrefixes( FileManager.get().loadModel("prefixes.ttl") );
     }
@@ -224,6 +226,19 @@ public class TestPattern {
     public void testErrorInConversion() {
         eval("{a.asNumber()}");
         assertFalse( proc.getMessageReporter().succeeded() );
+    }
+    
+    @Test
+    public void testDigest() {
+    	assertEquals("314eba63a0947f15012395df4e27193e",        eval("{str.digest()}").toString());
+    	assertEquals("MU66Y6CUfxUBI5XfTicZPg",                  eval("{str.digest(true)}").toString());
+    	assertEquals("314eba63a0947f15012395df4e27193e",        eval("{str.digest(false)}").toString());
+    	assertEquals("314eba63a0947f15012395df4e27193e",        eval("{str.digest('md5')}").toString());
+    	assertEquals("314eba63a0947f15012395df4e27193e",        eval("{str.digest('md5',false)}").toString());
+    	assertEquals("MU66Y6CUfxUBI5XfTicZPg",                  eval("{str.digest('md5',true)}").toString());
+    	assertEquals("d33a32f7e44ab4cf4aca38eae2ca05964e9f79bf",eval("{str.digest('sha-1')}").toString());
+    	assertEquals("d33a32f7e44ab4cf4aca38eae2ca05964e9f79bf",eval("{str.digest('sha-1',false)}").toString());
+    	assertEquals("0zoy9-RKtM9Kyjjq4soFlk6feb8",             eval("{str.digest('sha-1',true)}").toString());
     }
     
     private Node evalNode(String pattern) {
