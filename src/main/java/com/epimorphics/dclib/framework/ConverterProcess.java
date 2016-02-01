@@ -17,6 +17,8 @@ import org.apache.commons.collections.map.LRUMap;
 import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.riot.system.StreamRDF;
 import org.apache.jena.riot.system.StreamRDFLib;
+import org.apache.jena.riot.system.stream.Locator;
+import org.apache.jena.riot.system.stream.StreamManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -79,6 +81,19 @@ public class ConverterProcess {
     protected Model  result;   // May not be used if the stream is set directly  
     
     protected LRUMap fetchCache = new LRUMap(MAX_FETCH_CACHE);
+    
+	// During static class initialisation replaced the builtin Locator HTTP with one that doesn't accept "*/*" in
+	// the mix.
+	static {
+		StreamManager stm = StreamManager.get();
+		for (Locator l : stm.locators()) {
+			if (l.getName().equals("LocatorHTTP")) {
+				stm.remove(l);
+				break;
+			}
+		}
+		stm.addLocator(new LocatorHTTP());
+	}
     
     public ConverterProcess(DataContext context, InputStream data) {
         dataContext = new DataContext( context );
@@ -434,6 +449,7 @@ public class ConverterProcess {
      * Fetch a remote (possibly cached) model from the given URI.
      * Return null if no data is found
      */
+    
     public Model fetchModel(String uri) {
         Model model = (Model) fetchCache.get(uri);
         if (model == null) {
