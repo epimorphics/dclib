@@ -1,0 +1,5 @@
+type     : Composite
+name     : "remap-driver"
+bind     : 
+   type  : "{alttype}"
+template : "dept-type-test" 

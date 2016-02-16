@@ -1,4 +1,5 @@
-{       
+{
+    "name" : "dept-type-test",       
     "type"  : "Composite",
     "bind" : {"$base" : "http://example.com/test"},
      "templates" : {

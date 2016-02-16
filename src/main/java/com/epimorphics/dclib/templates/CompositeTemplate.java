@@ -191,6 +191,10 @@ public class CompositeTemplate extends ParameterizedTemplate implements Template
         for (Template t : templates) {
                 t.preamble(proc, env);
         }
+        
+        if (template != null) {
+            template.preamble(proc, env);
+        }
     }
 
     private void reportApplying(ConverterProcess proc, Template t, int rowNumber) {
