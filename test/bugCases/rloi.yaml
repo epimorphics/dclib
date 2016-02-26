@@ -1,0 +1,59 @@
+# dclib template for converting RLOI station data to RDF
+
+type : Composite
+name : flood.rloiImport
+requiredColumns:
+  - telemetry_id
+  - x_coord_actual
+  - y_coord_actual
+  - wiski_id
+  - wiski_river_name
+  - rloi_id
+  - stage_datum
+   # Others but that should be enough as a check
+
+# telemetry_id    wiski_id    rloi_id    station_type    post_process    subtract    
+# region    area    catchment    display_region    display_area    display_catchment    
+# agency_name    external_name    location_info    x_coord_actual    y_coord_actual    actual_ngr    
+# x_coord_display    y_coord_display    site_max    wiski_river_name    date_open    stage_datum    
+# period_of_record    por_max_value    date_por_max    highest_level    date_highest_level    
+# por_min_value    date_por_min    percentile_5    percentile_95    comments    
+# d_stage_datum    d_period_of_record    d_por_max_value    d_date_por_max    
+# d_highest_level    d_date_highest_level    d_por_min_value    d_date_por_min    d_percentile_5    d_percentile_95    d_comments    
+# status    status_reason    status_date
+
+prefixes:
+  rt : "http://environment.data.gov.uk/flood-monitoring/def/core/"
+
+bind :
+    - "$base"           : "http://environment.data.gov.uk/flood-monitoring/id/stations"
+      "$region"         : "{region.toLowerCase().replaceAll(' ', '_')}"
+      "$tid"            : "{telemetry_id.replaceAll(' ', '_').replaceAll('/', '_')}"
+    - "$stub"           : "{$tid}-{$region}"
+    - "$idfrag"         : "{$tid}"
+    - "$id"             : "{$base}/{$idfrag}"
+      "$point"          : "{empty(x_coord_actual) || empty(y_coord_actual) ? null : fromEastingNorthing(x_coord_actual, y_coord_actual)}"
+
+templates:
+  - flood.rloi.base
+
+referenced:
+
+  - name : flood.rloi.base
+    type : Composite
+    bind : {}
+    prefixes :
+       spatial : "http://data.ordnancesurvey.co.uk/ontology/spatialrelations/"
+       geo:      "http://www.w3.org/2003/01/geo/wgs84_pos#"
+
+    templates:
+      - "@id"                   : "<{$id}>"
+        "<spatial:easting>"     : "{x_coord_actual}"
+        "<spatial:northing>"    : "{y_coord_actual}"
+        "<geo:lat>"             : "{$point.latLiteral}"
+        "<geo:long>"            : "{$point.lonLiteral}"
+        "<rt:gridReference>"    : "{actual_ngr}"
+        "<rt:dateOpened>"       : "{date_open.asDate('dd/MM/yyyy','xsd:date')}"
+        "<rt:status>"           : "<rt:status{status}>"
+
+
