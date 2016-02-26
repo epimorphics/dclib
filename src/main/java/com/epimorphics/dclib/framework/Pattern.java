@@ -219,7 +219,7 @@ public class Pattern {
         } else if (result instanceof Number) {
             return ValueNumber.nodeFromNumber( (Number)result );
         } else if (result instanceof Boolean) {
-            return NodeFactory.createLiteral( LiteralLabelFactory.create(result) );
+            return NodeFactory.createLiteral( LiteralLabelFactory.createTypedLiteral(result) );
         } else if (result instanceof Value) {
             return ((Value)result).asNode();
         } else {
