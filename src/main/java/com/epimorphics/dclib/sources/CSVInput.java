@@ -15,6 +15,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 
+import org.apache.commons.io.input.BOMInputStream;
+
 import au.com.bytecode.opencsv.CSVParser;
 import au.com.bytecode.opencsv.CSVReader;
 
@@ -34,7 +36,7 @@ public class CSVInput {
     protected String[] peekRow;
     
     public CSVInput(String filename) throws IOException {
-        this( new FileInputStream(filename) );
+        this( new BOMInputStream( new FileInputStream(filename) ) );
     }
     
     public CSVInput(InputStream ins) throws IOException {

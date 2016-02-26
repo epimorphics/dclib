@@ -14,6 +14,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.apache.commons.io.input.BOMInputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -146,7 +147,7 @@ public class ConverterService extends ComponentBase {
         String filebasename = NameUtils.removeExtension(filename);
         put(ConverterProcess.FILE_NAME, filename);
         put(ConverterProcess.FILE_BASE_NAME, filebasename);
-        InputStream is = new FileInputStream(dataFileF);
+        InputStream is = new BOMInputStream( new FileInputStream(dataFileF) );
         
         ConverterProcess process = new ConverterProcess(dc, is);
         process.setDebug(debug);
