@@ -269,6 +269,12 @@ public class TestBasicConverters {
     }
     
     @Test
+    public void testDateParseFailure() throws IOException {
+        // A failure to parse a date shouldn't break the whole template, or should it
+        checkAgainstExpected("test/bugCases/rloi.yaml", "test/bugCases/rloiNoBOM.csv", "test/bugCases/rloi-out.ttl");
+    }
+    
+    @Test
     public void testFunctions() throws IOException {
         checkAgainstExpected("test/functions/function.yaml", "test/functions/data.csv", "test/functions/result.ttl");
     }

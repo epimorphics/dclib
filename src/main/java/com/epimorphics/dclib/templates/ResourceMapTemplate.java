@@ -27,6 +27,7 @@ import com.epimorphics.dclib.framework.Template;
 import com.epimorphics.dclib.values.Value;
 import com.epimorphics.dclib.values.ValueArray;
 import com.epimorphics.dclib.values.ValueNode;
+import com.epimorphics.dclib.values.ValueNull;
 import com.epimorphics.util.EpiException;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.util.OneToManyMap;
@@ -97,6 +98,9 @@ public class ResourceMapTemplate extends TemplateBase implements Template {
                         out.triple(asTriple(propPattern, valPattern, subject,
                                 prop, v));
                     }
+                } else if (value instanceof ValueNull ) {
+                    // E.g. failed to parse a date, treat like missing data?
+                    proc.getMessageReporter().report("Skipping null result for property " + propPattern, rowNumber);
                 } else {
                     out.triple(asTriple(propPattern, valPattern, subject, prop,
                             value));
