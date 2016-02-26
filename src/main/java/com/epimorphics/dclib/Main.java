@@ -16,6 +16,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.io.input.BOMInputStream;
 import org.apache.jena.riot.Lang;
 import org.apache.jena.riot.RDFLanguages;
 import org.apache.jena.riot.system.StreamRDF;
@@ -85,7 +86,7 @@ public class Main {
             String filebasename = NameUtils.removeExtension(filename);
             dc.getGlobalEnv().put(ConverterProcess.FILE_NAME, filename);
             dc.getGlobalEnv().put(ConverterProcess.FILE_BASE_NAME, filebasename);
-            InputStream is = new FileInputStream(dataFileF);
+            InputStream is = new BOMInputStream( new FileInputStream(dataFileF) );
             
             ConverterProcess process = new ConverterProcess(dc, is);
             process.setDebug(debug);
