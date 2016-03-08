@@ -205,7 +205,7 @@ public class ConverterProcess {
                             if (allowNullRows) {
                                 messageReporter.report("Warning: no templates matched line " + lineNumber + ", " + e, lineNumber);
                             } else {
-                                messageReporter.reportError("Warning: no templates matched line " + lineNumber + ", " + e, lineNumber);
+                                messageReporter.reportError("Error: no templates matched line " + lineNumber + ", " + e, lineNumber);
                             }
                         }
                     }

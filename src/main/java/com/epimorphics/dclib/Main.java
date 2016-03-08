@@ -37,11 +37,13 @@ public class Main {
     public static final String DEBUG_FLAG = "--debug";
     public static final String STREAMING_FLAG = "--streaming";
     public static final String NTRIPLE_FLAG = "--ntriples";
+    public static final String NULL_ROW_FLAG = "--abortIfRowFails";
     
     public static void main(String[] argsIn) throws IOException {
         boolean debug = false;
         boolean streaming = false;
         boolean ntriples = false;
+        boolean nullRowAborts = false;
         
         // TODO proper command line parsing
         
@@ -60,9 +62,13 @@ public class Main {
             ntriples = true;
             args.remove(NTRIPLE_FLAG);
         }
+        if (args.contains(NULL_ROW_FLAG)) {
+            nullRowAborts = true;
+            args.remove(NULL_ROW_FLAG);
+        }
 
         if (args.size() < 2) {
-            System.err.println("Usage:  java -jar dclib.jar [--debug] [--streaming] [--ntriples] template.json ... data.csv");
+            System.err.println("Usage:  java -jar dclib.jar [--debug] [--streaming] [--ntriples] [--abortIfRowFails] template.json ... data.csv");
             System.exit(1);
         }
         String templateName = args.get(0);
@@ -92,7 +98,7 @@ public class Main {
             process.setDebug(debug);
             process.setTemplate( template );
             process.setMessageReporter( reporter );
-            process.setAllowNullRows(true);
+            process.setAllowNullRows( !nullRowAborts );
             
             StreamRDF stream = StreamRDFWriter.getWriterStream(System.out,  ntriples ? Lang.NTRIPLES : Lang.TURTLE);
             process.setOutputStream( stream );
@@ -101,7 +107,7 @@ public class Main {
             stream.finish();
             
         } else {
-            Model m = service.simpleConvert(templateName, dataFile, reporter, debug);
+            Model m = service.simpleConvert(templateName, dataFile, reporter, debug, !nullRowAborts);
             if (m != null) {
                 m.write(System.out, ntriples ? RDFLanguages.strLangNTriples : RDFLanguages.strLangTurtle);
                 succeeded=true;
