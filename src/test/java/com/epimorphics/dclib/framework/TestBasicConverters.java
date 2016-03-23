@@ -266,6 +266,8 @@ public class TestBasicConverters {
         checkAgainstExpected("test/bugCases/mailto.json", "test/test-ok.csv", "test/bugCases/mailto.ttl");
         checkAgainstExpected("test/bugCases/lang.json", "test/test-ok.csv", "test/bugCases/lang.ttl");
         checkAgainstExpected("test/bugCases/null.json", "test/test-ok.csv", "test/bugCases/null.ttl");
+        
+        checkAgainstExpected("test/bugCases/accidental-lang.yaml", "test/bugCases/accidental-lang.csv", "test/bugCases/accidental-lang.ttl");
     }
     
     @Test

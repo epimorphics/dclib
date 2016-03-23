@@ -1,0 +1,4 @@
+name : accidental-lang
+"@id" : "<http://example.com/{number}>"
+"<rdfs:label>" : "{name}"
+

@@ -52,7 +52,7 @@ public class ValueString extends ValueBase<String> implements Value {
     @Override
     public Node asNode() {
         int split = value.lastIndexOf("@");
-        if (split != -1 && (value.length() - split < MAX_LANGSTR)) {
+        if (split != -1 && (value.length() - split < MAX_LANGSTR) && split != 0) {
             String possLangTag = value.substring(split);
             Matcher matcher = LANGSTR.matcher(possLangTag);
             if (matcher.find()) {
