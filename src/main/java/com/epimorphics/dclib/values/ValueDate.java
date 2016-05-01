@@ -379,6 +379,19 @@ public class ValueDate extends ValueNode implements Value {
         }
     }
     
+    public Value toLocalTime(String zone) {
+        if (hasTimezone()) {
+            DateTime jdt = getJDateTime();
+            for (String z : DateTimeZone.getAvailableIDs()) {
+                System.out.println("Available zone = " + z);
+            }
+            jdt = jdt.withZone( DateTimeZone.forID(zone) );
+            return fromDateTime(jdt, value.getLiteralDatatypeURI(), false);
+        } else {
+            return this;
+        }
+    }
+    
     @Override
     public Object format(String format) {
         DateTimeFormatter formatter = DateTimeFormat.forPattern(format);
