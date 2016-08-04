@@ -279,7 +279,8 @@ public class ConverterProcess {
             String[] headers = dataSource.getHeaders();
             if (row == null) return null;
             BindingEnv wrapped = new BindingEnv(env);
-            for (int i = 0; i < row.length; i++) {
+            int safeLength = Math.min(row.length,headers.length);
+            for (int i = 0; i < safeLength; i++) {
                 wrapped.put(headers[i], ValueFactory.asValue(row[i].trim()));
             }
             return wrapped;
