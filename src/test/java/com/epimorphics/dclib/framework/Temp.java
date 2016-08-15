@@ -22,7 +22,7 @@ import org.yaml.snakeyaml.Yaml;
 
 import com.epimorphics.dclib.values.Row;
 import com.epimorphics.json.JsonUtil;
-import com.hp.hpl.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.Model;
 
 /**
  * Playpen used for experiments

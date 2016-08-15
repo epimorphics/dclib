@@ -13,10 +13,10 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.regex.Pattern;
 
-import com.hp.hpl.jena.datatypes.RDFDatatype;
-import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
-import com.hp.hpl.jena.graph.Node;
-import com.hp.hpl.jena.graph.NodeFactory;
+import org.apache.jena.datatypes.RDFDatatype;
+import org.apache.jena.datatypes.xsd.XSDDatatype;
+import org.apache.jena.graph.Node;
+import org.apache.jena.graph.NodeFactory;
 
 public class ValueNumber extends ValueBase<Number> implements Value {
     protected static final Pattern INTEGER_PATTERN = Pattern.compile("[-+]?[0-9]+");
@@ -108,7 +108,7 @@ public class ValueNumber extends ValueBase<Number> implements Value {
     	if(result instanceof BigDecimal) {
     		return NodeFactory.createLiteral( ((BigDecimal)result).toPlainString(),  XSDDatatype.XSDdecimal) ;
     	}
-        return NodeFactory.createUncachedLiteral(result, typeFromNumber(result));
+        return NodeFactory.createLiteralByValue(result, typeFromNumber(result));
     }
     
     public static RDFDatatype typeFromNumber(Number result) {

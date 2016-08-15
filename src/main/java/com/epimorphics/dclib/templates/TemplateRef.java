@@ -16,7 +16,7 @@ import com.epimorphics.dclib.framework.ConverterProcess;
 import com.epimorphics.dclib.framework.DataContext;
 import com.epimorphics.dclib.framework.Template;
 import com.epimorphics.util.EpiException;
-import com.hp.hpl.jena.graph.Node;
+import org.apache.jena.graph.Node;
 
 /**
  * An indirect pointref to a template that allows for late binding of template names

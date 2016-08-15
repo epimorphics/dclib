@@ -12,7 +12,7 @@ package com.epimorphics.dclib.framework;
 import java.util.List;
 
 import com.epimorphics.appbase.monitor.ConfigInstance;
-import com.hp.hpl.jena.graph.Node;
+import org.apache.jena.graph.Node;
 
 /**
  * Defines a CSV to RDF data mapping, may be standalone or may be composed

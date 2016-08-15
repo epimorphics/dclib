@@ -13,7 +13,7 @@ import org.apache.jena.atlas.json.JsonObject;
 import org.apache.jena.riot.system.StreamRDF;
 
 import com.epimorphics.dclib.framework.MapSource;
-import com.hp.hpl.jena.graph.Node;
+import org.apache.jena.graph.Node;
 
 /**
  * Generic implementation of MapSource based on an in-memory lookup table.

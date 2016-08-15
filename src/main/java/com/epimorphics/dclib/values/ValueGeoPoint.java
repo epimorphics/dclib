@@ -10,7 +10,7 @@
 package com.epimorphics.dclib.values;
 
 import com.epimorphics.geo.GeoPoint;
-import com.hp.hpl.jena.graph.Node;
+import org.apache.jena.graph.Node;
 
 /**
  * A value which represents a geographic point. 

@@ -23,7 +23,7 @@ import com.epimorphics.dclib.values.Row;
 import com.epimorphics.dclib.values.Value;
 import com.epimorphics.dclib.values.ValueArray;
 import com.epimorphics.dclib.values.ValueFactory;
-import com.hp.hpl.jena.graph.Node;
+import org.apache.jena.graph.Node;
 
 public class TestFunctions {
 

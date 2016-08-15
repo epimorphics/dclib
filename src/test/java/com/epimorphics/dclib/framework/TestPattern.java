@@ -20,11 +20,11 @@ import com.epimorphics.dclib.values.Value;
 import com.epimorphics.dclib.values.ValueArray;
 import com.epimorphics.dclib.values.ValueFactory;
 import com.epimorphics.dclib.values.ValueNumber;
-import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
-import com.hp.hpl.jena.graph.Node;
-import com.hp.hpl.jena.graph.NodeFactory;
-import com.hp.hpl.jena.util.FileManager;
-import com.hp.hpl.jena.vocabulary.RDF;
+import org.apache.jena.datatypes.xsd.XSDDatatype;
+import org.apache.jena.graph.Node;
+import org.apache.jena.graph.NodeFactory;
+import org.apache.jena.util.FileManager;
+import org.apache.jena.vocabulary.RDF;
 
 public class TestPattern {
     DataContext dc = new DataContext();
@@ -62,7 +62,6 @@ public class TestPattern {
         env.set("d4", ValueFactory.asValue("0.1"));
         env.set("str",ValueFactory.asValue("South Tees Hospitals NHS Foundation Trust"));
 
-        
         dc.setPrefixes( FileManager.get().loadModel("prefixes.ttl") );
     }
     

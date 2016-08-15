@@ -23,8 +23,8 @@ import org.slf4j.LoggerFactory;
 
 import com.epimorphics.dclib.templates.TemplateFactory;
 import com.epimorphics.util.EpiException;
-import com.hp.hpl.jena.shared.PrefixMapping;
-import com.hp.hpl.jena.shared.impl.PrefixMappingImpl;
+import org.apache.jena.shared.PrefixMapping;
+import org.apache.jena.shared.impl.PrefixMappingImpl;
 
 /**
  * Packages access to the background context of reference data, templates and

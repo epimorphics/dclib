@@ -23,17 +23,17 @@ import com.epimorphics.rdfutil.RDFUtil;
 import com.epimorphics.tasks.SimpleProgressMonitor;
 import com.epimorphics.util.NameUtils;
 import com.epimorphics.vocabs.SKOS;
-import com.hp.hpl.jena.rdf.model.Literal;
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.Property;
-import com.hp.hpl.jena.rdf.model.RDFNode;
-import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.rdf.model.ResourceFactory;
-import com.hp.hpl.jena.rdf.model.Statement;
-import com.hp.hpl.jena.util.FileManager;
-import com.hp.hpl.jena.vocabulary.DCTerms;
-import com.hp.hpl.jena.vocabulary.RDF;
-import com.hp.hpl.jena.vocabulary.RDFS;
+import org.apache.jena.rdf.model.Literal;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.Property;
+import org.apache.jena.rdf.model.RDFNode;
+import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.rdf.model.ResourceFactory;
+import org.apache.jena.rdf.model.Statement;
+import org.apache.jena.util.FileManager;
+import org.apache.jena.vocabulary.DCTerms;
+import org.apache.jena.vocabulary.RDF;
+import org.apache.jena.vocabulary.RDFS;
 
 public class TestBasicConverters {
     
@@ -268,6 +268,12 @@ public class TestBasicConverters {
         checkAgainstExpected("test/bugCases/null.json", "test/test-ok.csv", "test/bugCases/null.ttl");
         
         checkAgainstExpected("test/bugCases/accidental-lang.yaml", "test/bugCases/accidental-lang.csv", "test/bugCases/accidental-lang.ttl");
+    }
+    
+    @Test
+    public void testDateParseFailure() throws IOException {
+        // A failure to parse a date shouldn't break the whole template, or should it
+        checkAgainstExpected("test/bugCases/rloi.yaml", "test/bugCases/rloiNoBOM.csv", "test/bugCases/rloi-out.ttl");
     }
     
     @Test

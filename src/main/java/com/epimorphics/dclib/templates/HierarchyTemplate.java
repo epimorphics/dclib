@@ -20,8 +20,8 @@ import com.epimorphics.dclib.framework.DataContext;
 import com.epimorphics.dclib.framework.NullResult;
 import com.epimorphics.dclib.framework.Pattern;
 import com.epimorphics.dclib.framework.Template;
-import com.hp.hpl.jena.graph.Node;
-import com.hp.hpl.jena.graph.Triple;
+import org.apache.jena.graph.Node;
+import org.apache.jena.graph.Triple;
 
 public class HierarchyTemplate extends TemplateBase implements Template {
     protected Pattern parentLink;

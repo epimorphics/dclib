@@ -12,8 +12,8 @@ package com.epimorphics.dclib.values;
 import org.apache.commons.jexl2.Script;
 
 import com.epimorphics.dclib.framework.BindingEnv;
-import com.hp.hpl.jena.graph.Node;
-import com.hp.hpl.jena.graph.NodeFactory;
+import org.apache.jena.graph.Node;
+import org.apache.jena.graph.NodeFactory;
 
 /**
  * Wraps up a Jexl script as an executable function
@@ -69,7 +69,7 @@ public class ValueFunction implements Value {
 
     @Override
     public Node asNode() {
-        return NodeFactory.createAnon();
+        return NodeFactory.createBlankNode();
     }
 
     @Override

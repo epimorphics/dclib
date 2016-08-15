@@ -31,8 +31,8 @@ import com.epimorphics.dclib.framework.NullResult;
 import com.epimorphics.dclib.framework.Pattern;
 import com.epimorphics.dclib.framework.Template;
 import com.epimorphics.util.EpiException;
-import com.hp.hpl.jena.graph.Node;
-import com.hp.hpl.jena.graph.NodeFactory;
+import org.apache.jena.graph.Node;
+import org.apache.jena.graph.NodeFactory;
 
 public class ParameterizedTemplate extends TemplateBase implements Template {
     protected List<Map<String, Pattern>> parameters = new ArrayList<>();

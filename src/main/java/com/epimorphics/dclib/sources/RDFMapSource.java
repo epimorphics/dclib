@@ -22,19 +22,19 @@ import com.epimorphics.dclib.framework.ConverterProcess;
 import com.epimorphics.dclib.framework.MapSource;
 import com.epimorphics.dclib.templates.JSONConstants;
 import com.epimorphics.util.EpiException;
-import com.hp.hpl.jena.graph.Node;
-import com.hp.hpl.jena.graph.Triple;
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.Property;
-import com.hp.hpl.jena.rdf.model.RDFNode;
-import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.rdf.model.ResourceFactory;
-import com.hp.hpl.jena.rdf.model.Statement;
-import com.hp.hpl.jena.rdf.model.StmtIterator;
-import com.hp.hpl.jena.sparql.util.Closure;
-import com.hp.hpl.jena.util.FileManager;
-import com.hp.hpl.jena.util.iterator.ExtendedIterator;
-import com.hp.hpl.jena.vocabulary.RDF;
+import org.apache.jena.graph.Node;
+import org.apache.jena.graph.Triple;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.Property;
+import org.apache.jena.rdf.model.RDFNode;
+import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.rdf.model.ResourceFactory;
+import org.apache.jena.rdf.model.Statement;
+import org.apache.jena.rdf.model.StmtIterator;
+import org.apache.jena.sparql.util.Closure;
+import org.apache.jena.util.FileManager;
+import org.apache.jena.util.iterator.ExtendedIterator;
+import org.apache.jena.vocabulary.RDF;
 
 /**
  * A mapping source derived from an RDF file. The RDF will loaded into memory
