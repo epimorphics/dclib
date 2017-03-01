@@ -11,6 +11,7 @@ package com.epimorphics.dclib.values;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -50,6 +51,22 @@ public class GlobalFunctions {
     
     public static Value nullValue() {
         return new ValueNull();
+    }
+    
+    public static boolean isEmpty(Object value) {
+        if (value == null) {
+            return true;
+        } else if (value instanceof String) {
+            return true;
+        } else if (value instanceof ValueString) {
+            return ((ValueString)value).toString().isEmpty();
+        } else if (value instanceof Value) {
+            return ((Value)value).isNull();
+        } else if (value instanceof Collection<?>) {
+            return ((Collection<?>) value).isEmpty();
+        } else {
+            return false;
+        }
     }
     
     public static void abort() {
