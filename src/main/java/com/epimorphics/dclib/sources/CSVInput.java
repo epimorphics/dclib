@@ -104,8 +104,9 @@ public class CSVInput {
             if (rowValues == null || rowValues.length == 0) {
                 return null;
             }
+            int safeLength = Math.min(rowValues.length,headers.length);
             BindingEnv row = new BindingEnv( );
-            for (int i = 0; i < headers.length; i++) {
+            for (int i = 0; i < safeLength; i++) {
                 row.put(headers[i], rowValues[i]);
             }
             return row;
