@@ -40,6 +40,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.zip.GZIPOutputStream;
 
 public class Main {
     public static final String DEBUG_FLAG = "--debug";
@@ -48,6 +49,7 @@ public class Main {
     public static final String NULL_ROW_FLAG = "--abortIfRowFails";
     public static final String NTHREADS_FLAG = "--nThreads";
     public static final String BATCH_FLAG = "--batch";
+    public static final String COMPRESS_FLAG = "--compress";
     
     public static void main(String[] argsIn) throws IOException {
         CommandArgs cargs = new CommandArgs();
@@ -71,6 +73,10 @@ public class Main {
         if (args.contains(NULL_ROW_FLAG)) {
             cargs.setNullRowAborts(true);
             args.remove(NULL_ROW_FLAG);
+        }
+        if (args.contains(COMPRESS_FLAG)) {
+            cargs.setCompress(true);
+            args.remove(COMPRESS_FLAG);
         }
         if (args.contains(NTHREADS_FLAG)) {
             int i = args.indexOf(NTHREADS_FLAG);
@@ -96,7 +102,7 @@ public class Main {
 
         if (batchFile == null && args.size() < 2) {
             System.err.println("Usage:  java -jar dclib.jar [--debug] [--streaming] [--ntriples] [--abortIfRowFails] template.json ... data.csv");
-            System.err.println("   or:  java -jar dclib.jar [--debug] [--streaming] [--ntriples] [--abortIfRowFails] [--nThreads 4] --batch batchFile");
+            System.err.println("   or:  java -jar dclib.jar [--debug] [--streaming] [--ntriples] [--abortIfRowFails] [--nThreads 4] [--compress] --batch batchFile");
             System.exit(1);
         }
         
@@ -162,7 +168,13 @@ public class Main {
             if (out == null) {
                 String outf = dataFile.replaceFirst("\\.csv$", "");
                 outf += args.isNtriples() ? ".nt" : ".ttl";
+                if (args.isCompress()) {
+                    outf += ".gz";
+                }
                 out = new FileOutputStream(outf);
+                if (args.isCompress()) {
+                    out = new GZIPOutputStream(out);
+                }
                 System.err.println("Processing " + dataFile + " to " + outf);
             }
         }
@@ -236,7 +248,14 @@ public class Main {
         boolean nullRowAborts = false;
         int nThreads = 4;
         List<String> auxTemplates = new ArrayList<>();
+        boolean compress = false;
         
+        public boolean isCompress() {
+            return compress;
+        }
+        public void setCompress(boolean compress) {
+            this.compress = compress;
+        }
         public boolean isDebug() {
             return debug;
         }
