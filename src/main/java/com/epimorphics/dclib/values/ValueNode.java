@@ -12,13 +12,17 @@ package com.epimorphics.dclib.values;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.jena.graph.Node;
+import org.apache.jena.graph.Triple;
+import org.apache.jena.rdf.model.Literal;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.Property;
+import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.riot.system.StreamRDF;
+
 import com.epimorphics.dclib.framework.ConverterProcess;
 import com.epimorphics.rdfutil.ModelWrapper;
 import com.epimorphics.rdfutil.RDFNodeWrapper;
-import org.apache.jena.graph.Node;
-import org.apache.jena.rdf.model.Literal;
-import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.Resource;
 
 public class ValueNode extends ValueBase<Node> implements Value{
     RDFNodeWrapper wnode;
@@ -236,6 +240,21 @@ public class ValueNode extends ValueBase<Node> implements Value{
             return prop;
         }
     }
+    
+    public ValueNode addPropertyValue(Value p, Value o) {
+        ConverterProcess proc = ConverterProcess.get();
+        StreamRDF        out = proc.getOutputStream();
+        ModelWrapper     model = new ModelWrapper(proc.getModel());
+      
+        Property prop = model.getModel().createProperty(model.getResource(p.toString()).getURI());
+        Resource val  = model.getResource(o.toString());
+        
+        out.triple(new Triple(this.asNode(), prop.asNode(), val.asNode()));
+//        model.getModel().add(this.asResource(), prop, (RDFNode) val);
+    
+    	return this;
+    }
+    
     public static class PropertyValue implements Comparable<PropertyValue> {
 
         protected ValueNode prop;
