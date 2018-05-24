@@ -240,21 +240,57 @@ public class ValueNode extends ValueBase<Node> implements Value{
             return prop;
         }
     }
+
+    public ValueNode addPropertyValue(String p, String o) {
+    	return addPropertyValue(new ValueString(p),  new ValueString(o)) ;
+    }
     
+    public ValueNode addPropertyValue(Value p, String o) {
+    	return addPropertyValue(p,  new ValueString(o)) ;
+    }
+
+    public ValueNode addPropertyValue(String p, Value o) {
+    	return addPropertyValue(new ValueString(p), o) ;
+    }
+
     public ValueNode addPropertyValue(Value p, Value o) {
         ConverterProcess proc = ConverterProcess.get();
         StreamRDF        out = proc.getOutputStream();
         ModelWrapper     model = new ModelWrapper(proc.getModel());
-      
-        Property prop = model.getModel().createProperty(model.getResource(p.toString()).getURI());
-        Resource val  = model.getResource(o.toString());
-        
-        out.triple(new Triple(this.asNode(), prop.asNode(), val.asNode()));
+
+        Resource prop = model.getResource(p.toString());
+  
+        out.triple(new Triple(this.asNode(), prop.asNode(), o.asNode()));
 //        model.getModel().add(this.asResource(), prop, (RDFNode) val);
     
     	return this;
     }
     
+    public ValueNode addObjectPropertyValue(String p, String o) {
+    	return addObjectPropertyValue(new ValueString(p),  new ValueString(o)) ;
+    }
+    
+    public ValueNode addObjectPropertyValue(Value p, String o) {
+    	return addObjectPropertyValue(p,  new ValueString(o)) ;
+    }
+
+    public ValueNode addObjectPropertyValue(String p, Value o) {
+    	return addObjectPropertyValue(new ValueString(p), o) ;
+    }
+
+    public ValueNode addObjectPropertyValue(Value p, Value o) {
+        ConverterProcess proc = ConverterProcess.get();
+        StreamRDF        out = proc.getOutputStream();
+        ModelWrapper     model = new ModelWrapper(proc.getModel());
+
+        Resource prop = model.getResource(p.toString());
+        Resource res  = model.getResource(o.toString());
+  
+        out.triple(new Triple(this.asNode(), prop.asNode(), res.asNode()));
+//        model.getModel().add(this.asResource(), prop, (RDFNode) val);
+    
+    	return this;
+    }
     public static class PropertyValue implements Comparable<PropertyValue> {
 
         protected ValueNode prop;
