@@ -11,6 +11,9 @@ package com.epimorphics.dclib.values;
 
 import com.epimorphics.dclib.framework.ConverterProcess;
 import com.epimorphics.util.NameUtils;
+
+import java.util.ArrayList;
+
 import org.apache.jena.datatypes.RDFDatatype;
 import org.apache.jena.datatypes.TypeMapper;
 import org.apache.jena.graph.Node;
@@ -315,6 +318,37 @@ public class ValueArray extends ValueBase<Value[]> implements Value {
         }
         return new ValueArray(result);
     }
+    
+    public String toString() {
+    	StringBuilder sb = new StringBuilder() ;
+    	if (value == null) 
+    		return null;
+    	boolean first = true;
+    	sb.append('[');
+    	
+    	for(Value v : value) {
+    		sb.append(first ? "" : " | ");
+    		sb.append(v.toString()) ;
+    		first = false;
+    	}
+    	sb.append(']');
+    	return sb.toString();
+    }
+    
+//    public ValueArray flatten() { 
+//    	ArrayList<Value> result = new ArrayList<Value>() ;
+//    	Value[] a = null;
+//    	for (Value v : value) {
+//    		if(v instanceof ValueArray) {
+//    			ValueArray values = ((ValueArray) v).flatten();
+//    			for (Value x : values.getValues()) 
+//    				result.add(x);
+//    		}
+//    		else result.add(v);    		
+//    	}
+//    	a = result.toArray(a);
+//    	return new ValueArray(a);
+//    }
 }
 
 
