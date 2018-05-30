@@ -16,11 +16,12 @@ import org.apache.jena.graph.Node;
 import org.apache.jena.graph.Triple;
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.jena.riot.system.StreamRDF;
 
 import com.epimorphics.dclib.framework.ConverterProcess;
+import com.epimorphics.dclib.framework.DataContext;
 import com.epimorphics.rdfutil.ModelWrapper;
 import com.epimorphics.rdfutil.RDFNodeWrapper;
 
@@ -255,10 +256,10 @@ public class ValueNode extends ValueBase<Node> implements Value{
 
     public ValueNode addPropertyValue(Value p, Value o) {
         ConverterProcess proc = ConverterProcess.get();
+        DataContext      dc   = proc.getDataContext();
         StreamRDF        out = proc.getOutputStream();
-        ModelWrapper     model = new ModelWrapper(proc.getModel());
 
-        Resource prop = model.getResource(p.toString());
+        Resource prop = ResourceFactory.createResource(dc.expandURI(p.toString()) );
   
         out.triple(new Triple(this.asNode(), prop.asNode(), o.asNode()));
 //        model.getModel().add(this.asResource(), prop, (RDFNode) val);
@@ -280,11 +281,11 @@ public class ValueNode extends ValueBase<Node> implements Value{
 
     public ValueNode addObjectPropertyValue(Value p, Value o) {
         ConverterProcess proc = ConverterProcess.get();
+        DataContext      dc   = proc.getDataContext();
         StreamRDF        out = proc.getOutputStream();
-        ModelWrapper     model = new ModelWrapper(proc.getModel());
-
-        Resource prop = model.getResource(p.toString());
-        Resource res  = model.getResource(o.toString());
+        
+        Resource prop = ResourceFactory.createResource(dc.expandURI(p.toString()));
+        Resource res  = ResourceFactory.createResource(dc.expandURI(o.toString()));
   
         out.triple(new Triple(this.asNode(), prop.asNode(), res.asNode()));
 //        model.getModel().add(this.asResource(), prop, (RDFNode) val);
