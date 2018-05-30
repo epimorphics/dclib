@@ -285,8 +285,8 @@ public class ValueNode extends ValueBase<Node> implements Value{
         DataContext      dc   = proc.getDataContext();
         StreamRDF        out = proc.getOutputStream();
         
-        Resource prop = ResourceFactory.createResource(dc.expandURI(p.toString()) );
-        Resource res  = ResourceFactory.createResource(dc.expandURI(o.toString()) );
+        Resource prop = ResourceFactory.createResource(dc.expandURI(p.toString()));
+        Resource res  = ResourceFactory.createResource(dc.expandURI(o.toString()));
   
         out.triple(new Triple(this.asNode(), prop.asNode(), res.asNode()));
 //        model.getModel().add(this.asResource(), prop, (RDFNode) val);
