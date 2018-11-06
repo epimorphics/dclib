@@ -171,4 +171,18 @@ public class GlobalFunctions {
     public static ValueGeoPoint fromGridRef(Value gridref) {
         return fromGridRefRaw( gridref.toString() );
     }
+    
+    static protected Map<Object, Node> bNodes;
+    
+    public static  ValueNode bnodeFor(Object key) {
+        if (bNodes == null) {
+            bNodes = new HashMap<Object, Node>();
+        }
+        Node bnode = bNodes.get(key);
+        if (bnode == null) {
+            bnode = NodeFactory.createBlankNode();
+            bNodes.put(key, bnode);
+        }
+        return new ValueNode(bnode);
+    }
 }

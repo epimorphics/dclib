@@ -11,8 +11,10 @@ package com.epimorphics.dclib.framework;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
@@ -23,6 +25,8 @@ import com.epimorphics.dclib.values.Row;
 import com.epimorphics.dclib.values.Value;
 import com.epimorphics.dclib.values.ValueArray;
 import com.epimorphics.dclib.values.ValueFactory;
+import com.epimorphics.dclib.values.ValueNode;
+
 import org.apache.jena.graph.Node;
 
 public class TestFunctions {
@@ -39,6 +43,26 @@ public class TestFunctions {
         assertNotSame(a1, b1);
         assertTrue( a1.isBlank() );
         assertNotNull( row.getUuid() );
+    }
+    
+    @Test public void testGlobalNode() {
+    	Object a1 = eval("void","{bnodeFor('abc')}");
+    	Object b1 = eval("void","{bnodeFor('bcd')}");
+    	Object a2 = eval("void","{bnodeFor('abc')}");
+    	
+    	assertEquals(ValueNode.class, a1.getClass());
+    	
+    	assert(((ValueNode) a1).isAnon());
+    	assert(((ValueNode) a2).isAnon());
+    	assert(((ValueNode) b1).isAnon());
+ 
+ /* a1 and a2 happen to be different ValueNode objects that wrap a common blank Node object. 
+  * They don't have to be. They could be the same object. So testing for equality rather
+  * than identity.
+  */
+    	assertEquals(a1, a2);
+    	assertNotEquals(a1, b1);
+    	assertNotEquals(a2, b1);
     }
 
     
