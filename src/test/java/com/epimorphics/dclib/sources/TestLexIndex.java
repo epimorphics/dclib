@@ -11,10 +11,25 @@ package com.epimorphics.dclib.sources;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
+import java.util.Collection;
+
+import org.junit.Before;
 import org.junit.Test;
 
 public class TestLexIndex {
+    
+	LexIndex<String> table = new LexIndex<>();
+    
+    @Before
+    public void setUp() {
+    	table.put("theFirstKey", "first");
+        table.put("first key", "second");
+        table.put("anotherKey", "third");
+    }
+
     @Test
     public void testNormalize() {
         assertEquals("", LexIndex.normalize(""));
@@ -24,13 +39,9 @@ public class TestLexIndex {
         assertEquals("you me", LexIndex.normalize("you and     me"));
         assertEquals("you me", LexIndex.normalize("you      \n & me"));
     }
-
+    
     @Test
     public void testLookup() {
-        LexIndex<String> table = new LexIndex<>();
-        table.put("theFirstKey", "first");
-        table.put("first key", "second");
-        table.put("anotherKey", "third");
         assertNull( table.lookup("no match") );
         assertEquals("third", table.lookup("another key"));
         assertEquals("third", table.lookup("another-key"));
@@ -38,6 +49,15 @@ public class TestLexIndex {
         assertEquals("second", table.lookup("first key"));
         assertEquals("second", table.lookup("firstKey"));
         assertEquals("first", table.lookup("theFirstKey"));
+    }
+    
+    @Test
+    public void testLookupAll() {
+        table.put("anotherKey", "fourth");
+        Collection<String> results = table.lookupAll("another key");
+        assertTrue(results.contains("third"));
+        assertTrue(results.contains("fourth"));
+        assertEquals(2, results.size());
     }
     
 }
