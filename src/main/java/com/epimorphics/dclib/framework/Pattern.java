@@ -12,6 +12,8 @@ package com.epimorphics.dclib.framework;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.ws.rs.NotSupportedException;
+
 import org.apache.commons.jexl2.Expression;
 import org.apache.commons.jexl2.JexlEngine;
 import org.apache.commons.jexl2.Script;
@@ -113,15 +115,11 @@ public class Pattern {
                 if (result instanceof Value && ((Value)result).isMulti()) {
                     if (!multiValued) {
                         multiValued = true;
-                        ans = new ValueString( ansString.toString() );
+                        ans = wrapResultAsValue( ansString.toString() );
                     }
                 }
                 if (multiValued) {
-                    if (result instanceof Value) {
-                        ans = ans.append( (Value)result );
-                    } else {
-                        ans = ans.append( new ValueString(result.toString()) );
-                    }
+                	ans = ans.append( wrapResultAsValue(result) );
                 } else {
                     ansString.append( result.toString() );
                 }
@@ -133,6 +131,18 @@ public class Pattern {
                 return wrapResult(result);
             }
         }
+    }
+    
+    private Value wrapResultAsValue(Object result) {
+    	Object r = wrapResult(result);
+    	if (r instanceof Value) {
+    		return (Value)r;
+    	}
+    	r = wrapResult(result.toString());
+    	if (r instanceof Value) {
+    		return (Value)r;
+    	}
+    	throw new NotSupportedException("Cannot wrap object "+result);
     }
     
     private Object wrapResult(Object result) {
