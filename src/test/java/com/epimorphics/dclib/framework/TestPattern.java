@@ -122,7 +122,7 @@ public class TestPattern {
         checkArray(both, RDF.type.getURI(), RDF.Property.getURI());
         
         Object type = eval("<rdf:{value('type comment').split(' ').0}>");
-        assertEquals(type.toString(), RDF.type.getURI());
+        assertEquals(RDF.type.getURI(), type.toString());
     }
     
     protected void checkArray(Object result, String...expected) {
