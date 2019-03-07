@@ -9,11 +9,13 @@
 
 package com.epimorphics.dclib.sources;
 
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
-
 import org.apache.jena.util.OneToManyMap;
 
 /**
@@ -63,6 +65,16 @@ public class LexIndex<T> {
         }
         return null;
     }
+    
+    public Collection<T> lookupAll(String key) {
+    	String nkey = normalize(key);
+    	Iterator<Record> i = table.getAll(nkey);
+    	List<T> ret = new ArrayList<T>();
+    	while(i.hasNext()) {
+    		ret.add(i.next().value);    		
+    	}
+    	return ret; 
+	}
     
     /**
      * Normalize a string for more robust matching, assumes English text.

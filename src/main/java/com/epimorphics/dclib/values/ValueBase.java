@@ -12,11 +12,21 @@ package com.epimorphics.dclib.values;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Collection;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.codec.binary.Base64;
+import org.apache.jena.datatypes.RDFDatatype;
+import org.apache.jena.datatypes.TypeMapper;
+import org.apache.jena.graph.Node;
+import org.apache.jena.graph.NodeFactory;
+import org.apache.jena.graph.Triple;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.riot.system.StreamRDF;
+import org.apache.jena.util.iterator.ExtendedIterator;
+import org.apache.jena.vocabulary.XSD;
 
 import com.epimorphics.dclib.framework.ConverterProcess;
 import com.epimorphics.dclib.framework.MapSource;
@@ -26,15 +36,6 @@ import com.epimorphics.rdfutil.RDFUtil;
 import com.epimorphics.tasks.ProgressReporter;
 import com.epimorphics.util.EpiException;
 import com.epimorphics.util.NameUtils;
-import org.apache.jena.datatypes.RDFDatatype;
-import org.apache.jena.datatypes.TypeMapper;
-import org.apache.jena.graph.Node;
-import org.apache.jena.graph.NodeFactory;
-import org.apache.jena.graph.Triple;
-import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.Resource;
-import org.apache.jena.util.iterator.ExtendedIterator;
-import org.apache.jena.vocabulary.XSD;
 
 /**
  * A simple packaged value.
@@ -211,6 +212,23 @@ public abstract class ValueBase<T> implements Value {
         } else {
             return ValueFactory.asValue(deflt.toString());
         }
+    }
+    
+    public ValueArray mapToAll(String mapsource) {
+        ConverterProcess proc = ConverterProcess.get();
+        MapSource source = proc.getDataContext().getSource(mapsource);
+        Collection<Node> n = source.lookupAll(toString());
+        if (n == null || n.isEmpty()) {
+            throw new MatchFailed("Value '" + value + "' not found in source " + mapsource);
+        }
+        Value[] values = new Value[n.size()];
+        int i = 0;
+        for (Node node : n) {
+        	source.enrich(proc.getOutputStream(), node);
+        	values[i] = new ValueNode(node);
+        	i++;
+		}
+        return new ValueArray(values);
     }
     
     public Value asDate(String format, String typeURI) {

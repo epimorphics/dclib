@@ -10,9 +10,12 @@
 package com.epimorphics.dclib.sources;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+
+import javax.ws.rs.NotSupportedException;
 
 import org.apache.jena.atlas.json.JsonObject;
 import org.apache.jena.riot.system.StreamRDF;
@@ -114,6 +117,8 @@ public class RDFSparqlMapSource extends MapSourceBaseBase implements MapSource {
         // No enrichment supported
     }
 
-
-
+	@Override
+	public Collection<Node> lookupAll(String key) {
+		throw new NotSupportedException(key+".mapToAll() not supported for RDF SPARQL mapping sources.");
+	}
 }

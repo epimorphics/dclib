@@ -12,6 +12,9 @@ package com.epimorphics.dclib.framework;
 import org.apache.jena.riot.system.StreamRDF;
 
 import com.epimorphics.appbase.monitor.ConfigInstance;
+
+import java.util.Collection;
+
 import org.apache.jena.graph.Node;
 
 /**
@@ -34,9 +37,14 @@ public interface MapSource extends ConfigInstance {
      */
     public Node lookup(String key, String valueToReturn);
     
+    /**
+     * Return the matching normalized RDF values where key matches 
+     * in the mapping source
+     */
+    public Collection<Node> lookupAll(String key);
     
     /**
-     * Return the name of this suorce, may be null
+     * Return the name of this source, may be null
      */
     public String getName();
     
