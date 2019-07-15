@@ -9,6 +9,8 @@
 
 package com.epimorphics.dclib.sources;
 
+import java.util.Collection;
+
 import org.apache.jena.atlas.json.JsonObject;
 import org.apache.jena.riot.system.StreamRDF;
 
@@ -41,6 +43,11 @@ public class MapSourceBase extends MapSourceBaseBase implements MapSource {
     public Node lookup(String key, String valueToReturn) {
         return lookup(key);
     }
+    
+    @Override
+    public Collection<Node> lookupAll(String key) {
+        return table.lookupAll(key);
+    } 
     
     @Override
     public void enrich(StreamRDF stream, Node match) {

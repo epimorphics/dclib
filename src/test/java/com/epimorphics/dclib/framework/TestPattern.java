@@ -117,6 +117,12 @@ public class TestPattern {
         checkArray( eval("{m.split(',').replaceAll('[oa]','z')}"), "Fz z", "Bzr ");
         checkArray( eval("{b.split(' ').append(i)}"), "foo42", "bar42");
         checkArray( eval("{i.append(b.split(' '))}"), "42foo", "42bar");
+        
+        Object both = eval("<rdf:{value('type Property').split(' ')}>");
+        checkArray(both, RDF.type.getURI(), RDF.Property.getURI());
+        
+        Object type = eval("<rdf:{value('type comment').split(' ').0}>");
+        assertEquals(RDF.type.getURI(), type.toString());
     }
     
     protected void checkArray(Object result, String...expected) {
