@@ -9,3 +9,9 @@ generated
 /work
 /velocity.log
 /dependency-reduced-pom.xml
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
