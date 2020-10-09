@@ -109,7 +109,22 @@ public class GlobalFunctions {
     
     /** Wrap a plain object as a Value */
     public static Object value(Object value) {
-        if (value instanceof Value) {
+  
+    	if(value instanceof Object[] ) {
+    		Object[] oa = (Object[] )value;
+    		int len = oa.length;
+        	Value[] v = new Value[len] ;
+        	for(int i=0; i<len; i++) {
+        		Object wrapped = value(oa[i]);
+        		if ( !(wrapped instanceof Value) ) {
+        			throw new EpiException("Can't wrap array/collection member:" + oa[i] +" as a Value()");
+        		}
+        		v[i] = (Value) value(oa[i]);
+        	}
+        	return new ValueArray(v);
+    	}
+
+    	if (value instanceof Value) {
             return value;
         } else if (value instanceof String) {
             return new ValueString((String)value);
@@ -118,6 +133,10 @@ public class GlobalFunctions {
         } else {
             return value;
         }
+    }
+    
+    public static Object value(Collection<Object> values) {
+    	return value(values.toArray(new Object[values.size()]));
     }
     
     /** Convert a URI string to a resource, expanding any prefixes */
