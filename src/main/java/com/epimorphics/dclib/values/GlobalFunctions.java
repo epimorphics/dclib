@@ -11,6 +11,7 @@ package com.epimorphics.dclib.values;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -109,9 +110,12 @@ public class GlobalFunctions {
     
     /** Wrap a plain object as a Value */
     public static Object value(Object value) {
-  
-    	if(value instanceof Object[] ) {
-    		Object[] oa = (Object[] )value;
+        
+    	if(value.getClass().isArray()) {
+	        Object[] oa = (value instanceof int[] )    ? (Object[] ) (Arrays.stream((int[])    value).boxed().toArray()) :
+    	                  (value instanceof long[] )   ? (Object[] ) (Arrays.stream((long[])   value).boxed().toArray()) :
+          	              (value instanceof double[] ) ? (Object[] ) (Arrays.stream((double[]) value).boxed().toArray()) :
+		    		      (Object[] )value;
     		int len = oa.length;
         	Value[] v = new Value[len] ;
         	for(int i=0; i<len; i++) {
