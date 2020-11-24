@@ -279,15 +279,19 @@ public class ValueNode extends ValueBase<Node> implements Value{
     	return addObjectPropertyValue(new ValueString(p), o) ;
     }
 
+
+
     public ValueNode addObjectPropertyValue(Value p, Value o) {
         ConverterProcess proc = ConverterProcess.get();
         DataContext      dc   = proc.getDataContext();
         StreamRDF        out = proc.getOutputStream();
         
-        Resource prop = ResourceFactory.createResource(dc.expandURI(p.toString()));
-        Resource res  = ResourceFactory.createResource(dc.expandURI(o.toString()));
+        Node prop =  ResourceFactory.createResource(dc.expandURI(p.toString())).asNode();
+        Node res  = (o instanceof ValueNode)
+        		    ? o.asNode() 
+                    : ResourceFactory.createResource(dc.expandURI(o.toString())).asNode();
   
-        out.triple(new Triple(this.asNode(), prop.asNode(), res.asNode()));
+        out.triple(new Triple(this.asNode(), prop, res ));
 //        model.getModel().add(this.asResource(), prop, (RDFNode) val);
     
     	return this;
