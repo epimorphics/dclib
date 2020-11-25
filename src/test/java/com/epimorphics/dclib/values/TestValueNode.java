@@ -67,6 +67,7 @@ public class TestValueNode {
 				+ ".addPropertyValue(       'dct:hasVersion',                     value('10.5').asDecimal())"                          	 // String, ValueNumber
 				+ ".addObjectPropertyValue( 'dct:isVersionOf',                   'http://example.com/bar')"                   		     // String, String
 				+ ".addObjectPropertyValue( value('dct:isVersionOf').asRDFNode(), value('http://example.com/bar2'))"                     // ValueNode, ValueNode
+				+ ".addPropertyValue(        'rdfs:label',                        value('This is also a test').lang('en'))"              // String, Node 
 				+ ".asResource()"
 				+ "}"
 			    );
@@ -75,7 +76,9 @@ public class TestValueNode {
 		assertTrue("Missing or unexpected dct:created value",                proc.getModel().contains(r, DCTerms.created,proc.getModel().createTypedLiteral("2018-05-29T12:24:00Z",XSDDatatype.XSDdateTime)));
 		assertTrue("Missing or unexpected dct:hasVersion (decimal) value",   proc.getModel().contains(r, DCTerms.hasVersion,proc.getModel().createTypedLiteral(BigDecimal.valueOf(10.5))));
 		assertTrue("Missing or unexpected dct:isVersionOf (resource) value", proc.getModel().contains(r, DCTerms.isVersionOf, proc.getModel().getResource("http://example.com/bar")));
-		assertTrue("Missing or unexpected dct:isVersionOf (resource) value", proc.getModel().contains(r, DCTerms.isVersionOf, proc.getModel().getResource("http://example.com/bar2")));		
+		assertTrue("Missing or unexpected dct:isVersionOf (resource) value", proc.getModel().contains(r, DCTerms.isVersionOf, proc.getModel().getResource("http://example.com/bar2")));
+		assertTrue("Missing or unexpected rdfs:label value",                 proc.getModel().contains(r, RDFS.label, proc.getModel().createLiteral("This is also a test","en")));
+		
 	}
 	
 	private Object eval(String pattern) {
