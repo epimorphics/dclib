@@ -349,7 +349,7 @@ public abstract class ValueBase<T> implements Value {
 
     
     /** Convert to a wrapped RDF node, treats strings as a URI and creates a resource node */
-    public ValueNode asRDFNode() {
+    public Value asRDFNode() {
         return new ValueNode( NodeFactory.createURI( value.toString() ) );
     }
     
