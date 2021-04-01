@@ -159,8 +159,8 @@ public class ValueArray extends ValueBase<Value[]> implements Value {
     public Value asRDFNode() {
         return applyFunction(new MapValue() {
             public Value map(Value value) {
-				@SuppressWarnings("rawtypes")
-				Value v = ((ValueBase) value).asRDFNode() ;
+                @SuppressWarnings("rawtypes")
+                Value v = ((ValueBase) value).asRDFNode() ;
                 return v;
             }
         });
