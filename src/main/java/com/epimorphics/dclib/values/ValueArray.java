@@ -156,6 +156,25 @@ public class ValueArray extends ValueBase<Value[]> implements Value {
     }    
     
     @Override
+    public Value asRDFNode() {
+        return applyFunction(new MapValue() {
+            public Value map(Value value) {
+                @SuppressWarnings("rawtypes")
+                Value v = ((ValueBase) value).asRDFNode() ;
+                return v;
+            }
+        });
+    }    
+    
+    public Value asResource() {
+        return applyFunction(new MapValue() {
+            public Value map(Value value) {
+            	return GlobalFunctions.asResource((Object) value);
+            }
+        });
+    }
+    
+    @Override
     public Value map(final String mapsource, final boolean matchRequired) {
         return applyFunction(new MapValue() {
             @SuppressWarnings("rawtypes")
