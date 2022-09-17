@@ -269,7 +269,11 @@ public class TestBasicConverters {
         
         checkAgainstExpected("test/bugCases/accidental-lang.yaml", "test/bugCases/accidental-lang.csv", "test/bugCases/accidental-lang.ttl");
     }
-    
+
+    @Test
+    public void testArrayMap() throws IOException {
+        checkAgainstExpected("test/arrayMap/resource-media-type.yaml", "test/arrayMap/resource_media_types.csv", "test/arrayMap/expected.ttl");
+    }
     @Test
     public void testDateParseFailure() throws IOException {
         // A failure to parse a date shouldn't break the whole template, or should it

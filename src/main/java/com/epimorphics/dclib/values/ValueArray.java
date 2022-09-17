@@ -10,6 +10,7 @@
 package com.epimorphics.dclib.values;
 
 import com.epimorphics.dclib.framework.ConverterProcess;
+import com.epimorphics.dclib.framework.NullResult;
 import com.epimorphics.util.NameUtils;
 
 import java.util.ArrayList;
@@ -333,7 +334,11 @@ public class ValueArray extends ValueBase<Value[]> implements Value {
     public ValueArray applyFunction(MapValue map) {
         Value[] result = new Value[ value.length ];
         for (int i = 0; i < value.length; i++) {
-            result[i] = map.map( value[i]);
+            try {
+                result[i] = map.map( value[i]);
+            } catch (NullResult n) {
+                result[i] = new ValueNull();
+            }
         }
         return new ValueArray(result);
     }
