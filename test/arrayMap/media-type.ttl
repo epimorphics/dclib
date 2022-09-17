@@ -1,0 +1,665 @@
+@prefix c:     <http://vocab.epimorphics.com/agora/def/catalog/> .
+@prefix u:     <http://vocab.epimorphics.com/agora/def/upper/> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix m:     <http://www.freedesktop.org/standards/shared-mime-info> .
+
+<http://vocab.epimorphics.com/agora/reference/media-type/text/turtle>
+        a                       c:MediaType ;
+        c:ianaMediaType         "text/turtle" ;
+        c:relatedFileExtension  ".ttl" ;
+        u:acronym               [ a            u:Acronym ;
+                                  u:notation   "TTL" ;
+                                  u:prefLabel  "Terse Triple Language"@en
+                                ] ;
+        u:identifier            "text/turtle" ;
+        u:inScheme              <http://vocab.epimorphics.com/agora/reference/media-type> ;
+        u:prefLabel             "Turtle RDF document"@en .
+
+<http://vocab.epimorphics.com/agora/reference/media-type/application/gml+xml>
+        a                       c:MediaType ;
+        c:ianaMediaType         "application/gml+xml" ;
+        c:relatedFileExtension  ".gml" ;
+        u:acronym               [ a            u:Acronym ;
+                                  u:notation   "GML" ;
+                                  u:prefLabel  "Geography Markup Language"@en
+                                ] ;
+        u:identifier            "application/gml+xml" ;
+        u:inScheme              <http://vocab.epimorphics.com/agora/reference/media-type> ;
+        u:prefLabel             "GML document"@en .
+
+<http://vocab.epimorphics.com/agora/reference/media-type/application/vnd.ms-excel>
+        a                       c:MediaType ;
+        c:ianaMediaType         "application/vnd.ms-excel" ;
+        c:ianaMediaTypeAlias    "zz-application/zz-winassoc-xls" , "application/x-msexcel" , "application/vnd.ms-excel.sheet.macroEnabled.12" , "application/msexcel" ;
+        c:relatedFileExtension  ".xla" , ".xlm" , ".xll" , ".xlc" , ".xls" , ".xld" , ".xlw" , ".xlt" ;
+        u:acronym               [ a            u:Acronym ;
+                                  u:notation   "XLS" ;
+                                  u:prefLabel  "Microsoft eXcel Spreadsheet"@en
+                                ] ;
+        u:altLabel              "xls / xlsx"@en , "XLSM"@en ;
+        u:identifier            "application/vnd.ms-excel" ;
+        u:inScheme              <http://vocab.epimorphics.com/agora/reference/media-type> ;
+        u:prefLabel             "Excel spreadsheet"@en .
+
+<http://vocab.epimorphics.com/agora/reference/media-type/application/vnd.ms-word.document.macroEnabled.12>
+        a                       c:MediaType ;
+        c:ianaMediaType         "application/vnd.ms-word.document.macroEnabled.12" ;
+        c:relatedFileExtension  ".docm" ;
+        u:altLabel              "DOCM"@en ;
+        u:identifier            "application/vnd.ms-word.document.macroEnabled.12" ;
+        u:inScheme              <http://vocab.epimorphics.com/agora/reference/media-type> ;
+        u:prefLabel             "MS Word Macro Enabled"@en .
+
+<http://vocab.epimorphics.com/agora/reference/media-type/x-service/vnd.ogc.wfs>
+        a                c:MediaType ;
+        c:ianaMediaType  "x-service/vnd.ogc.wfs" ;
+        u:acronym        [ a            u:Acronym ;
+                           u:notation   "OGC WFS" ;
+                           u:prefLabel  "Open Geospatial Consortium Web Feature Service"@en
+                         ] ;
+        u:altLabel       "WFS"@en ;
+        u:identifier     "x-service/vnd.ogc.wfs" ;
+        u:inScheme       <http://vocab.epimorphics.com/agora/reference/media-type> ;
+        u:prefLabel      "OGC WFS"@en .
+
+<http://vocab.epimorphics.com/agora/reference/media-type/text/csv>
+        a                       c:MediaType ;
+        c:ianaMediaType         "text/csv" ;
+        c:ianaMediaTypeAlias    "text/x-csv" , "text/x-comma-separated-values" ;
+        c:relatedFileExtension  ".csv" ;
+        u:acronym               [ a            u:Acronym ;
+                                  u:notation   "CSV" ;
+                                  u:prefLabel  "Comma Separated Values"@en
+                                ] ;
+        u:altLabel              "CSV."@en ;
+        u:identifier            "text/csv" ;
+        u:inScheme              <http://vocab.epimorphics.com/agora/reference/media-type> ;
+        u:prefLabel             "CSV document"@en .
+
+<http://vocab.epimorphics.com/agora/reference/media-type>
+        a             u:ConceptScheme ;
+        rdfs:comment  "Reference list of media types organised into collections."@en .
+
+<http://vocab.epimorphics.com/agora/reference/media-type/application/vnd.ms-powerpoint>
+        a                       c:MediaType ;
+        c:ianaMediaType         "application/vnd.ms-powerpoint" ;
+        c:relatedFileExtension  ".ppt" ;
+        u:acronym               [ a            u:Acronym ;
+                                  u:notation   "PPT" ;
+                                  u:prefLabel  "PowerPoinT"@en
+                                ] ;
+        u:identifier            "application/vnd.ms-powerpoint" ;
+        u:inScheme              <http://vocab.epimorphics.com/agora/reference/media-type> ;
+        u:prefLabel             "Powerpoint"@en .
+
+<http://vocab.epimorphics.com/agora/reference/media-type/application/x-qgis>
+        a                       c:MediaType ;
+        c:ianaMediaType         "application/x-qgis" ;
+        c:relatedFileExtension  ".qgs" ;
+        u:acronym               [ a            u:Acronym ;
+                                  u:notation   "QGIS" ;
+                                  u:prefLabel  "Q Geospatial Information System"@en
+                                ] ;
+        u:identifier            "application/x-qgis" ;
+        u:inScheme              <http://vocab.epimorphics.com/agora/reference/media-type> ;
+        u:prefLabel             "Q GIS"@en .
+
+<http://vocab.epimorphics.com/agora/reference/media-type/text/html>
+        a                       c:MediaType ;
+        c:ianaMediaType         "text/html" ;
+        c:relatedFileExtension  ".html" , ".htm" ;
+        u:acronym               [ a            u:Acronym ;
+                                  u:notation   "HTML" ;
+                                  u:prefLabel  "HyperText Markup Language"@en
+                                ] ;
+        u:altLabel              "HTML5"@en , "SHTML"@en , "webpage"@en , "text/html; charset=UTF-8"@en ;
+        u:identifier            "text/html" ;
+        u:inScheme              <http://vocab.epimorphics.com/agora/reference/media-type> ;
+        u:prefLabel             "HTML document"@en .
+
+<http://vocab.epimorphics.com/agora/reference/media-type/text/plain>
+        a                       c:MediaType ;
+        c:ianaMediaType         "text/plain" ;
+        c:relatedFileExtension  ".txt" , ".text" ;
+        u:acronym               [ a            u:Acronym ;
+                                  u:notation   "TXT" ;
+                                  u:prefLabel  "TeXT File"@en
+                                ] ;
+        u:identifier            "text/plain" ;
+        u:inScheme              <http://vocab.epimorphics.com/agora/reference/media-type> ;
+        u:prefLabel             "Plain text"@en .
+
+<http://vocab.epimorphics.com/agora/reference/media-type/group/spatial>
+        a            u:Collection ;
+        u:hasMember  <http://vocab.epimorphics.com/agora/reference/media-type/x-service/vnd.esri.geoservices.rest> , <http://vocab.epimorphics.com/agora/reference/media-type/x-service/arcgis-map> , <http://vocab.epimorphics.com/agora/reference/media-type/application/geo+json> , <http://vocab.epimorphics.com/agora/reference/media-type/application/vnd.shx> , <http://vocab.epimorphics.com/agora/reference/media-type/application/x-qgis> , <http://vocab.epimorphics.com/agora/reference/media-type/x-service/vnd.ogc.wfs> , <http://vocab.epimorphics.com/agora/reference/media-type/application/vnd.google-earth.kml+xml> , <http://vocab.epimorphics.com/agora/reference/media-type/application/vnd.shp> , <http://vocab.epimorphics.com/agora/reference/media-type/application/x-ogc-aaigrid> , <http://vocab.epimorphics.com/agora/reference/media-type/application/vnd.ogc.wms_xml> , <http://vocab.epimorphics.com/agora/reference/media-type/application/vnd.google-earth.kmz> , <http://vocab.epimorphics.com/agora/reference/media-type/application/gml+xml> ;
+        u:inScheme   <http://vocab.epimorphics.com/agora/reference/media-type> ;
+        u:prefLabel  "Spatial"@en .
+
+<http://vocab.epimorphics.com/agora/reference/media-type/group/dev-data-exchange>
+        a            u:Collection ;
+        u:hasMember  <http://vocab.epimorphics.com/agora/reference/media-type/application/vnd.dbf> , <http://vocab.epimorphics.com/agora/reference/media-type/application/xml> , <http://vocab.epimorphics.com/agora/reference/media-type/application/json> ;
+        u:inScheme   <http://vocab.epimorphics.com/agora/reference/media-type> ;
+        u:prefLabel  "Developer Data Exchange"@en .
+
+<http://vocab.epimorphics.com/agora/reference/media-type/application/vnd.microsoft.portable-executable>
+        a                       c:MediaType ;
+        c:ianaMediaType         "application/vnd.microsoft.portable-executable" ;
+        c:ianaMediaTypeAlias    "application/x-msdos-program" ;
+        c:relatedFileExtension  ".dll" , ".exe" ;
+        u:acronym               [ a            u:Acronym ;
+                                  u:notation   "EXE" ;
+                                  u:prefLabel  "EXEcutable"@en
+                                ] ;
+        u:identifier            "application/vnd.microsoft.portable-executable" ;
+        u:inScheme              <http://vocab.epimorphics.com/agora/reference/media-type> ;
+        u:prefLabel             "MS-DOS/Windows Executable"@en .
+
+<http://vocab.epimorphics.com/agora/reference/media-type/application/x-compressed-tar>
+        a                       c:MediaType ;
+        c:ianaMediaType         "application/x-compressed-tar" ;
+        c:relatedFileExtension  ".tgz" , ".tar.gz" ;
+        u:acronym               [ a            u:Acronym ;
+                                  u:notation   "TGZ" ;
+                                  u:prefLabel  "Tape ARchive GNU Zip"@en
+                                ] ;
+        u:identifier            "application/x-compressed-tar" ;
+        u:inScheme              <http://vocab.epimorphics.com/agora/reference/media-type> ;
+        u:prefLabel             "Tar archive (gzip-compressed)"@en .
+
+<http://vocab.epimorphics.com/agora/reference/media-type/application/n-quads>
+        a                       c:MediaType ;
+        c:ianaMediaType         "application/n-quads" ;
+        c:relatedFileExtension  ".nq" ;
+        u:acronym               [ a            u:Acronym ;
+                                  u:notation   "NQ" ;
+                                  u:prefLabel  "N-Quads"@en
+                                ] ;
+        u:identifier            "application/n-quads" ;
+        u:inScheme              <http://vocab.epimorphics.com/agora/reference/media-type> ;
+        u:prefLabel             "N-Quads RDF document"@en .
+
+<http://vocab.epimorphics.com/agora/reference/media-type/application/xml>
+        a                       c:MediaType ;
+        c:ianaMediaType         "application/xml" ;
+        c:ianaMediaTypeAlias    "text/xml" ;
+        c:relatedFileExtension  ".ashx" , ".xml" , ".xsd" , ".xbl" , ".rng" , ".aspx" ;
+        u:acronym               [ a            u:Acronym ;
+                                  u:notation   "XML" ;
+                                  u:prefLabel  "eXtensible Markup Language"@en
+                                ] ;
+        u:altLabel              "ASPX"@en , "ASHX"@en ;
+        u:identifier            "application/xml" ;
+        u:inScheme              <http://vocab.epimorphics.com/agora/reference/media-type> ;
+        u:prefLabel             "XML document"@en .
+
+<http://vocab.epimorphics.com/agora/reference/media-type/group/tabular>
+        a            u:Collection ;
+        u:hasMember  <http://vocab.epimorphics.com/agora/reference/media-type/application/vnd.oasis.opendocument.spreadsheet> , <http://vocab.epimorphics.com/agora/reference/media-type/text/csv> , <http://vocab.epimorphics.com/agora/reference/media-type/application/vnd.openxmlformats-officedocument.spreadsheetml.sheet> , <http://vocab.epimorphics.com/agora/reference/media-type/application/x-sqlite3> , <http://vocab.epimorphics.com/agora/reference/media-type/text/tab-separated-values> , <http://vocab.epimorphics.com/agora/reference/media-type/application/vnd.ms-excel> , <http://vocab.epimorphics.com/agora/reference/media-type/application/vnd.ms-excel.sheet.binary.macroenabled.12> ;
+        u:inScheme   <http://vocab.epimorphics.com/agora/reference/media-type> ;
+        u:prefLabel  "Tabular"@en .
+
+<http://vocab.epimorphics.com/agora/reference/media-type/application/octet-stream>
+        a                c:MediaType ;
+        c:ianaMediaType  "application/octet-stream" ;
+        u:acronym        [ a            u:Acronym ;
+                           u:notation   "BIN" ;
+                           u:prefLabel  "Binary"@en
+                         ] ;
+        u:altLabel       "BIN"@en ;
+        u:identifier     "application/octet-stream" ;
+        u:inScheme       <http://vocab.epimorphics.com/agora/reference/media-type> ;
+        u:prefLabel      "Octet Stream"@en .
+
+<http://vocab.epimorphics.com/agora/reference/media-type/application/rdf+xml>
+        a                       c:MediaType ;
+        c:ianaMediaType         "application/rdf+xml" ;
+        c:ianaMediaTypeAlias    "text/rdf" ;
+        c:relatedFileExtension  ".owl" , ".rdfs" , ".rdf" ;
+        u:acronym               [ a            u:Acronym ;
+                                  u:notation   "RDF" ;
+                                  u:prefLabel  "Resource Description Framework"@en
+                                ] ;
+        u:altLabel              "SKOS RDF"@en ;
+        u:identifier            "application/rdf+xml" ;
+        u:inScheme              <http://vocab.epimorphics.com/agora/reference/media-type> ;
+        u:prefLabel             "RDF file"@en .
+
+<http://vocab.epimorphics.com/agora/reference/media-type/application/vnd.ogc.wms_xml>
+        a                       c:MediaType ;
+        c:ianaMediaType         "application/vnd.ogc.wms_xml" ;
+        c:relatedFileExtension  ".wms" ;
+        u:acronym               [ a            u:Acronym ;
+                                  u:notation   "WMS" ;
+                                  u:prefLabel  "Open Geospatial Consortiom Web Map Service"@en
+                                ] ;
+        u:altLabel              "OGC WMS"@en ;
+        u:identifier            "application/vnd.ogc.wms_xml" ;
+        u:inScheme              <http://vocab.epimorphics.com/agora/reference/media-type> ;
+        u:prefLabel             "Open Geospatial Consortiom Web Map Service"@en .
+
+<http://vocab.epimorphics.com/agora/reference/media-type/application/msword>
+        a                       c:MediaType ;
+        c:ianaMediaType         "application/msword" ;
+        c:relatedFileExtension  ".dot" , ".doc" ;
+        u:altLabel              "DOT"@en , "DOC"@en ;
+        u:identifier            "application/msword" ;
+        u:inScheme              <http://vocab.epimorphics.com/agora/reference/media-type> ;
+        u:prefLabel             "MS Word"@en .
+
+<http://vocab.epimorphics.com/agora/reference/media-type/group/linked-data>
+        a            u:Collection ;
+        u:hasMember  <http://vocab.epimorphics.com/agora/reference/media-type/application/n-quads> , <http://vocab.epimorphics.com/agora/reference/media-type/text/turtle> , <http://vocab.epimorphics.com/agora/reference/media-type/application/trig> , <http://vocab.epimorphics.com/agora/reference/media-type/x-service/vnd.w3c.sparql> , <http://vocab.epimorphics.com/agora/reference/media-type/application/ld+json> , <http://vocab.epimorphics.com/agora/reference/media-type/application/rdf+xml> , <http://vocab.epimorphics.com/agora/reference/media-type/application/n-triples> ;
+        u:inScheme   <http://vocab.epimorphics.com/agora/reference/media-type> ;
+        u:prefLabel  "Linked Data"@en .
+
+<http://vocab.epimorphics.com/agora/reference/media-type/group/document>
+        a            u:Collection ;
+        u:hasMember  <http://vocab.epimorphics.com/agora/reference/media-type/application/vnd.openxmlformats-officedocument.wordprocessingml.document> , <http://vocab.epimorphics.com/agora/reference/media-type/application/pdf> , <http://vocab.epimorphics.com/agora/reference/media-type/application/vnd.openxmlformats-officedocument.wordprocessingml.template> , <http://vocab.epimorphics.com/agora/reference/media-type/application/msword> , <http://vocab.epimorphics.com/agora/reference/media-type/text/rtf> , <http://vocab.epimorphics.com/agora/reference/media-type/application/vnd.ms-powerpoint> , <http://vocab.epimorphics.com/agora/reference/media-type/text/html> , <http://vocab.epimorphics.com/agora/reference/media-type/application/vnd.openxmlformats-officedocument.presentationml.presentation> , <http://vocab.epimorphics.com/agora/reference/media-type/application/vnd.ms-word.document.macroEnabled.12> , <http://vocab.epimorphics.com/agora/reference/media-type/text/plain> , <http://vocab.epimorphics.com/agora/reference/media-type/application/vnd.ms-powerpoint.presentation.macroEnabled.12> ;
+        u:inScheme   <http://vocab.epimorphics.com/agora/reference/media-type> ;
+        u:prefLabel  "Document"@en .
+
+<http://vocab.epimorphics.com/agora/reference/media-type/application/vnd.openxmlformats-officedocument.presentationml.presentation>
+        a                       c:MediaType ;
+        c:ianaMediaType         "application/vnd.openxmlformats-officedocument.presentationml.presentation" ;
+        c:relatedFileExtension  ".pptx" ;
+        u:acronym               [ a            u:Acronym ;
+                                  u:notation   "PPTX" ;
+                                  u:prefLabel  "PowerPoinT (XML)"@en
+                                ] ;
+        u:identifier            "application/vnd.openxmlformats-officedocument.presentationml.presentation" ;
+        u:inScheme              <http://vocab.epimorphics.com/agora/reference/media-type> ;
+        u:prefLabel             "Powerpoint (XML)"@en .
+
+<http://vocab.epimorphics.com/agora/reference/media-type/application/zip>
+        a                       c:MediaType ;
+        c:ianaMediaType         "application/zip" ;
+        c:ianaMediaTypeAlias    "application/x-zip-compressed" , "application/x-zip" ;
+        c:relatedFileExtension  ".zip" ;
+        u:acronym               [ a            u:Acronym ;
+                                  u:notation   "ZIP" ;
+                                  u:prefLabel  "Zip"@en
+                                ] ;
+        u:altLabel              "CSV/Zip"@en , "ZIP / ZIP"@en , "CSV / Zip"@en , "CSV (zip)"@en ;
+        u:identifier            "application/zip" ;
+        u:inScheme              <http://vocab.epimorphics.com/agora/reference/media-type> ;
+        u:prefLabel             "Zip archive"@en .
+
+<http://vocab.epimorphics.com/agora/reference/media-type/group/container>
+        a            u:Collection ;
+        u:hasMember  <http://vocab.epimorphics.com/agora/reference/media-type/application/x-compressed-tar> , <http://vocab.epimorphics.com/agora/reference/media-type/application/gzip> , <http://vocab.epimorphics.com/agora/reference/media-type/application/x-tar> , <http://vocab.epimorphics.com/agora/reference/media-type/application/zip> ;
+        u:inScheme   <http://vocab.epimorphics.com/agora/reference/media-type> ;
+        u:prefLabel  "Container"@en .
+
+<http://vocab.epimorphics.com/agora/reference/media-type/application/vnd.ms-powerpoint.presentation.macroEnabled.12>
+        a                       c:MediaType ;
+        c:ianaMediaType         "application/vnd.ms-powerpoint.presentation.macroEnabled.12" ;
+        c:relatedFileExtension  ".pptm" ;
+        u:acronym               [ a            u:Acronym ;
+                                  u:notation   "PPTM" ;
+                                  u:prefLabel  "PowerPoinT"@en
+                                ] ;
+        u:identifier            "application/vnd.ms-powerpoint.presentation.macroEnabled.12" ;
+        u:inScheme              <http://vocab.epimorphics.com/agora/reference/media-type> ;
+        u:prefLabel             "Powerpoint (macro enabled)"@en .
+
+<http://vocab.epimorphics.com/agora/reference/media-type/application/geo+json>
+        a                       c:MediaType ;
+        c:ianaMediaType         "application/geo+json" ;
+        c:ianaMediaTypeAlias    "application/vnd.geo+json" ;
+        c:relatedFileExtension  ".geo.json" , ".geojson" ;
+        u:acronym               [ a            u:Acronym ;
+                                  u:notation   "GeoJSON" ;
+                                  u:prefLabel  "Geographic JavaScript Object Notation"@en
+                                ] ;
+        u:identifier            "application/geo+json" ;
+        u:inScheme              <http://vocab.epimorphics.com/agora/reference/media-type> ;
+        u:prefLabel             "GeoJSON geospatial data"@en .
+
+<http://vocab.epimorphics.com/agora/reference/media-type/application/vnd.openxmlformats-officedocument.wordprocessingml.document>
+        a                       c:MediaType ;
+        c:ianaMediaType         "application/vnd.openxmlformats-officedocument.wordprocessingml.document" ;
+        c:relatedFileExtension  ".docx" ;
+        u:altLabel              "DOCX"@en ;
+        u:identifier            "application/vnd.openxmlformats-officedocument.wordprocessingml.document" ;
+        u:inScheme              <http://vocab.epimorphics.com/agora/reference/media-type> ;
+        u:prefLabel             "MS Word Document (docx)"@en .
+
+<http://vocab.epimorphics.com/agora/reference/media-type/application/n-triples>
+        a                       c:MediaType ;
+        c:ianaMediaType         "application/n-triples" ;
+        c:relatedFileExtension  ".nt" ;
+        u:acronym               [ a            u:Acronym ;
+                                  u:notation   "NT" ;
+                                  u:prefLabel  "N-Triples"@en
+                                ] ;
+        u:identifier            "application/n-triples" ;
+        u:inScheme              <http://vocab.epimorphics.com/agora/reference/media-type> ;
+        u:prefLabel             "N-Triples RDF document"@en .
+
+<http://vocab.epimorphics.com/agora/reference/media-type/x-service/vnd.esri.geoservices.rest>
+        a                c:MediaType ;
+        c:ianaMediaType  "x-service/vnd.esri.geoservices.rest" ;
+        u:acronym        [ a            u:Acronym ;
+                           u:notation   "ESRI" ;
+                           u:prefLabel  "ESRI"@en
+                         ] ;
+        u:altLabel       "ESRI GeoService"@en , "ArcGIS GeoServices REST API"@en , "esri rest api"@en ;
+        u:identifier     "x-service/vnd.esri.geoservices.rest" ;
+        u:inScheme       <http://vocab.epimorphics.com/agora/reference/media-type> ;
+        u:prefLabel      "Esri REST"@en .
+
+<http://vocab.epimorphics.com/agora/reference/media-type/x-service/vnd.w3c.http>
+        a                c:MediaType ;
+        c:ianaMediaType  "x-service/vnd.w3c.http" ;
+        u:acronym        [ a            u:Acronym ;
+                           u:notation   "WWW" ;
+                           u:prefLabel  "World Wide Web"@en
+                         ] ;
+        u:altLabel       "website containing data files"@en , "website"@en , "web server"@en ;
+        u:identifier     "x-service/vnd.w3c.http" ;
+        u:inScheme       <http://vocab.epimorphics.com/agora/reference/media-type> ;
+        u:prefLabel      "HTTP(s) Web Server"@en .
+
+<http://vocab.epimorphics.com/agora/reference/media-type/x-service/vnd.w3c.sparql>
+        a                c:MediaType ;
+        c:ianaMediaType  "x-service/vnd.w3c.sparql" ;
+        u:altLabel       "SPARQL"@en ;
+        u:identifier     "x-service/vnd.w3c.sparql" ;
+        u:inScheme       <http://vocab.epimorphics.com/agora/reference/media-type> ;
+        u:prefLabel      "SPARQL Service"@en .
+
+<http://vocab.epimorphics.com/agora/reference/media-type/application/json>
+        a                       c:MediaType ;
+        c:ianaMediaType         "application/json" ;
+        c:relatedFileExtension  ".json" ;
+        u:acronym               [ a            u:Acronym ;
+                                  u:notation   "JSON" ;
+                                  u:prefLabel  "JavaScript Object Notation"@en
+                                ] ;
+        u:identifier            "application/json" ;
+        u:inScheme              <http://vocab.epimorphics.com/agora/reference/media-type> ;
+        u:prefLabel             "JSON document"@en .
+
+<http://vocab.epimorphics.com/agora/reference/media-type/application/vnd.google-earth.kml+xml>
+        a                       c:MediaType ;
+        c:ianaMediaType         "application/vnd.google-earth.kml+xml" ;
+        c:relatedFileExtension  ".kml" ;
+        u:acronym               [ a            u:Acronym ;
+                                  u:notation   "KML" ;
+                                  u:prefLabel  "Keyhole Markup Language"@en
+                                ] ;
+        u:identifier            "application/vnd.google-earth.kml+xml" ;
+        u:inScheme              <http://vocab.epimorphics.com/agora/reference/media-type> ;
+        u:prefLabel             "KML geographic data"@en .
+
+<http://vocab.epimorphics.com/agora/reference/media-type/application/vnd.openxmlformats-officedocument.wordprocessingml.template>
+        a                       c:MediaType ;
+        c:ianaMediaType         "application/vnd.openxmlformats-officedocument.wordprocessingml.template" ;
+        c:relatedFileExtension  ".dotx" ;
+        u:altLabel              "DOTX"@en ;
+        u:identifier            "application/vnd.openxmlformats-officedocument.wordprocessingml.template" ;
+        u:inScheme              <http://vocab.epimorphics.com/agora/reference/media-type> ;
+        u:prefLabel             "MS Word Template (dotx)"@en .
+
+<http://vocab.epimorphics.com/agora/reference/media-type/application/vnd.google-earth.kmz>
+        a                       c:MediaType ;
+        c:ianaMediaType         "application/vnd.google-earth.kmz" ;
+        c:relatedFileExtension  ".kmz" ;
+        u:acronym               [ a            u:Acronym ;
+                                  u:notation   "KML" ;
+                                  u:prefLabel  "Keyhole Markup Language"@en
+                                ] ;
+        u:altLabel              "KMZ"@en ;
+        u:identifier            "application/vnd.google-earth.kmz" ;
+        u:inScheme              <http://vocab.epimorphics.com/agora/reference/media-type> ;
+        u:prefLabel             "KML geographic compressed data"@en .
+
+<http://vocab.epimorphics.com/agora/reference/media-type/application/vnd.ms-excel.sheet.binary.macroenabled.12>
+        a                       c:MediaType ;
+        c:ianaMediaType         "application/vnd.ms-excel.sheet.binary.macroenabled.12" ;
+        c:relatedFileExtension  ".xlsb" ;
+        u:acronym               [ a            u:Acronym ;
+                                  u:notation   "XLSB" ;
+                                  u:prefLabel  "Microsoft eXcel Spreadsheet Binary"@en
+                                ] ;
+        u:identifier            "application/vnd.ms-excel.sheet.binary.macroenabled.12" ;
+        u:inScheme              <http://vocab.epimorphics.com/agora/reference/media-type> ;
+        u:prefLabel             "Excel spreadsheet (binary)"@en .
+
+<http://vocab.epimorphics.com/agora/reference/media-type/application/x-ogc-aaigrid>
+        a                       c:MediaType ;
+        c:ianaMediaType         "application/x-ogc-aaigrid" ;
+        c:relatedFileExtension  ".asc" , ".grd" ;
+        u:acronym               [ a            u:Acronym ;
+                                  u:notation   "AAIGRID" ;
+                                  u:prefLabel  "Arcinfo ASCII Grid"@en
+                                ] ;
+        u:identifier            "application/x-ogc-aaigrid" ;
+        u:inScheme              <http://vocab.epimorphics.com/agora/reference/media-type> ;
+        u:prefLabel             "ASCII Grid"@en .
+
+<http://vocab.epimorphics.com/agora/reference/media-type/application/vnd.shx>
+        a                       c:MediaType ;
+        c:ianaMediaType         "application/vnd.shx" ;
+        c:relatedFileExtension  ".shx" ;
+        u:acronym               [ a            u:Acronym ;
+                                  u:notation   "SHX" ;
+                                  u:prefLabel  "SHape indeX format "@en
+                                ] ;
+        u:identifier            "application/vnd.shx" ;
+        u:inScheme              <http://vocab.epimorphics.com/agora/reference/media-type> ;
+        u:prefLabel             "ESRI Shapefile Index"@en .
+
+<http://vocab.epimorphics.com/agora/reference/media-type/application/trig>
+        a                       c:MediaType ;
+        c:ianaMediaType         "application/trig" ;
+        c:ianaMediaTypeAlias    "application/x-trig" ;
+        c:relatedFileExtension  ".trig" ;
+        u:acronym               [ a            u:Acronym ;
+                                  u:notation   "TriG" ;
+                                  u:prefLabel  "TriG RDF Graph Triple Language"@en
+                                ] ;
+        u:identifier            "application/trig" ;
+        u:inScheme              <http://vocab.epimorphics.com/agora/reference/media-type> ;
+        u:prefLabel             "TriG RDF document"@en .
+
+<http://vocab.epimorphics.com/agora/reference/media-type/x-service/arcgis-map>
+        a                c:MediaType ;
+        c:ianaMediaType  "x-service/arcgis-map" ;
+        u:identifier     "x-service/arcgis-map" ;
+        u:inScheme       <http://vocab.epimorphics.com/agora/reference/media-type> ;
+        u:prefLabel      "ArcGIS Online Map"@en .
+
+<http://vocab.epimorphics.com/agora/reference/media-type/application/vnd.oasis.opendocument.spreadsheet>
+        a                       c:MediaType ;
+        c:ianaMediaType         "application/vnd.oasis.opendocument.spreadsheet" ;
+        c:relatedFileExtension  ".ods" ;
+        u:acronym               [ a            u:Acronym ;
+                                  u:notation   "ODS" ;
+                                  u:prefLabel  "OpenDocument Spreadsheet"@en
+                                ] ;
+        u:identifier            "application/vnd.oasis.opendocument.spreadsheet" ;
+        u:inScheme              <http://vocab.epimorphics.com/agora/reference/media-type> ;
+        u:prefLabel             "ODS spreadsheet"@en .
+
+<http://vocab.epimorphics.com/agora/reference/media-type/application/vnd.openxmlformats-officedocument.spreadsheetml.sheet>
+        a                       c:MediaType ;
+        c:ianaMediaType         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ;
+        c:relatedFileExtension  ".xlsx" ;
+        u:acronym               [ a            u:Acronym ;
+                                  u:notation   "XLSX" ;
+                                  u:prefLabel  "eXcel Spreadsheet (XML)"@en
+                                ] ;
+        u:acronym               [ a            u:Acronym ;
+                                  u:notation   "XLSX" ;
+                                  u:prefLabel  "eXcel Spreadsheet (XML)"@en
+                                ] ;
+        u:identifier            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ;
+        u:inScheme              <http://vocab.epimorphics.com/agora/reference/media-type> ;
+        u:prefLabel             "Excel 2007 spreadsheet"@en .
+
+<http://vocab.epimorphics.com/agora/reference/media-type/application/pdf>
+        a                       c:MediaType ;
+        c:ianaMediaType         "application/pdf" ;
+        c:ianaMediaTypeAlias    "application/nappdf" , "image/pdf" , "application/acrobat" , "application/x-pdf" ;
+        c:relatedFileExtension  ".pdf" ;
+        u:acronym               [ a            u:Acronym ;
+                                  u:notation   "PDF" ;
+                                  u:prefLabel  "Portable Document Format"@en
+                                ] ;
+        u:altLabel              "PDF / PDF"@en ;
+        u:identifier            "application/pdf" ;
+        u:inScheme              <http://vocab.epimorphics.com/agora/reference/media-type> ;
+        u:prefLabel             "PDF document"@en .
+
+<http://vocab.epimorphics.com/agora/reference/media-type/group/imagery>
+        a            u:Collection ;
+        u:hasMember  <http://vocab.epimorphics.com/agora/reference/media-type/image/png> , <http://vocab.epimorphics.com/agora/reference/media-type/image/jpeg> , <http://vocab.epimorphics.com/agora/reference/media-type/image/tiff> ;
+        u:inScheme   <http://vocab.epimorphics.com/agora/reference/media-type> ;
+        u:prefLabel  "Imagery"@en .
+
+<http://vocab.epimorphics.com/agora/reference/media-type/application/ld+json>
+        a                       c:MediaType ;
+        c:ianaMediaType         "application/ld+json" ;
+        c:relatedFileExtension  ".jsonld" ;
+        u:acronym               [ a            u:Acronym ;
+                                  u:notation   "JSON-LD" ;
+                                  u:prefLabel  "JavaScript Object Notation for Linked Data"@en
+                                ] ;
+        u:identifier            "application/ld+json" ;
+        u:inScheme              <http://vocab.epimorphics.com/agora/reference/media-type> ;
+        u:prefLabel             "JSON-LD document"@en .
+
+<http://vocab.epimorphics.com/agora/reference/media-type/image/jpeg>
+        a                       c:MediaType ;
+        c:ianaMediaType         "image/jpeg" ;
+        c:ianaMediaTypeAlias    "image/pjpeg" ;
+        c:relatedFileExtension  ".jpg" , ".jpe" , ".jpeg" ;
+        u:acronym               [ a            u:Acronym ;
+                                  u:notation   "JPEG" ;
+                                  u:prefLabel  "Joint Photographic Experts Group"@en
+                                ] ;
+        u:identifier            "image/jpeg" ;
+        u:inScheme              <http://vocab.epimorphics.com/agora/reference/media-type> ;
+        u:prefLabel             "JPEG image"@en .
+
+<http://vocab.epimorphics.com/agora/reference/media-type/application/x-tar>
+        a                       c:MediaType ;
+        c:ianaMediaType         "application/x-tar" ;
+        c:ianaMediaTypeAlias    "application/x-gtar" ;
+        c:relatedFileExtension  ".gem" , ".tar" , ".gtar" ;
+        u:acronym               [ a            u:Acronym ;
+                                  u:notation   "TAR" ;
+                                  u:prefLabel  "Tape ARchive"@en
+                                ] ;
+        u:identifier            "application/x-tar" ;
+        u:inScheme              <http://vocab.epimorphics.com/agora/reference/media-type> ;
+        u:prefLabel             "Tar archive"@en .
+
+<http://vocab.epimorphics.com/agora/reference/media-type/application/gzip>
+        a                       c:MediaType ;
+        c:ianaMediaType         "application/gzip" ;
+        c:relatedFileExtension  ".gz" ;
+        u:acronym               [ a            u:Acronym ;
+                                  u:notation   "GZIP" ;
+                                  u:prefLabel  "GNU ZIP"@en
+                                ] ;
+        u:identifier            "application/gzip" ;
+        u:inScheme              <http://vocab.epimorphics.com/agora/reference/media-type> ;
+        u:prefLabel             "GZIP Compressed"@en .
+
+<http://vocab.epimorphics.com/agora/reference/media-type/text/rtf>
+        a                c:MediaType ;
+        c:ianaMediaType  "text/rtf" ;
+        u:acronym        [ a            u:Acronym ;
+                           u:notation   "RTF" ;
+                           u:prefLabel  "Rich Text Format"@en
+                         ] ;
+        u:altLabel       ".rtf"@en , "RTF / PDF"@en , "RTF"@en ;
+        u:identifier     "text/rtf" ;
+        u:inScheme       <http://vocab.epimorphics.com/agora/reference/media-type> ;
+        u:prefLabel      "Rich Text Format"@en .
+
+<http://vocab.epimorphics.com/agora/reference/media-type/group/other>
+        a            u:Collection ;
+        u:hasMember  <http://vocab.epimorphics.com/agora/reference/media-type/x-service/vnd.w3c.http> , <http://vocab.epimorphics.com/agora/reference/media-type/application/octet-stream> ;
+        u:inScheme   <http://vocab.epimorphics.com/agora/reference/media-type> ;
+        u:prefLabel  "Other"@en .
+
+<http://vocab.epimorphics.com/agora/reference/media-type/text/tab-separated-values>
+        a                       c:MediaType ;
+        c:ianaMediaType         "text/tab-separated-values" ;
+        c:relatedFileExtension  ".tsv" ;
+        u:acronym               [ a            u:Acronym ;
+                                  u:notation   "TSV" ;
+                                  u:prefLabel  "Tab Separated Values"@en
+                                ] ;
+        u:altLabel              "tab-d"@en ;
+        u:identifier            "text/tab-separated-values" ;
+        u:inScheme              <http://vocab.epimorphics.com/agora/reference/media-type> ;
+        u:prefLabel             "TSV document"@en .
+
+<http://vocab.epimorphics.com/agora/reference/media-type/group/executable>
+        a            u:Collection ;
+        u:hasMember  <http://vocab.epimorphics.com/agora/reference/media-type/application/vnd.microsoft.portable-executable> ;
+        u:inScheme   <http://vocab.epimorphics.com/agora/reference/media-type> ;
+        u:prefLabel  "Executable"@en .
+
+<http://vocab.epimorphics.com/agora/reference/media-type/image/png>
+        a                       c:MediaType ;
+        c:ianaMediaType         "image/png" ;
+        c:relatedFileExtension  ".png" ;
+        u:acronym               [ a            u:Acronym ;
+                                  u:notation   "PNG" ;
+                                  u:prefLabel  "Portable Network Graphics"@en
+                                ] ;
+        u:identifier            "image/png" ;
+        u:inScheme              <http://vocab.epimorphics.com/agora/reference/media-type> ;
+        u:prefLabel             "PNG image"@en .
+
+<http://vocab.epimorphics.com/agora/reference/media-type/application/vnd.shp>
+        a                       c:MediaType ;
+        c:ianaMediaType         "application/vnd.shp" ;
+        c:relatedFileExtension  ".shp" ;
+        u:acronym               [ a            u:Acronym ;
+                                  u:notation   "SHP" ;
+                                  u:prefLabel  "SHaPe format"@en
+                                ] ;
+        u:identifier            "application/vnd.shp" ;
+        u:inScheme              <http://vocab.epimorphics.com/agora/reference/media-type> ;
+        u:prefLabel             "ESRI Shapefile"@en .
+
+<http://vocab.epimorphics.com/agora/reference/media-type/image/tiff>
+        a                       c:MediaType ;
+        c:ianaMediaType         "image/tiff" ;
+        c:relatedFileExtension  ".tiff" , ".tif" ;
+        u:acronym               [ a            u:Acronym ;
+                                  u:notation   "TIFF" ;
+                                  u:prefLabel  "Tagged Image File Format"@en
+                                ] ;
+        u:identifier            "image/tiff" ;
+        u:inScheme              <http://vocab.epimorphics.com/agora/reference/media-type> ;
+        u:prefLabel             "TIFF image"@en .
+
+<http://vocab.epimorphics.com/agora/reference/media-type/application/x-sqlite3>
+        a                       c:MediaType ;
+        c:ianaMediaType         "application/x-sqlite3" ;
+        c:relatedFileExtension  ".sqlite" ;
+        u:altLabel              "SQLite"@en ;
+        u:identifier            "application/x-sqlite3" ;
+        u:inScheme              <http://vocab.epimorphics.com/agora/reference/media-type> ;
+        u:prefLabel             "SQLite database"@en .
+
+<http://vocab.epimorphics.com/agora/reference/media-type/application/vnd.dbf>
+        a                       c:MediaType ;
+        c:ianaMediaType         "application/vnd.dbf" ;
+        c:ianaMediaTypeAlias    "application/x-dbase" , "application/dbase" , "application/dbf" ;
+        c:relatedFileExtension  ".dbf" ;
+        u:acronym               [ a            u:Acronym ;
+                                  u:notation   "DBF" ;
+                                  u:prefLabel  "dBase DataBase File"@en
+                                ] ;
+        u:identifier            "application/vnd.dbf" ;
+        u:inScheme              <http://vocab.epimorphics.com/agora/reference/media-type> ;
+        u:prefLabel             "dBase DataBase File"@en .
