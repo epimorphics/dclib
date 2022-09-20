@@ -1,0 +1,82 @@
+name : catalog.xform
+type : Composite
+
+requiredColumns:
+- resource_format	
+- resource_mime_type	
+- resource_mimetype_inner
+
+prefixes :
+  c : http://vocab.epimorphics.com/agora/def/catalog/
+  u : http://vocab.epimorphics.com/agora/def/upper/
+  dataset: http://example.org/dataset/
+
+sources :
+- name       : mediatype.map
+  sourceType : RDFSparql
+#  source     : ../../vocab/vocab.epimorphics.com/agora/reference/media-type.ttl
+  source     : test/arrayMap/media-type.ttl
+  query      : "
+    select (lcase(str(?k)) as ?key) ?value
+    where { 
+      ?value a c:MediaType .
+      { ?value (c:ianaMediaType|c:ianaMediaTypeAlias) ?k }
+      UNION
+      { ?value (u:acronym/(u:notation|u:prefLabel)) ?k }
+      UNION
+      { ?value (u:prefLabel|u:altLabel) ?k }
+      UNION
+      { ?value c:relatedFileExtension ?k }
+  }
+  "
+  
+bind :
+
+- resource_id     : "dataset:{value($row.number).format('%04d')}"
+
+- r_mt     : "{ { var res = nullValue() ;
+                  /* 'empty(res) || res.isNull()' because plain 'null' and 'ValueNull' results arise - confusing*/
+                  res = (empty(res) || res.isNull()) && !empty(resource_mime_type)      ?      resource_mime_type.toLowerCase().split(',').trim().map('mediatype.map',false) : res ;
+                  res = (empty(res) || res.isNull()) && !empty(resource_mimetype_inner) ? resource_mimetype_inner.toLowerCase().split(',').trim().map('mediatype.map',false) : res ;
+                  res = (empty(res) || res.isNull()) && !empty(resource_format)         ?         resource_format.toLowerCase().split(',').trim().map('mediatype.map',false) : res;    
+                  return res;
+              } }"
+              
+- check_mt : "
+  { { var failed = 
+          ( !empty(resource_format) || 
+            !empty(resource_mime_type) || 
+            !empty(resource_mimetype_inner) 
+          ) && ( empty(r_mt) || r_mt.isNull() 
+          ) ;
+          
+      if(!failed && r_mt.isMulti() ) {
+        /* Look for nulls in array results */
+        var i = 0;
+        while(i lt r_mt.value.size() && !failed) {
+           var item = r_mt.get(i); 
+           failed = failed || (empty(item) || item.isNull());
+           i = i+1 ;
+        }
+      }
+      if(failed) {
+        print( value('WARNING: resource ')
+               .append(resource_id)
+               .append(' Unknown format : \"')
+               .append(empty(resource_format) ? '' : resource_format )
+               .append('\" Outer MIME Type : \"')
+               .append(empty(resource_mime_type) ? '' : resource_mime_type )
+               .append('\" inner MIME Type : \"')
+               .append(empty(resource_mimetype_inner) ? '' : resource_mimetype_inner )
+               .append('\"')
+        )
+      }
+      return nullValue()      
+  } }"
+  
+templates: 
+- name : main
+  "@id"          : "<{resource_id}>"
+  <c:mediaType>  : "{r_mt}"
+  
+  

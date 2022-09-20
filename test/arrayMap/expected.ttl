@@ -1,0 +1,26 @@
+@prefix void:  <http://rdfs.org/ns/void#> .
+@prefix c:     <http://vocab.epimorphics.com/agora/def/catalog/> .
+@prefix owl:   <http://www.w3.org/2002/07/owl#> .
+@prefix org:   <http://www.w3.org/ns/org#> .
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix skos:  <http://www.w3.org/2004/02/skos/core#> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix version: <http://purl.org/linked-data/version#> .
+@prefix qb:    <http://purl.org/linked-data/cube#> .
+@prefix at:    <http://environment.data.gov.uk/public-register/def/applicant-type/> .
+@prefix dct:   <http://purl.org/dc/terms/> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix reg:   <http://purl.org/linked-data/registry#> .
+@prefix u:     <http://vocab.epimorphics.com/agora/def/upper/> .
+@prefix time:  <http://www.w3.org/2006/time#> .
+@prefix api:   <http://purl.org/linked-data/api/vocab#> .
+@prefix prov:  <http://www.w3.org/ns/prov#> .
+@prefix dataset: <http://example.org/dataset/> .
+@prefix foaf:  <http://xmlns.com/foaf/0.1/> .
+@prefix dc:    <http://purl.org/dc/elements/1.1/> .
+
+dataset:0002  c:mediaType  <http://vocab.epimorphics.com/agora/reference/media-type/text/plain> , <http://vocab.epimorphics.com/agora/reference/media-type/application/octet-stream> , <http://vocab.epimorphics.com/agora/reference/media-type/application/zip> .
+
+dataset:0001  c:mediaType  <http://vocab.epimorphics.com/agora/reference/media-type/application/octet-stream> , <http://vocab.epimorphics.com/agora/reference/media-type/application/zip> .
+
+dataset:0003  c:mediaType  <http://vocab.epimorphics.com/agora/reference/media-type/application/vnd.openxmlformats-officedocument.spreadsheetml.sheet> .
