@@ -48,7 +48,7 @@ public class Temp {
     }
     
     public void testTemplate() throws IOException {
-        ConverterService service = new ConverterService();
+        ConverterService service = new ConverterService(ConverterService.DEFAULT_PREFIXES_RESOURCE);
         service.put("$base", "http://example.com/");
         String der = "/home/der/epimorphics/projects/registries/DefraPilot/data/";
         Model m = service.simpleConvert(der + "simple-skos.json", der + "category.csv");

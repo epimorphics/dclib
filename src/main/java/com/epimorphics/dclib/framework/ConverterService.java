@@ -47,10 +47,10 @@ public class ConverterService extends ComponentBase {
     protected boolean silent = false;
     protected TemplateMonitor monitor;
     
-    public ConverterService() {
+    public ConverterService(String defaultPrefixes) {
         dc = new DataContext();
         dc.getGlobalEnv().put(ConverterProcess.BASE_OBJECT_NAME, DEFAULT_BASE_URI);
-        PrefixMapping prefixes = FileManager.get().loadModel(DEFAULT_PREFIXES_RESOURCE);
+        PrefixMapping prefixes = FileManager.get().loadModel(defaultPrefixes);
         if (prefixes != null) {
             dc.setPrefixes(prefixes);
         } else {
@@ -134,7 +134,7 @@ public class ConverterService extends ComponentBase {
      * Problems/progress reporting live to given reporter
      * @param templateFile the name of the template file to use
      * @param dataFile  the name of the data file to process
-     * @param report the message reporter
+     * @param reporter the message reporter
      * @param debug set to true to enable voluminous debug message
      * @param allowNullRows set to true to allow output even if some rows don't match
      * @throws IOException 

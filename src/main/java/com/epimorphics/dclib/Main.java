@@ -50,7 +50,8 @@ public class Main {
     public static final String NTHREADS_FLAG = "--nThreads";
     public static final String BATCH_FLAG = "--batch";
     public static final String COMPRESS_FLAG = "--compress";
-    
+    public static final String DEFAULT_PREFIXES_FILE = "--prefixes";
+
     public static void main(String[] argsIn) throws IOException {
         CommandArgs cargs = new CommandArgs();
         String batchFile = null;
@@ -99,10 +100,20 @@ public class Main {
             args.remove(i);   // Flag
             args.remove(i);   // Argument to flag (removing flag shunts it down)
         }
+        if (args.contains(DEFAULT_PREFIXES_FILE)) {
+            int i = args.indexOf(DEFAULT_PREFIXES_FILE);
+            if (i == args.size()) {
+                System.err.println("No legal argument for --prefixes");
+                System.exit(1);
+            }
+            cargs.setDefaultPrefixesFile(args.get(i+1));
+            args.remove(i);   // Flag
+            args.remove(i);   // Argument to flag (removing flag shunts it down)
+        }
 
         if (batchFile == null && args.size() < 2) {
-            System.err.println("Usage:  java -jar dclib.jar [--debug] [--streaming] [--ntriples] [--abortIfRowFails] template.json ... data.csv");
-            System.err.println("   or:  java -jar dclib.jar [--debug] [--streaming] [--ntriples] [--abortIfRowFails] [--nThreads 4] [--compress] --batch batchFile");
+            System.err.println("Usage:  java -jar dclib.jar [--debug] [--streaming] [--ntriples] [--abortIfRowFails] [--prefixes prefixfile.ttl] template.json ... data.csv");
+            System.err.println("   or:  java -jar dclib.jar [--debug] [--streaming] [--ntriples] [--abortIfRowFails] [--prefixes prefixfile.ttl] [--nThreads 4] [--compress] --batch batchFile");
             System.exit(1);
         }
         
@@ -184,7 +195,7 @@ public class Main {
             try {
                 openOutputStream();
                 
-                ConverterService service = new ConverterService();
+                ConverterService service = new ConverterService(args.getDefaultPrefixesFile());
                 DataContext dc = service.getDataContext();
                 for(String template : args.getAuxTemplates()) {
                     Template aux = TemplateFactory.templateFrom(template, dc);
@@ -249,6 +260,7 @@ public class Main {
         int nThreads = 4;
         List<String> auxTemplates = new ArrayList<>();
         boolean compress = false;
+        String defaultPrefixesFile = ConverterService.DEFAULT_PREFIXES_RESOURCE;
         
         public boolean isCompress() {
             return compress;
@@ -289,6 +301,8 @@ public class Main {
         public void addAuxTemplate(String template) {
             auxTemplates.add(template);
         }
+        public void setDefaultPrefixesFile(String prefixes) { this.defaultPrefixesFile = prefixes; }
+        public String getDefaultPrefixesFile() { return defaultPrefixesFile; }
         public List<String> getAuxTemplates() {
             return auxTemplates;
         }

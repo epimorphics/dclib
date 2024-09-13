@@ -110,7 +110,7 @@ public class TestBasicConverters {
         assertNull( convert("test/mapping/dept-type-required.json", "test/mapping/dept-type-data-error.csv") );
         
         // Check map error reporting
-        ConverterService service = new ConverterService();
+        ConverterService service = new ConverterService(ConverterService.DEFAULT_PREFIXES_RESOURCE);
         service.getDataContext().registerTemplate("test/simple-skos-template.json");
         service.put("$base", "http://example.com/");
         SimpleProgressMonitor monitor = new SimpleProgressMonitor();
@@ -288,7 +288,7 @@ public class TestBasicConverters {
     @Test
     public void testPerformanceProblem() throws IOException {
         long start = System.currentTimeMillis();
-        ConverterService service = new ConverterService();
+        ConverterService service = new ConverterService(ConverterService.DEFAULT_PREFIXES_RESOURCE);
         SimpleProgressMonitor monitor = new SimpleProgressMonitor();
         Model m = service.simpleConvert("test/bugCases/zoi_tc.yaml", "test/bugCases/ea-ref-data.csv", monitor);
         assertNotNull(m);
@@ -304,7 +304,7 @@ public class TestBasicConverters {
     }
 
     public static Model convert(String templateFile, String dataFile, String loadDirs) throws IOException {
-        ConverterService service = new ConverterService();
+        ConverterService service = new ConverterService(ConverterService.DEFAULT_PREFIXES_RESOURCE);
         if (loadDirs != null) {
             service.setLoadDirectories(loadDirs);
         }
@@ -317,7 +317,7 @@ public class TestBasicConverters {
     }
 
     public static void expectError(String templateFile, String dataFile) throws IOException {
-        ConverterService service = new ConverterService();
+        ConverterService service = new ConverterService(ConverterService.DEFAULT_PREFIXES_RESOURCE);
         service.getDataContext().registerTemplate("test/simple-skos-template.json");
         service.put("$base", "http://example.com/");
         SimpleProgressMonitor monitor = new SimpleProgressMonitor();
