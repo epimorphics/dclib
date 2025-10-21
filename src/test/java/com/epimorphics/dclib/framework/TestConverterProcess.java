@@ -121,6 +121,11 @@ public class TestConverterProcess {
         }
 
         @Override
+        public void setName(String name) {
+            // No-op
+        }
+
+        @Override
         public String getDescription() {
             return null;
         }

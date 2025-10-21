@@ -78,17 +78,12 @@
     <dependency>
       <groupId>com.epimorphics</groupId>
       <artifactId>appbase</artifactId>
-      <version>2.0.0</version>
+      <version>3.1.13</version>
     </dependency>
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-jexl</artifactId>
       <version>2.1.1</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>commons-lang3</artifactId>
-      <version>3.1</version>
     </dependency>
     <dependency>
         <groupId>joda-time</groupId>
@@ -98,8 +93,8 @@
     <dependency>
       <groupId>org.yaml</groupId>
       <artifactId>snakeyaml</artifactId>
-      <version>2.0</version>
-    </dependency>    
+      <version>2.4</version>
+    </dependency>
   </dependencies>
 
   <build>
@@ -178,6 +173,11 @@
         <artifactId>wagon-ftp</artifactId>
         <version>2.10</version>
       </extension>
+      <extension>
+        <groupId>org.springframework.build</groupId>
+        <artifactId>aws-maven</artifactId>
+        <version>5.0.0.RELEASE</version>
+      </extension>
     </extensions>
 
     <pluginManagement>
@@ -213,9 +213,20 @@
   
   <distributionManagement>
     <repository>
-      <id>epi-public-repo</id>
-      <url>ftp://epimorphics.com</url>
+      <id>epi-public-s3-release</id>
+      <name>Epimorphics S3 release repository</name>
+      <url>s3://epi-repository/release</url>
+      <releases><enabled>true</enabled></releases>
+      <snapshots><enabled>false</enabled></snapshots>
     </repository>
+
+    <snapshotRepository>
+      <id>epi-public-s3-snapshot</id>
+      <name>Epimorphics S3 snapshot repository</name>
+      <url>s3://epi-repository/snapshot</url>
+      <releases><enabled>false</enabled></releases>
+      <snapshots><enabled>true</enabled></snapshots>
+    </snapshotRepository>
   </distributionManagement>
 
 

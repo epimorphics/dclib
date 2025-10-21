@@ -11,6 +11,8 @@ package com.epimorphics.dclib.sources;
 
 import java.io.File;
 
+import javax.naming.OperationNotSupportedException;
+
 import org.apache.jena.atlas.json.JsonObject;
 import org.apache.jena.atlas.json.JsonValue;
 
@@ -20,15 +22,21 @@ import com.epimorphics.util.EpiException;
 
 public class MapSourceBaseBase {
     protected JsonObject spec;
+    protected String name;
 
     public MapSourceBaseBase(JsonObject spec) {
         this.spec = spec;
+        this.name = getField(JSONConstants.NAME);
     }
 
     public String getName() {
-        return getField(JSONConstants.NAME);
+        return this.name;
     }
-    
+
+    public void setName(String name) 
+    {
+        this.name = name;
+    }
 
     protected String getRequiredField(String name) {
         JsonValue field = spec.get(name);

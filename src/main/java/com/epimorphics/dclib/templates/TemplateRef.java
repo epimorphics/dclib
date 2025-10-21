@@ -69,6 +69,11 @@ public class TemplateRef implements Template {
     }
 
     @Override
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
     public String getDescription() {
         return getTemplate().getDescription();
     }
