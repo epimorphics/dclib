@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.epimorphics</groupId>
   <artifactId>dclib</artifactId>
-  <version>2.1.4-SNAPSHOT</version>
+  <version>3.0.0-SNAPSHOT</version>
   <name>Data Converter library</name>
   <description>Data converter library</description>
 
