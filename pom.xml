@@ -78,7 +78,7 @@
     <dependency>
       <groupId>com.epimorphics</groupId>
       <artifactId>appbase</artifactId>
-      <version>3.1.13</version>
+      <version>3.1.14</version>
     </dependency>
     <dependency>
       <groupId>org.apache.commons</groupId>
