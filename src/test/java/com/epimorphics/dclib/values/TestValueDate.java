@@ -15,6 +15,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 
+import org.apache.jena.riot.RDFDataMgr;
 import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
@@ -39,7 +40,7 @@ public class TestValueDate {
     @Before
     public void setUp() {
         proc = new ConverterProcess(dc, null);
-        dc.setPrefixes( FileManager.get().loadModel("prefixes.ttl") );
+        dc.setPrefixes( RDFDataMgr.loadModel("prefixes.ttl") );
         env = new BindingEnv();
         env.put("date", ValueDate.parse("2014-09-11") );
         env.put("datetime", ValueDate.parse("2014-09-11T12:42:21.23") );

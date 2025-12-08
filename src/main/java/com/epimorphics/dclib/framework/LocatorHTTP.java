@@ -27,7 +27,7 @@
 package com.epimorphics.dclib.framework ;
 
 import org.apache.jena.atlas.web.TypedInputStream ;
-import org.apache.jena.riot.web.HttpOp ;
+import org.apache.jena.http.HttpOp;
 import org.slf4j.Logger ;
 import org.slf4j.LoggerFactory ;
 
@@ -47,7 +47,7 @@ public class LocatorHTTP extends org.apache.jena.riot.system.stream.LocatorURL {
     @Override
     public TypedInputStream performOpen(String uri) {
         if ( uri.startsWith("http://") || uri.startsWith("https://") )
-            return HttpOp.execHttpGet(uri, acceptHeader) ;
+            return HttpOp.httpGet(uri, acceptHeader) ;
         return null ;
     }
 

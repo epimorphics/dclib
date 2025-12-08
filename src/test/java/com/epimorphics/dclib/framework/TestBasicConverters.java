@@ -17,6 +17,9 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 
+import org.apache.jena.riot.RDFDataMgr;
+import org.apache.jena.riot.RDFLanguages;
+import org.apache.jena.riot.RDFParserBuilder;
 import org.junit.Test;
 
 import com.epimorphics.rdfutil.RDFUtil;
@@ -337,7 +340,7 @@ public class TestBasicConverters {
         Model m = convert(templateFile, dataFile, loadDirs);
         assertNotNull(m);
         String DUMMY = "http://example.com/DONOTUSE/";
-        Model expected = FileManager.get().loadModel(resultFile, DUMMY, "Turtle");
+        Model expected = RDFParserBuilder.create().source(resultFile).lang(RDFLanguages.TTL).base(DUMMY).toModel();
         expected = RDFUtil.mapNamespace(expected, DUMMY, "");
         boolean same = m.isIsomorphicWith(expected);
 //        boolean rev = expected.isIsomorphicWith(m);

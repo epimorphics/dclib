@@ -12,11 +12,13 @@ package com.epimorphics.dclib.framework;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.ws.rs.NotSupportedException;
+import jakarta.ws.rs.NotSupportedException;
 
 import org.apache.commons.jexl2.Expression;
 import org.apache.commons.jexl2.JexlEngine;
 import org.apache.commons.jexl2.Script;
+import org.apache.jena.datatypes.xsd.XSDDatatype;
+import org.apache.jena.vocabulary.XSD;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -225,11 +227,11 @@ public class Pattern {
         } else if (result instanceof RDFNodeWrapper) {
             return ((RDFNodeWrapper)result).asRDFNode().asNode();
         } else if (result instanceof String) {
-            return NodeFactory.createLiteral( (String)result );
+            return NodeFactory.createLiteralString( (String)result );
         } else if (result instanceof Number) {
             return ValueNumber.nodeFromNumber( (Number)result );
         } else if (result instanceof Boolean) {
-            return NodeFactory.createLiteral( LiteralLabelFactory.createTypedLiteral(result) );
+            return NodeFactory.createLiteralDT(result.toString(), XSDDatatype.XSDboolean);
         } else if (result instanceof Value) {
             return ((Value)result).asNode();
         } else {

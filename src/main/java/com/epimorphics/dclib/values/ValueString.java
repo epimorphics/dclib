@@ -58,11 +58,11 @@ public class ValueString extends ValueBase<String> implements Value {
             if (matcher.find()) {
                 String lang = matcher.group(1);
                 if (value.charAt(split-1) == '@') {
-                    return NodeFactory.createLiteral( value.substring(0, split) + lang );
+                    return NodeFactory.createLiteralString( value.substring(0, split) + lang );
                 } else if (value.charAt(split-1) == '\\') {
-                    return NodeFactory.createLiteral( value.substring(0, split-1) + "@" + lang );
+                    return NodeFactory.createLiteralString( value.substring(0, split-1) + "@" + lang );
                 } else {
-                    return NodeFactory.createLiteral(value.substring(0, split), lang, false);
+                    return NodeFactory.createLiteralLang(value.substring(0, split), lang);
                 }
             }
         }
@@ -77,13 +77,13 @@ public class ValueString extends ValueBase<String> implements Value {
                     dt = dt.substring(1, dt.length() - 1);
                 }
                 dt = ConverterProcess.getGlobalDataContext().expandURI(dt);
-                return NodeFactory.createLiteral(lex, TypeMapper.getInstance().getSafeTypeByName(dt));
+                return NodeFactory.createLiteralDT(lex, TypeMapper.getInstance().getSafeTypeByName(dt));
             } else {
-                return NodeFactory.createLiteral(value.substring(0,split-1) + value.substring(split));
+                return NodeFactory.createLiteralString(value.substring(0,split-1) + value.substring(split));
             }
         }
 
-        return NodeFactory.createLiteral( value );
+        return NodeFactory.createLiteralString( value );
     }
 
     @Override

@@ -47,7 +47,7 @@ public class GlobalFunctions {
             typeURI = typeURI.replace("xsd:", XSD.getURI());
         }
         RDFDatatype typeR = TypeMapper.getInstance().getSafeTypeByName( typeURI );
-        return NodeFactory.createLiteral(value.toString(), typeR);
+        return NodeFactory.createLiteralDT(value.toString(), typeR);
     }
     
     public static Value nullValue() {

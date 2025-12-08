@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
 
+import com.opencsv.exceptions.CsvValidationException;
 import org.apache.jena.atlas.json.JsonObject;
 import org.apache.jena.atlas.json.JsonValue;
 
@@ -192,7 +193,7 @@ public class TemplateBase implements Template {
             } else {
                 config.getDataContext().registerSource(source);
             }
-        } catch (IOException e) {
+        } catch (IOException | CsvValidationException e) {
             throw new EpiException(e);
         }
     }
@@ -260,9 +261,9 @@ public class TemplateBase implements Template {
         Node so = propPattern.isInverse() ? valPattern.asURINode(v) : valPattern.asNode(v);
         validateNode(so);
         if (propPattern.isInverse()) {
-            return new Triple( so, prop, subject);
+            return Triple.create( so, prop, subject);
         } else {
-            return new Triple(subject, prop, so);
+            return Triple.create(subject, prop, so);
         }
     }
 

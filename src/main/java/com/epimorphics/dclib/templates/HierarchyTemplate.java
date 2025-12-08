@@ -110,7 +110,7 @@ public class HierarchyTemplate extends TemplateBase implements Template {
             Node resource, Node parent, int rowNumber) {
         if (link != null) {
             Node linkn = link.evaluateAsNode( row, proc, rowNumber );
-            proc.getOutputStream().triple( new Triple(resource, linkn, parent) );
+            proc.getOutputStream().triple(Triple.create(resource, linkn, parent));
         }
     }
 

@@ -16,6 +16,7 @@ import java.util.List;
 
 import org.apache.jena.atlas.json.JsonObject;
 import org.apache.jena.atlas.json.JsonValue;
+import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.riot.system.StreamRDF;
 
 import com.epimorphics.dclib.framework.ConverterProcess;
@@ -68,7 +69,7 @@ public class RDFMapSource extends MapSourceBase implements MapSource {
         List<Resource> typeConstraints = getTypeConstraints(spec, proc);
         
         String sourceFile = getRequiredField(JSONConstants.SOURCE);
-        rdf = FileManager.get().loadModel( "file:" + findFile(sourceFile, proc) );
+        rdf = RDFDataMgr.loadModel( "file:" + findFile(sourceFile, proc) );
 
         for (StmtIterator i = rdf.listStatements(null,  keyProp, (RDFNode)null); i.hasNext();) {
             Statement s = i.next();

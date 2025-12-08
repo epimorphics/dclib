@@ -59,13 +59,13 @@ public class ValueDate extends ValueNode implements Value {
     
     private static Node stringToDate(String value) {
         if (DATETIME_PATTERN.matcher(value).matches()) {
-            return NodeFactory.createLiteral(value, XSDDatatype.XSDdateTime);
+            return NodeFactory.createLiteralDT(value, XSDDatatype.XSDdateTime);
         } else if (DATE_PATTERN.matcher(value).matches()) {
-            return NodeFactory.createLiteral(value, XSDDatatype.XSDdate);
+            return NodeFactory.createLiteralDT(value, XSDDatatype.XSDdate);
         } else if (TIME_PATTERN.matcher(value).matches()) {
-            return NodeFactory.createLiteral(value, XSDDatatype.XSDtime);
+            return NodeFactory.createLiteralDT(value, XSDDatatype.XSDtime);
         } else if (GYEARMONTH_PATTERN.matcher(value).matches()) {
-            return NodeFactory.createLiteral(value, XSDDatatype.XSDgYearMonth);
+            return NodeFactory.createLiteralDT(value, XSDDatatype.XSDgYearMonth);
         } else {
             return null;
         }
@@ -156,7 +156,7 @@ public class ValueDate extends ValueNode implements Value {
         if (formatted.endsWith("UTC")) {
             formatted = formatted.replace("UTC", "Z");
         }
-        Node n = NodeFactory.createLiteral(formatted, TypeMapper.getInstance().getSafeTypeByName(typeURI));
+        Node n = NodeFactory.createLiteralDT(formatted, TypeMapper.getInstance().getSafeTypeByName(typeURI));
         return new ValueDate(n);        
     }
     
@@ -184,7 +184,7 @@ public class ValueDate extends ValueNode implements Value {
             throw new EpiException("Unrecognized datetime type");
         }
 
-        Node n = NodeFactory.createLiteral(formatted, TypeMapper.getInstance().getSafeTypeByName(typeURI));
+        Node n = NodeFactory.createLiteralDT(formatted, TypeMapper.getInstance().getSafeTypeByName(typeURI));
         return new ValueDate(n);        
     }
     
@@ -195,7 +195,7 @@ public class ValueDate extends ValueNode implements Value {
      * @return A ValueDate containing an RDF literal
      */
     public static Value parse(String lex, String typeURI) {
-        Node node = NodeFactory.createLiteral(lex, TypeMapper.getInstance().getSafeTypeByName(typeURI));
+        Node node = NodeFactory.createLiteralDT(lex, TypeMapper.getInstance().getSafeTypeByName(typeURI));
         node.getLiteral().getValue(); // Checks well formed, throws exception if not
         return new ValueDate( node);
     }

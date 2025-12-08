@@ -18,9 +18,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.epimorphics.geo.GeoPoint;
-
-import au.com.bytecode.opencsv.CSVReader;
-import au.com.bytecode.opencsv.CSVWriter;
+import com.opencsv.CSVReader;
+import com.opencsv.CSVWriter;
+import com.opencsv.exceptions.CsvValidationException;
 
 /**
  * Used for experimentation or one off hacks
@@ -31,7 +31,7 @@ public class Temp {
     public static final String dest = "/home/der/tmp/Data/postcodes.csv"; 
 
     public static final Pattern PCMERGED = Pattern.compile( "([A-Z]{2}[0-9]{2})([0-9][A-Z]{2})" );
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, CsvValidationException {
         Reader in = new FileReader( src );
         CSVReader reader = new CSVReader(in);
         Writer out = new FileWriter( dest );

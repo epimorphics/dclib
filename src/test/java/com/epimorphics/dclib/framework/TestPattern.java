@@ -13,6 +13,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import org.apache.jena.riot.RDFDataMgr;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -62,7 +63,7 @@ public class TestPattern {
         env.set("d4", ValueFactory.asValue("0.1"));
         env.set("str",ValueFactory.asValue("South Tees Hospitals NHS Foundation Trust"));
 
-        dc.setPrefixes( FileManager.get().loadModel("prefixes.ttl") );
+        dc.setPrefixes( RDFDataMgr.loadModel("prefixes.ttl") );
     }
     
     @Test
@@ -185,36 +186,36 @@ public class TestPattern {
     
     @Test
     public void testNodeValues() {
-        assertEquals(NodeFactory.createLiteral("foo\nbar", "en", false), evalNode("{ml}@en") );
+        assertEquals(NodeFactory.createLiteralLang("foo\nbar", "en"), evalNode("{ml}@en") );
 
         assertEquals(NodeFactory.createURI("http://example.com/foo"), evalNode("<{u}>"));
-        assertEquals(NodeFactory.createLiteral("42", XSDDatatype.XSDinteger), evalNode("{i}"));
-        assertEquals(NodeFactory.createLiteral("true", XSDDatatype.XSDboolean), evalNode("{true}"));
-        assertEquals(NodeFactory.createLiteral("false", XSDDatatype.XSDboolean), evalNode("{false}"));
-        assertEquals(NodeFactory.createLiteral("true", XSDDatatype.XSDboolean), evalNode("{t.asBoolean()}"));
+        assertEquals(NodeFactory.createLiteralDT("42", XSDDatatype.XSDinteger), evalNode("{i}"));
+        assertEquals(NodeFactory.createLiteralDT("true", XSDDatatype.XSDboolean), evalNode("{true}"));
+        assertEquals(NodeFactory.createLiteralDT("false", XSDDatatype.XSDboolean), evalNode("{false}"));
+        assertEquals(NodeFactory.createLiteralDT("true", XSDDatatype.XSDboolean), evalNode("{t.asBoolean()}"));
         
-        assertEquals(NodeFactory.createLiteral("42", XSDDatatype.XSDshort), evalNode("{i.datatype('xsd:short')}"));
-        assertEquals(NodeFactory.createLiteral("42", XSDDatatype.XSDstring), evalNode("{i.datatype('xsd:string')}"));
-        assertEquals(NodeFactory.createLiteral("42"), evalNode("{i.asString()}"));
+        assertEquals(NodeFactory.createLiteralDT("42", XSDDatatype.XSDshort), evalNode("{i.datatype('xsd:short')}"));
+        assertEquals(NodeFactory.createLiteralDT("42", XSDDatatype.XSDstring), evalNode("{i.datatype('xsd:string')}"));
+        assertEquals(NodeFactory.createLiteralString("42"), evalNode("{i.asString()}"));
         
-        assertEquals(NodeFactory.createLiteral("a string", "en", false), evalNode("{a.lang('en')}"));
+        assertEquals(NodeFactory.createLiteralLang("a string", "en"), evalNode("{a.lang('en')}"));
         
-        assertEquals(NodeFactory.createLiteral("b", "en", false), evalNode("b@en") );
-        assertEquals(NodeFactory.createLiteral("foo bar", "en", false), evalNode("{b}@en") );
-        assertEquals(NodeFactory.createLiteral("foo bar@en"), evalNode("{b}@@en") );
-        assertEquals(NodeFactory.createLiteral("foo bar@en"), evalNode("{b}\\@en") );
+        assertEquals(NodeFactory.createLiteralLang("b", "en"), evalNode("b@en") );
+        assertEquals(NodeFactory.createLiteralLang("foo bar", "en"), evalNode("{b}@en") );
+        assertEquals(NodeFactory.createLiteralString("foo bar@en"), evalNode("{b}@@en") );
+        assertEquals(NodeFactory.createLiteralString("foo bar@en"), evalNode("{b}\\@en") );
         
-        assertEquals(NodeFactory.createLiteral("foo bar", XSDDatatype.XSDstring), evalNode("{b}^^xsd:string"));
-        assertEquals(NodeFactory.createLiteral("foo bar^^xsd:string"), evalNode("{b}\\^^xsd:string"));
-        assertEquals(NodeFactory.createLiteral("foo bar", XSDDatatype.XSDstring), evalNode("{b}^^http://www.w3.org/2001/XMLSchema#string"));
-        assertEquals(NodeFactory.createLiteral("foo bar", XSDDatatype.XSDstring), evalNode("{b}^^<http://www.w3.org/2001/XMLSchema#string>"));
+        assertEquals(NodeFactory.createLiteralDT("foo bar", XSDDatatype.XSDstring), evalNode("{b}^^xsd:string"));
+        assertEquals(NodeFactory.createLiteralString("foo bar^^xsd:string"), evalNode("{b}\\^^xsd:string"));
+        assertEquals(NodeFactory.createLiteralDT("foo bar", XSDDatatype.XSDstring), evalNode("{b}^^http://www.w3.org/2001/XMLSchema#string"));
+        assertEquals(NodeFactory.createLiteralDT("foo bar", XSDDatatype.XSDstring), evalNode("{b}^^<http://www.w3.org/2001/XMLSchema#string>"));
         
-        assertEquals(NodeFactory.createLiteral("42", XSDDatatype.XSDdecimal), evalNode("{i.asDecimal()}") );
-        assertEquals(NodeFactory.createLiteral("0.1", XSDDatatype.XSDdecimal), evalNode("{d4.asDecimal()}") );
-        assertEquals(NodeFactory.createLiteral("0.6", XSDDatatype.XSDdecimal), evalNode("{d1.asDecimal()}") );
-        assertEquals(NodeFactory.createLiteral("460", XSDDatatype.XSDdecimal), evalNode("{d2.asDecimal()}") );
-        assertEquals(NodeFactory.createLiteral("460000000000000000000", XSDDatatype.XSDdecimal), evalNode("{d3.asDecimal()}") );
-        assertEquals(NodeFactory.createLiteral("5501000000000000000000000000000",XSDDatatype.XSDdecimal), evalNode("{big.asDecimal()}"));
+        assertEquals(NodeFactory.createLiteralDT("42", XSDDatatype.XSDdecimal), evalNode("{i.asDecimal()}") );
+        assertEquals(NodeFactory.createLiteralDT("0.1", XSDDatatype.XSDdecimal), evalNode("{d4.asDecimal()}") );
+        assertEquals(NodeFactory.createLiteralDT("0.6", XSDDatatype.XSDdecimal), evalNode("{d1.asDecimal()}") );
+        assertEquals(NodeFactory.createLiteralDT("460", XSDDatatype.XSDdecimal), evalNode("{d2.asDecimal()}") );
+        assertEquals(NodeFactory.createLiteralDT("460000000000000000000", XSDDatatype.XSDdecimal), evalNode("{d3.asDecimal()}") );
+        assertEquals(NodeFactory.createLiteralDT("5501000000000000000000000000000",XSDDatatype.XSDdecimal), evalNode("{big.asDecimal()}"));
     }
   
     @Test

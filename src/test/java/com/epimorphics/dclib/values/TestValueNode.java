@@ -21,6 +21,7 @@ import org.apache.jena.datatypes.xsd.XSDDatatype;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.util.FileManager;
 import org.apache.jena.vocabulary.DCTerms;
 import org.apache.jena.vocabulary.RDF;
@@ -49,7 +50,7 @@ public class TestValueNode {
 	@Before
 	public void setUp() {
 		// Need to set prefixes in DC *before* creating the converter process.
-		dc.setPrefixes( FileManager.get().loadModel("prefixes.ttl") );
+		dc.setPrefixes( RDFDataMgr.loadModel("prefixes.ttl") );
 		proc = new ConverterProcess(dc, null);
 		env = new BindingEnv();
 		env.set("u", ValueFactory.asValue("http://example.com/foo"));

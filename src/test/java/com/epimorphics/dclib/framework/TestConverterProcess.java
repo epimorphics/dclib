@@ -109,8 +109,8 @@ public class TestConverterProcess {
                         throw new NullResult("Value exceeds test threshold of 20");
                     }
                 }
-                Node vnode = NodeFactory.createLiteral( value.toString() );
-                config.getOutputStream().triple( new Triple(root, property, vnode) );
+                Node vnode = NodeFactory.createLiteralString( value.toString() );
+                config.getOutputStream().triple( Triple.create(root, property, vnode) );
             }
             return root;
         }

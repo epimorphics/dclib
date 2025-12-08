@@ -213,7 +213,7 @@ public class Main {
                     String filebasename = NameUtils.removeExtension(filename);
                     dc.getGlobalEnv().put(ConverterProcess.FILE_NAME, filename);
                     dc.getGlobalEnv().put(ConverterProcess.FILE_BASE_NAME, filebasename);
-                    InputStream is = new BOMInputStream( new FileInputStream(dataFileF) );
+                    InputStream is = BOMInputStream.builder().setInputStream( new FileInputStream(dataFileF) ).get();
                     
                     ConverterProcess process = new ConverterProcess(dc, is);
                     process.setDebug( args.isDebug() );

@@ -13,6 +13,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
 
+import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.util.FileManager;
 import org.junit.Before;
 import org.junit.Test;
@@ -38,7 +39,7 @@ public class TestValueArray {
 	@Before
 	public void setUp() {
 		// Need to set prefixes in DC *before* creating the converter process.
-		dc.setPrefixes( FileManager.get().loadModel("prefixes.ttl") );
+		dc.setPrefixes( RDFDataMgr.loadModel("prefixes.ttl") );
 		proc = new ConverterProcess(dc, null);
 		env = new BindingEnv();
 		env.set("u", ValueFactory.asValue("http://example.com/foo"));
