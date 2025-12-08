@@ -8,26 +8,19 @@
  *****************************************************************/
 package com.epimorphics.dclib.values;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 
 import org.apache.jena.datatypes.xsd.XSDDatatype;
 import org.apache.jena.graph.Node;
-import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.riot.RDFDataMgr;
-import org.apache.jena.util.FileManager;
 import org.apache.jena.vocabulary.DCTerms;
-import org.apache.jena.vocabulary.RDF;
 import org.apache.jena.vocabulary.RDFS;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import com.epimorphics.dclib.framework.BindingEnv;
 import com.epimorphics.dclib.framework.ConverterProcess;
@@ -47,7 +40,7 @@ public class TestValueNode {
 	public TestValueNode() {
 	}
 	
-	@Before
+	@BeforeEach
 	public void setUp() {
 		// Need to set prefixes in DC *before* creating the converter process.
 		dc.setPrefixes( RDFDataMgr.loadModel("prefixes.ttl") );
@@ -73,12 +66,12 @@ public class TestValueNode {
 				+ "}"
 			    );
 	
-		assertTrue("Missing or unexpected rdfs:label value",                 proc.getModel().contains(r, RDFS.label,proc.getModel().createLiteral("This is a test","en")));
-		assertTrue("Missing or unexpected dct:created value",                proc.getModel().contains(r, DCTerms.created,proc.getModel().createTypedLiteral("2018-05-29T12:24:00Z",XSDDatatype.XSDdateTime)));
-		assertTrue("Missing or unexpected dct:hasVersion (decimal) value",   proc.getModel().contains(r, DCTerms.hasVersion,proc.getModel().createTypedLiteral(BigDecimal.valueOf(10.5))));
-		assertTrue("Missing or unexpected dct:isVersionOf (resource) value", proc.getModel().contains(r, DCTerms.isVersionOf, proc.getModel().getResource("http://example.com/bar")));
-		assertTrue("Missing or unexpected dct:isVersionOf (resource) value", proc.getModel().contains(r, DCTerms.isVersionOf, proc.getModel().getResource("http://example.com/bar2")));
-		assertTrue("Missing or unexpected rdfs:label value",                 proc.getModel().contains(r, RDFS.label, proc.getModel().createLiteral("This is also a test","en")));
+		assertTrue(proc.getModel().contains(r, RDFS.label,proc.getModel().createLiteral("This is a test","en")), "Missing or unexpected rdfs:label value");
+		assertTrue(proc.getModel().contains(r, DCTerms.created,proc.getModel().createTypedLiteral("2018-05-29T12:24:00Z",XSDDatatype.XSDdateTime)), "Missing or unexpected dct:created value");
+		assertTrue(proc.getModel().contains(r, DCTerms.hasVersion,proc.getModel().createTypedLiteral(BigDecimal.valueOf(10.5))), "Missing or unexpected dct:hasVersion (decimal) value");
+		assertTrue(proc.getModel().contains(r, DCTerms.isVersionOf, proc.getModel().getResource("http://example.com/bar")), "Missing or unexpected dct:isVersionOf (resource) value");
+		assertTrue(proc.getModel().contains(r, DCTerms.isVersionOf, proc.getModel().getResource("http://example.com/bar2")), "Missing or unexpected dct:isVersionOf (resource) value");
+		assertTrue(proc.getModel().contains(r, RDFS.label, proc.getModel().createLiteral("This is also a test","en")), "Missing or unexpected rdfs:label value");
 		
 	}
 	

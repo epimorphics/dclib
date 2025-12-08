@@ -9,21 +9,20 @@
 
 package com.epimorphics.dclib.sources;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Collection;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class TestLexIndex {
     
 	LexIndex<String> table = new LexIndex<>();
     
-    @Before
+    @BeforeEach
     public void setUp() {
     	table.put("theFirstKey", "first");
         table.put("first key", "second");

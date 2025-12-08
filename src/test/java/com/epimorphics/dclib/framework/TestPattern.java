@@ -9,13 +9,13 @@
 
 package com.epimorphics.dclib.framework;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.jena.riot.RDFDataMgr;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import com.epimorphics.dclib.values.Value;
 import com.epimorphics.dclib.values.ValueArray;
@@ -24,7 +24,6 @@ import com.epimorphics.dclib.values.ValueNumber;
 import org.apache.jena.datatypes.xsd.XSDDatatype;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
-import org.apache.jena.util.FileManager;
 import org.apache.jena.vocabulary.RDF;
 
 public class TestPattern {
@@ -35,7 +34,7 @@ public class TestPattern {
     public TestPattern() {
     }
     
-    @Before
+    @BeforeEach
     public void setUp() {
         proc = new ConverterProcess(dc, null);
         

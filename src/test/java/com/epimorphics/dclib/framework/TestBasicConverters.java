@@ -9,18 +9,12 @@
 
 package com.epimorphics.dclib.framework;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-
 import java.io.IOException;
 
 import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.riot.RDFLanguages;
 import org.apache.jena.riot.RDFParserBuilder;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.epimorphics.rdfutil.RDFUtil;
 import com.epimorphics.tasks.SimpleProgressMonitor;
@@ -37,6 +31,8 @@ import org.apache.jena.util.FileManager;
 import org.apache.jena.vocabulary.DCTerms;
 import org.apache.jena.vocabulary.RDF;
 import org.apache.jena.vocabulary.RDFS;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TestBasicConverters {
     
@@ -298,7 +294,7 @@ public class TestBasicConverters {
         long duration = System.currentTimeMillis() - start;
         if (duration > 30000) {
             System.out.println("Took " + NameUtils.formatDuration(duration));
-            assertTrue("Conversion exceed 30s, should be less than 1s", false);
+            fail("Conversion exceed 30s, should be less than 1s");
         }
     }
 
