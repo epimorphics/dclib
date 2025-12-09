@@ -48,7 +48,7 @@ public class ValueNode extends ValueBase<Node> implements Value{
         } else if (value.isURI()) {
             return value.getURI();
         } else {
-            return value.getBlankNodeId().toString();
+            return value.getBlankNodeLabel();
         }
     }
 
@@ -269,7 +269,7 @@ public class ValueNode extends ValueBase<Node> implements Value{
 
         Resource prop = ResourceFactory.createResource(dc.expandURI(p.toString()) );
   
-        out.triple(new Triple(this.asNode(), prop.asNode(), o));
+        out.triple(Triple.create(this.asNode(), prop.asNode(), o));
 //        model.getModel().add(this.asResource(), prop, (RDFNode) val);
     
     	return this;
@@ -300,7 +300,7 @@ public class ValueNode extends ValueBase<Node> implements Value{
         		    ? o.asNode() 
                     : ResourceFactory.createResource(dc.expandURI(o.toString())).asNode();
   
-        out.triple(new Triple(this.asNode(), prop, res ));
+        out.triple(Triple.create(this.asNode(), prop, res ));
 //        model.getModel().add(this.asResource(), prop, (RDFNode) val);
     
     	return this;

@@ -15,9 +15,10 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import javax.ws.rs.NotSupportedException;
+import jakarta.ws.rs.NotSupportedException;
 
 import org.apache.jena.atlas.json.JsonObject;
+import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.riot.system.StreamRDF;
 
 import com.epimorphics.dclib.framework.ConverterProcess;
@@ -64,7 +65,7 @@ public class RDFSparqlMapSource extends MapSourceBaseBase implements MapSource {
     public RDFSparqlMapSource(JsonObject spec, ConverterProcess proc) throws IOException {
         super(spec);
         String sourceFile = getRequiredField(JSONConstants.SOURCE);
-        Model rdf = FileManager.get().loadModel( "file:" + findFile(sourceFile, proc) );
+        Model rdf = RDFDataMgr.loadModel( "file:" + findFile(sourceFile, proc) );
         
         String query = getRequiredField(JSONConstants.QUERY);
         query = PrefixUtils.expandQuery(query, proc.getDataContext().getPrefixes());

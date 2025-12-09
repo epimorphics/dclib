@@ -16,6 +16,7 @@ import java.util.Iterator;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.text.similarity.LevenshteinDistance;
 import org.apache.jena.util.OneToManyMap;
 
 /**
@@ -25,6 +26,7 @@ import org.apache.jena.util.OneToManyMap;
  * @author <a href="mailto:dave@epimorphics.com">Dave Reynolds</a>
  */
 public class LexIndex<T> {
+    private static final LevenshteinDistance levDist = LevenshteinDistance.getDefaultInstance();
     protected OneToManyMap<String, Record> table = new OneToManyMap<>();
     
     /**
@@ -48,11 +50,11 @@ public class LexIndex<T> {
             // There is a result but is there more than one
             if (i.hasNext()) {
                 // Yes, so search for best
-                int bestDist = StringUtils.getLevenshteinDistance(key, match.key);
+                int bestDist = levDist.apply(key, match.key);
                 Record best = match;
                 while (i.hasNext()) {
                     match = i.next();
-                    int dist = StringUtils.getLevenshteinDistance(key, match.key);
+                    int dist = levDist.apply(key, match.key);
                     if (dist < bestDist) {
                         bestDist = dist;
                         best = match;

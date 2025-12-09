@@ -157,7 +157,7 @@ public class CompositeTemplate extends ParameterizedTemplate implements Template
                 } else {
                     proc.getMessageReporter().report("Warning: could not interpret raw column value: " + v, rowNumber);
                 }
-                out.triple( new Triple(resource, predicate, obj) );
+                out.triple(Triple.create(resource, predicate, obj) );
             }
         }
     }

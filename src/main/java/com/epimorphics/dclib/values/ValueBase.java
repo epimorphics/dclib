@@ -111,7 +111,7 @@ public abstract class ValueBase<T> implements Value {
     // Value methods applicable to any type
     
     public Object datatype(String typeURI) {
-        return NodeFactory.createLiteral(toString(), typeFor(typeURI));
+        return NodeFactory.createLiteralDT(toString(), typeFor(typeURI));
     }
     
     protected RDFDatatype typeFor(String typeURI) {
@@ -306,7 +306,7 @@ public abstract class ValueBase<T> implements Value {
     }
     
     public Node lang(String lang) {
-        return NodeFactory.createLiteral(toString(), lang, false);
+        return NodeFactory.createLiteralLang(toString(), lang);
     }
     
     /**

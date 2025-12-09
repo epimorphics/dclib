@@ -15,10 +15,12 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 
+import com.opencsv.CSVParser;
+import com.opencsv.CSVParserBuilder;
+import com.opencsv.CSVReader;
+import com.opencsv.CSVReaderBuilder;
+import com.opencsv.exceptions.CsvValidationException;
 import org.apache.commons.io.input.BOMInputStream;
-
-import au.com.bytecode.opencsv.CSVParser;
-import au.com.bytecode.opencsv.CSVReader;
 
 import com.epimorphics.dclib.framework.BindingEnv;
 import com.epimorphics.util.EpiException;
@@ -35,12 +37,12 @@ public class CSVInput {
     protected boolean hasPreamble = false;
     protected String[] peekRow;
     
-    public CSVInput(String filename) throws IOException {
-        this( new BOMInputStream( new FileInputStream(filename) ) );
+    public CSVInput(String filename) throws IOException, CsvValidationException {
+        this(BOMInputStream.builder().setInputStream( new FileInputStream(filename) ).get());
     }
     
-    public CSVInput(InputStream ins) throws IOException {
-        in = new CSVReader( new InputStreamReader(ins, StandardCharsets.UTF_8), CSVParser.DEFAULT_SEPARATOR, CSVParser.DEFAULT_QUOTE_CHARACTER, '\0' );
+    public CSVInput(InputStream ins) throws IOException, CsvValidationException {
+        in = new CSVReaderBuilder(new InputStreamReader(ins, StandardCharsets.UTF_8)).build();
         
         String[] headerLine = in.readNext();
         if (headerLine == null) {
@@ -72,7 +74,7 @@ public class CSVInput {
      * Return a look ahead to the next row.
      * Repeat calls do not advance to further rows, 
      */
-    public String[] getPeekRow() throws IOException {
+    public String[] getPeekRow() throws IOException, CsvValidationException {
         if (peekRow == null) {
             peekRow = in.readNext();
         }
@@ -83,7 +85,7 @@ public class CSVInput {
      * Advances to the next row after a prior peek.
      * Returns true if a new peek was available.
      */
-    public boolean advancePeek() throws IOException {
+    public boolean advancePeek() throws IOException, CsvValidationException {
         peekRow = in.readNext();
         lineNumber++;
         return peekRow != null;
@@ -96,7 +98,7 @@ public class CSVInput {
      * If there have been any peek rows then returns an env based
      * on the last peeked row.
      */
-    public BindingEnv nextRow() throws IOException {
+    public BindingEnv nextRow() throws IOException, CsvValidationException {
         if (in != null) {
             String[] rowValues = (peekRow != null) ? peekRow : in.readNext();
             lineNumber++;

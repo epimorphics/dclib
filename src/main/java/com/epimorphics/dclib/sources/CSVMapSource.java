@@ -11,6 +11,7 @@ package com.epimorphics.dclib.sources;
 
 import java.io.IOException;
 
+import com.opencsv.exceptions.CsvValidationException;
 import org.apache.jena.atlas.json.JsonObject;
 
 import com.epimorphics.dclib.framework.BindingEnv;
@@ -39,7 +40,7 @@ public class CSVMapSource extends MapSourceBase implements MapSource {
         return false;
     }
 
-    public CSVMapSource(JsonObject spec, ConverterProcess config) throws IOException {
+    public CSVMapSource(JsonObject spec, ConverterProcess config) throws IOException, CsvValidationException {
         super(spec);
         String keyCol = getField(JSONConstants.KEY, "key");
         String valueCol = getField(JSONConstants.VALUE, "value");
@@ -76,7 +77,7 @@ public class CSVMapSource extends MapSourceBase implements MapSource {
         if (isURI) {
             return NodeFactory.createURI(value);
         } else {
-            return NodeFactory.createLiteral(value);
+            return NodeFactory.createLiteralString(value);
         }
     }
 }

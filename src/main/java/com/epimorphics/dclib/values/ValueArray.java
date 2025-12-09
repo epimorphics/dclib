@@ -105,7 +105,7 @@ public class ValueArray extends ValueBase<Value[]> implements Value {
     public Object datatype(final String typeURI) {
         return applyFunction(new MapValue() {
             public Value map(Value value) {
-                return new ValueNode( NodeFactory.createLiteral(value.toString(), typeFor(typeURI)) );        
+                return new ValueNode( NodeFactory.createLiteralDT(value.toString(), typeFor(typeURI)) );
             }
         });
     }

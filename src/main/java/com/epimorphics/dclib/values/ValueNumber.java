@@ -106,7 +106,7 @@ public class ValueNumber extends ValueBase<Number> implements Value {
     
     public static Node nodeFromNumber(Number result) {
     	if(result instanceof BigDecimal) {
-    		return NodeFactory.createLiteral( ((BigDecimal)result).toPlainString(),  XSDDatatype.XSDdecimal) ;
+    		return NodeFactory.createLiteralDT( ((BigDecimal)result).toPlainString(),  XSDDatatype.XSDdecimal) ;
     	}
         return NodeFactory.createLiteralByValue(result, typeFromNumber(result));
     }

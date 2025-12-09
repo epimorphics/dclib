@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.apache.commons.io.input.BOMInputStream;
+import org.apache.jena.riot.RDFDataMgr;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,7 +51,7 @@ public class ConverterService extends ComponentBase {
     public ConverterService(String defaultPrefixes) {
         dc = new DataContext();
         dc.getGlobalEnv().put(ConverterProcess.BASE_OBJECT_NAME, DEFAULT_BASE_URI);
-        PrefixMapping prefixes = FileManager.get().loadModel(defaultPrefixes);
+        PrefixMapping prefixes = RDFDataMgr.loadModel(defaultPrefixes);
         if (prefixes != null) {
             dc.setPrefixes(prefixes);
         } else {
@@ -64,7 +65,7 @@ public class ConverterService extends ComponentBase {
      * all qnames in templates.
      */
     public void setPrefixFile(String prefixes) {
-        PrefixMapping pref = FileManager.get().loadModel(prefixes);
+        PrefixMapping pref = RDFDataMgr.loadModel(prefixes);
         dc.setPrefixes(pref);
     }
     
@@ -147,7 +148,7 @@ public class ConverterService extends ComponentBase {
         String filebasename = NameUtils.removeExtension(filename);
         put(ConverterProcess.FILE_NAME, filename);
         put(ConverterProcess.FILE_BASE_NAME, filebasename);
-        InputStream is = new BOMInputStream( new FileInputStream(dataFileF) );
+        InputStream is = BOMInputStream.builder().setInputStream( new FileInputStream(dataFileF) ).get();
         
         ConverterProcess process = new ConverterProcess(dc, is);
         process.setDebug(debug);

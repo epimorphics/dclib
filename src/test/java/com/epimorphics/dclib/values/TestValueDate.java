@@ -9,15 +9,12 @@
 
 package com.epimorphics.dclib.values;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import java.io.IOException;
 
+import org.apache.jena.riot.RDFDataMgr;
 import org.joda.time.DateTime;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import com.epimorphics.dclib.framework.BindingEnv;
 import com.epimorphics.dclib.framework.ConverterProcess;
@@ -27,19 +24,20 @@ import com.epimorphics.dclib.framework.TestBasicConverters;
 import com.epimorphics.rdfutil.RDFUtil;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.Resource;
-import org.apache.jena.util.FileManager;
 import org.apache.jena.vocabulary.DCTerms;
 import org.apache.jena.vocabulary.XSD;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TestValueDate {
     DataContext dc = new DataContext();
     ConverterProcess proc;
     BindingEnv env;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         proc = new ConverterProcess(dc, null);
-        dc.setPrefixes( FileManager.get().loadModel("prefixes.ttl") );
+        dc.setPrefixes( RDFDataMgr.loadModel("prefixes.ttl") );
         env = new BindingEnv();
         env.put("date", ValueDate.parse("2014-09-11") );
         env.put("datetime", ValueDate.parse("2014-09-11T12:42:21.23") );
@@ -118,7 +116,7 @@ public class TestValueDate {
         
         try {
             doTestCoercion("2014 03", XSD.gYearMonth.getURI(), "2014-03");
-            assertTrue("Should have raised exception", false);
+            fail("Should have raised exception");
         } catch (Exception e) { }
         doTestCoercion("2014 03", "yyyy MM", XSD.gYearMonth.getURI(), "2014-03");
         doTestCoercion("2014 03", "yyyy-MM|yyyy MM", XSD.gYearMonth.getURI(), "2014-03");

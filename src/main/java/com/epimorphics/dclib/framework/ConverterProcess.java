@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map.Entry;
 
+import com.opencsv.exceptions.CsvValidationException;
 import org.apache.commons.collections.map.LRUMap;
 import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.riot.system.StreamRDF;
@@ -221,6 +222,8 @@ public class ConverterProcess {
             
         } catch (IOException e) {
             messageReporter.reportError("Problem reading next line of source");
+        } catch (CsvValidationException csvve) {
+            messageReporter.reportError("The CSV content was invalid: " + csvve.getMessage());
         } finally {
             current.set(null);
         }
@@ -291,7 +294,7 @@ public class ConverterProcess {
         }
     }
     
-    protected void preprocess() throws IOException {        
+    protected void preprocess() throws IOException, CsvValidationException {
         Node dataset = NodeFactory.createBlankNode();
         
         Object baseURI = env.get(BASE_OBJECT_NAME);
@@ -332,7 +335,7 @@ public class ConverterProcess {
                             try {
                                 Node prop = new Pattern(peekRow[1], dataContext).evaluateAsURINode(env, this, -1);
                                 Node value = new Pattern(peekRow[2], dataContext).evaluateAsNode(env, this, -1);
-                                getOutputStream().triple( new Triple(dataset, prop, value) );
+                                getOutputStream().triple(Triple.create(dataset, prop, value));
                             } catch (Exception e) {
                                 messageReporter.report("Failed to process metadata row: " + e, dataSource.getLineNumber());
                             }
