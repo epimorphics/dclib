@@ -2,13 +2,13 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.epimorphics</groupId>
   <artifactId>dclib</artifactId>
-  <version>3.0.1-SNAPSHOT</version>
+  <version>3.0.1</version>
   <name>Data Converter library</name>
   <description>Data converter library</description>
 
   <scm>
     <developerConnection>scm:git:ssh://git@github.com/epimorphics/dclib.git</developerConnection>
-    <tag>HEAD</tag>
+    <tag>dclib-3.0.1</tag>
   </scm>
 
   <properties>
