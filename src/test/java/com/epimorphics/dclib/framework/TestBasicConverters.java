@@ -16,6 +16,7 @@ import org.apache.jena.riot.RDFLanguages;
 import org.apache.jena.riot.RDFParserBuilder;
 import org.junit.jupiter.api.Test;
 
+import com.epimorphics.dclib.SkipWhenEndpointUnavailable;
 import com.epimorphics.rdfutil.RDFUtil;
 import com.epimorphics.tasks.SimpleProgressMonitor;
 import com.epimorphics.util.NameUtils;
@@ -188,6 +189,7 @@ public class TestBasicConverters {
     }
     
     @Test
+    @SkipWhenEndpointUnavailable(uri = "http://environment.data.gov.uk/def/bathing-water/sand-sediment")
     public void testFetch() throws IOException {
         // These test are selective instead of testing the whole model because the
         // data source returns a conflation of the doc and id views and that might change
