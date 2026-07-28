@@ -89,7 +89,7 @@
     <dependency>
       <groupId>com.epimorphics</groupId>
       <artifactId>appbase</artifactId>
-      <version>4.0.0</version>
+      <version>4.0.6</version>
     </dependency>
     <dependency>
       <groupId>org.apache.commons</groupId>
@@ -114,7 +114,7 @@
     <dependency>
         <groupId>ch.qos.logback</groupId>
         <artifactId>logback-classic</artifactId>
-        <version>1.5.32</version>
+        <version>1.5.34</version>
         <scope>test</scope>
     </dependency>
   </dependencies>
