@@ -345,7 +345,7 @@ public abstract class ValueBase<T> implements Value {
         ConverterProcess proc = ConverterProcess.get();
         String uri = asURI();
         Model model = proc.fetchModel(uri);
-        if (model != null) {;
+        if (model != null) {
             StreamRDF out = proc.getOutputStream();
             ExtendedIterator<Triple> it = model.getGraph().find(null, null, null);
             while (it.hasNext()) {
