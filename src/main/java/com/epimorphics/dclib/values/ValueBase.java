@@ -12,7 +12,9 @@ package com.epimorphics.dclib.values;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -263,6 +265,31 @@ public abstract class ValueBase<T> implements Value {
         }
         return wrap( seg );
     }
+
+    public Value toCamelCaseSegment() {
+        String[] segs = toString()
+                .toLowerCase()
+                .replace("'", "")
+                .split("[^@$a-zA-Z0-9\\.~]+");
+
+        List<String> ccSegs = new ArrayList<>();
+        for (int i = 0; i < segs.length; i++) {
+            String seg = segs[i];
+            if (seg.isEmpty()) {
+                continue;
+            }
+            if (ccSegs.isEmpty()) {
+                ccSegs.add(seg);
+                continue;
+            }
+            char[] chars = seg.toCharArray();
+            char first = chars[0];
+            char upper = ("" + first).toUpperCase().toCharArray()[0];
+            chars[0] = upper;
+            ccSegs.add(new String(chars));
+        }
+        return wrap(String.join("", ccSegs));
+    }
     
     public Value toSegment(String repl) {
         return wrap( NameUtils.safeName(toString()).replaceAll("_", repl) );
@@ -318,7 +345,7 @@ public abstract class ValueBase<T> implements Value {
         ConverterProcess proc = ConverterProcess.get();
         String uri = asURI();
         Model model = proc.fetchModel(uri);
-        if (model != null) {
+        if (model != null) {;
             StreamRDF out = proc.getOutputStream();
             ExtendedIterator<Triple> it = model.getGraph().find(null, null, null);
             while (it.hasNext()) {
