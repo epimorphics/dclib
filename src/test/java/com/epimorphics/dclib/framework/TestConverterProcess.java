@@ -36,11 +36,22 @@ public class TestConverterProcess {
     
     @Test
     public void testBaseCase() throws IOException {
+        SimpleProgressMonitor monitor = new SimpleProgressMonitor();
         ConverterProcess process = setUp("test/test-ok.csv");
+        process.setMessageReporter(monitor);
+        process.setBatchSize(1);
+        process.setRowCount(3);
         boolean ok = process.process();
         assertTrue(ok);
         assertTrue( contains(process, "1", "a", "10") );
         assertTrue( contains(process, "2", "b", "20") );
+
+        List<ProgressMessage> msgs = monitor.getMessages();
+        assertEquals(4, msgs.size());
+        assertEquals("Processing row 1 of 3 (0%)", msgs.get(0).getMessage());
+        assertEquals("Processing row 2 of 3 (33%)", msgs.get(1).getMessage());
+        assertEquals("Processing row 3 of 3 (66%)", msgs.get(2).getMessage());
+        assertEquals("Processed 3 lines", msgs.get(3).getMessage());
     }
     
     @Test
@@ -48,17 +59,23 @@ public class TestConverterProcess {
         SimpleProgressMonitor monitor = new SimpleProgressMonitor();
         ConverterProcess process = setUp("test/test-fail.csv");
         process.setMessageReporter(monitor);
+        process.setBatchSize(2);
+        process.setRowCount(5);
         @SuppressWarnings("unused")
         boolean ok = process.process();
 //        assertFalse(ok);  - failed row convert no longer itself fatal
         assertTrue( contains(process, "1", "a", "10") );
         assertTrue( contains(process, "2", "b", "20") );
         assertTrue( contains(process, "4", "d", "10") );
-        List<ProgressMessage> messages = monitor.getMessages();
-        assertEquals(2, messages.size());
-        ProgressMessage message = messages.get(0);
-        assertEquals(3, message.getLineNumber());
-        assertTrue( message.getMessage().contains("Value exceeds test threshold") );
+
+        List<ProgressMessage> msgs = monitor.getMessages();
+        assertEquals(5, msgs.size());
+        assertEquals("Processing row 1 of 5 (0%)", msgs.get(0).getMessage());
+        assertEquals("Processing row 3 of 5 (40%)", msgs.get(1).getMessage());
+        assertEquals("Warning: no templates matched line 3, com.epimorphics.dclib.framework.NullResult: Value exceeds test threshold of 20", msgs.get(2).getMessage());
+        assertEquals(3, msgs.get(2).getLineNumber());
+        assertEquals("Processing row 5 of 5 (80%)", msgs.get(3).getMessage());
+        assertEquals("Processed 5 lines", msgs.get(4).getMessage());
     }
     
     private ConverterProcess setUp(String file) throws IOException {

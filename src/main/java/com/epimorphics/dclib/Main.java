@@ -20,6 +20,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.epimorphics.dclib.sources.LineCount;
 import org.apache.commons.io.input.BOMInputStream;
 import org.apache.jena.riot.Lang;
 import org.apache.jena.riot.RDFLanguages;
@@ -214,12 +215,14 @@ public class Main {
                     dc.getGlobalEnv().put(ConverterProcess.FILE_NAME, filename);
                     dc.getGlobalEnv().put(ConverterProcess.FILE_BASE_NAME, filebasename);
                     InputStream is = BOMInputStream.builder().setInputStream( new FileInputStream(dataFileF) ).get();
+                    int rowCount = LineCount.file(dataFileF) - 1; // discount header row
                     
                     ConverterProcess process = new ConverterProcess(dc, is);
                     process.setDebug( args.isDebug() );
                     process.setTemplate( template );
                     process.setMessageReporter( reporter );
                     process.setAllowNullRows( !args.isNullRowAborts() );
+                    process.setRowCount(rowCount);
                     
                     StreamRDF stream = StreamRDFWriter.getWriterStream(out,  args.isNtriples() ? Lang.NTRIPLES : Lang.TURTLE);
                     process.setOutputStream( stream );

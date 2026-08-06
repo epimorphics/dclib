@@ -71,6 +71,7 @@ public class ConverterProcess {
     
     protected CSVInput dataSource;
 
+    protected int rowCount;
     protected boolean debug = false;
     protected boolean allowNullRows = true;
     
@@ -142,6 +143,10 @@ public class ConverterProcess {
     public void setDebug(boolean debugOn) {
         this.debug = debugOn;
     }
+
+    public void setRowCount(int rowCount) {
+        this.rowCount = rowCount;
+    }
     
     public boolean isDebugging() {
         return debug;
@@ -182,8 +187,13 @@ public class ConverterProcess {
             while(true) {
                 int lineNumber = dataSource.getLineNumber();
 //                log.debug("Line " + lineNumber);
-                if (lineNumber % BATCH_SIZE == 0) {
-                    messageReporter.report("Processing row " + lineNumber);
+                if ((lineNumber - 1) % BATCH_SIZE == 0) {
+                    if (rowCount > 0) {
+                        messageReporter.setProgress(((lineNumber - 1) * 100) / rowCount);
+                        messageReporter.report(String.format("Processing row %d of %d (%d%%)", lineNumber, rowCount, messageReporter.getProgress()));
+                    } else {
+                        messageReporter.report("Processing row " + lineNumber);
+                    }
                 }
                 BindingEnv row = nextRow();
                 if (row != null) {
