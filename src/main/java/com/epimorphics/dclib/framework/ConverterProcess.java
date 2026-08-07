@@ -11,8 +11,8 @@ package com.epimorphics.dclib.framework;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Map.Entry;
 
+import com.epimorphics.dclib.sources.CsvBindingEnv;
 import com.opencsv.exceptions.CsvValidationException;
 import org.apache.commons.collections.map.LRUMap;
 import org.apache.jena.riot.RDFDataMgr;
@@ -150,6 +150,12 @@ public class ConverterProcess {
     public void setRowCount(int rowCount) {
         this.rowCount = rowCount;
     }
+
+
+    private long totalBytes = 0;
+    public void setTotalBytes(long totalBytes) {
+        this.totalBytes = totalBytes;
+    }
     
     public boolean isDebugging() {
         return debug;
@@ -168,6 +174,14 @@ public class ConverterProcess {
      */
     public boolean process() {
         int rowNumber = 0;
+        long processedBytes = 0;
+        if (totalBytes > 0) {
+            String[] headers = getHeaders();
+            totalBytes -= headers.length; // assume 1 byte for each column separator
+            for (String header: getHeaders()) {
+                totalBytes -= header.length();
+            }
+        }
         try {
             current.set(this);
             Node now = RDFUtil.fromDateTime( System.currentTimeMillis() ).asNode();
@@ -189,17 +203,17 @@ public class ConverterProcess {
 
             boolean started = false;
             while(true) {
-                BindingEnv row = nextRow();
+                CsvBindingEnv row = nextRow();
                 if (row != null) {
                     int lineNumber = dataSource.getLineNumber();
                     rowNumber = lineNumber - 1;
 
                     if ((rowNumber - 1) % BATCH_SIZE == 0) {
-                        if (rowCount > 0) {
-                            messageReporter.setProgress(((rowNumber - 1) * 100) / rowCount);
-                            messageReporter.report(String.format("Processing row %d of %d (%d%%)", rowNumber, rowCount, messageReporter.getProgress()), lineNumber);
+                        if (totalBytes > 0) {
+                            messageReporter.setProgress(Math.toIntExact(((processedBytes * 100) / totalBytes)));
+                            messageReporter.report(String.format("Processing row %d (%d%%)", rowNumber, messageReporter.getProgress()), lineNumber);
                         } else {
-                            messageReporter.report("Processing line " + lineNumber);
+                            messageReporter.report("Processing row " + rowNumber);
                         }
                     }
                     started = true;
@@ -216,7 +230,6 @@ public class ConverterProcess {
                     } catch (Exception e) {
                         if (!(e instanceof NullResult)) {
                             messageReporter.reportError("Error: " + e, lineNumber);
-//                            log.error("Error processing line " + lineNumber, e);
                         } else {
                             if (allowNullRows) {
                                 messageReporter.report("Warning: no templates matched line " + lineNumber + ", " + e, lineNumber);
@@ -224,6 +237,8 @@ public class ConverterProcess {
                                 messageReporter.reportError("Error: no templates matched line " + lineNumber + ", " + e, lineNumber);
                             }
                         }
+                    } finally {
+                        processedBytes += row.sourceBytes();
                     }
                 } else {
                     break;
@@ -275,15 +290,20 @@ public class ConverterProcess {
         }
     }
     
-    public BindingEnv nextRow() throws IOException {
+    public CsvBindingEnv nextRow() throws IOException {
         try {
-            BindingEnv row = dataSource.nextRow();
+//            BindingEnv row = dataSource.nextRow();
+//            if (row == null) return null;
+//            BindingEnv wrapped = new BindingEnv(env);
+//            for (Entry<String, Object> entry : row.entrySet()) {
+//                wrapped.put(entry.getKey(), ValueFactory.asValue(entry.getValue().toString().trim()));
+//            }
+//            return wrapped;
+            CsvBindingEnv row = dataSource.nextRow();
             if (row == null) return null;
-            BindingEnv wrapped = new BindingEnv(env);
-            for (Entry<String, Object> entry : row.entrySet()) {
-                wrapped.put(entry.getKey(), ValueFactory.asValue(entry.getValue().toString().trim()));
-            }
-            return wrapped;
+            row.setParent(env);
+            row.replaceAll((k, v) -> ValueFactory.asValue(v.toString().trim()));
+            return row;
         } catch (Exception e) {
             // Most likely problem here is bad data such as an unterminated line
             messageReporter.reportError("Error during CSV reading, unterminated final line? " + e, dataSource.getLineNumber());

@@ -18,7 +18,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
-import com.epimorphics.dclib.sources.LineCount;
 import org.junit.jupiter.api.Test;
 
 import com.epimorphics.dclib.values.ValueNumber;
@@ -49,8 +48,8 @@ public class TestConverterProcess {
 
         List<ProgressMessage> msgs = monitor.getMessages();
         assertEquals(3, msgs.size());
-        assertEquals("Processing row 1 of 2 (0%)", msgs.get(0).getMessage());
-        assertEquals("Processing row 2 of 2 (50%)", msgs.get(1).getMessage());
+        assertEquals("Processing row 1 (0%)", msgs.get(0).getMessage());
+        assertEquals("Processing row 2 (50%)", msgs.get(1).getMessage());
         assertEquals("Processed 2 rows", msgs.get(2).getMessage());
     }
     
@@ -69,19 +68,18 @@ public class TestConverterProcess {
 
         List<ProgressMessage> msgs = monitor.getMessages();
         assertEquals(4, msgs.size());
-        assertEquals("Processing row 1 of 4 (0%)", msgs.get(0).getMessage());
-        assertEquals("Processing row 3 of 4 (50%)", msgs.get(1).getMessage());
+        assertEquals("Processing row 1 (0%)", msgs.get(0).getMessage());
+        assertEquals("Processing row 3 (52%)", msgs.get(1).getMessage());
         assertEquals("Warning: no templates matched line 4, com.epimorphics.dclib.framework.NullResult: Value exceeds test threshold of 20", msgs.get(2).getMessage());
         assertEquals(4, msgs.get(2).getLineNumber());
         assertEquals("Processed 4 rows", msgs.get(3).getMessage());
     }
     
     private ConverterProcess setUp(String file) throws IOException {
-        int lineCount = LineCount.file(new File(file));
         InputStream is = new FileInputStream(file);
         ConverterProcess process = new ConverterProcess(new DataContext(), is);
         process.setTemplate( new TestTemplate() );
-        process.setRowCount(lineCount - 1);
+        process.setTotalBytes(new File(file).length());
         return process;
     }
     
