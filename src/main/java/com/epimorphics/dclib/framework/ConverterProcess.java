@@ -203,7 +203,7 @@ public class ConverterProcess {
                         }
                     }
                     started = true;
-                    row.put(ROW_OBJECT_NAME, new Row(lineNumber));
+                    row.put(ROW_OBJECT_NAME, new Row(rowNumber));
                     try {
                         Node result = template.convertRow(this, row, rowNumber);
                         if (result == null) {
