@@ -214,8 +214,8 @@ public class Main {
                     String filebasename = NameUtils.removeExtension(filename);
                     dc.getGlobalEnv().put(ConverterProcess.FILE_NAME, filename);
                     dc.getGlobalEnv().put(ConverterProcess.FILE_BASE_NAME, filebasename);
-                    InputStream is = BOMInputStream.builder().setInputStream( new FileInputStream(dataFileF) ).get();
                     int rowCount = LineCount.file(dataFileF) - 1; // discount header row
+                    InputStream is = BOMInputStream.builder().setInputStream( new FileInputStream(dataFileF) ).get();
                     
                     ConverterProcess process = new ConverterProcess(dc, is);
                     process.setDebug( args.isDebug() );

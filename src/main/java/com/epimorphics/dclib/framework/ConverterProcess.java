@@ -164,6 +164,7 @@ public class ConverterProcess {
      * @return true if the conversion succeeded
      */
     public boolean process() {
+        int rowNumber = 0;
         try {
             current.set(this);
             Node now = RDFUtil.fromDateTime( System.currentTimeMillis() ).asNode();
@@ -182,25 +183,26 @@ public class ConverterProcess {
                 messageReporter.reportError("Data shape does not match template, missing columns: " + ((TemplateBase)template).listMissingColumns(getHeaders()));
                 return false;
             }
-    
+
             boolean started = false;
             while(true) {
-                int lineNumber = dataSource.getLineNumber();
-//                log.debug("Line " + lineNumber);
-                if ((lineNumber - 1) % BATCH_SIZE == 0) {
-                    if (rowCount > 0) {
-                        messageReporter.setProgress(((lineNumber - 1) * 100) / rowCount);
-                        messageReporter.report(String.format("Processing row %d of %d (%d%%)", lineNumber, rowCount, messageReporter.getProgress()));
-                    } else {
-                        messageReporter.report("Processing row " + lineNumber);
-                    }
-                }
                 BindingEnv row = nextRow();
                 if (row != null) {
+                    int lineNumber = dataSource.getLineNumber();
+                    rowNumber = lineNumber - 1;
+
+                    if ((rowNumber - 1) % BATCH_SIZE == 0) {
+                        if (rowCount > 0) {
+                            messageReporter.setProgress(((rowNumber - 1) * 100) / rowCount);
+                            messageReporter.report(String.format("Processing row %d of %d (%d%%)", rowNumber, rowCount, messageReporter.getProgress()), lineNumber);
+                        } else {
+                            messageReporter.report("Processing line " + lineNumber);
+                        }
+                    }
                     started = true;
                     row.put(ROW_OBJECT_NAME, new Row(lineNumber));
                     try {
-                        Node result = template.convertRow(this, row, lineNumber);
+                        Node result = template.convertRow(this, row, rowNumber);
                         if (result == null) {
                             if (allowNullRows) {
                                 messageReporter.report("Warning: no templates matched line " + lineNumber, lineNumber);
@@ -237,7 +239,7 @@ public class ConverterProcess {
         } finally {
             current.set(null);
         }
-        messageReporter.report("Processed " + (dataSource.getLineNumber() - 1) + " lines");
+        messageReporter.report("Processed " + rowNumber + " rows");
         messageReporter.setState(TaskState.Terminated);
         close();
         
