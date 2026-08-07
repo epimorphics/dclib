@@ -144,6 +144,9 @@ public class ConverterProcess {
         this.debug = debugOn;
     }
 
+    /**
+     * Set the total number of rows (not lines) to be processed for the purpose of computing progress percentage.
+     */
     public void setRowCount(int rowCount) {
         this.rowCount = rowCount;
     }
