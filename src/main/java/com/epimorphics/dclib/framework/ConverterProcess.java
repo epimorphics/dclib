@@ -71,7 +71,6 @@ public class ConverterProcess {
     
     protected CSVInput dataSource;
 
-    protected int rowCount;
     protected boolean debug = false;
     protected boolean allowNullRows = true;
     
@@ -143,14 +142,6 @@ public class ConverterProcess {
     public void setDebug(boolean debugOn) {
         this.debug = debugOn;
     }
-
-    /**
-     * Set the total number of rows (not lines) to be processed for the purpose of computing progress percentage.
-     */
-    public void setRowCount(int rowCount) {
-        this.rowCount = rowCount;
-    }
-
 
     private long totalBytes = 0;
     public void setTotalBytes(long totalBytes) {
