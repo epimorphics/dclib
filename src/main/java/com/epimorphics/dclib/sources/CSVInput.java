@@ -115,7 +115,7 @@ public class CSVInput {
         CsvBindingEnv row = new CsvBindingEnv();
         for (int i = 0; i < rowLength; i++) {
             String rowValue = rowValues[i];
-            sourceBytes += rowValue.length();
+            sourceBytes += rowValue.getBytes().length;
             if (i < safeLength) {
                 row.put(headers[i], rowValue);
             }

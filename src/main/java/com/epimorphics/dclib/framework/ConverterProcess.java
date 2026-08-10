@@ -170,7 +170,7 @@ public class ConverterProcess {
             String[] headers = getHeaders();
             totalBytes -= headers.length; // assume 1 byte for each column separator
             for (String header: getHeaders()) {
-                totalBytes -= header.length();
+                totalBytes -= header.getBytes().length;
             }
         }
         try {
