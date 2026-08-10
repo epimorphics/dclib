@@ -14,10 +14,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.Iterator;
 
-import com.opencsv.CSVReader;
-import com.opencsv.CSVReaderBuilder;
 import com.opencsv.exceptions.CsvValidationException;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.io.input.BOMInputStream;
 
 import com.epimorphics.util.EpiException;
@@ -28,7 +30,8 @@ import com.epimorphics.util.NameUtils;
  * @author <a href="mailto:dave@epimorphics.com">Dave Reynolds</a>
  */
 public class CSVInput {
-    protected CSVReader in;
+    protected CSVParser parser;
+    protected Iterator<CSVRecord> in;
     protected String[] headers;
     protected int lineNumber = 0;
     protected boolean hasPreamble = false;
@@ -38,10 +41,10 @@ public class CSVInput {
         this(BOMInputStream.builder().setInputStream( new FileInputStream(filename) ).get());
     }
     
-    public CSVInput(InputStream ins) throws IOException, CsvValidationException {
-        in = new CSVReaderBuilder(new InputStreamReader(ins, StandardCharsets.UTF_8)).withKeepCarriageReturn(true).build();
-        
-        String[] headerLine = in.readNext();
+    public CSVInput(InputStream ins) throws IOException {
+        CSVParser parser = CSVFormat.RFC4180.parse(new InputStreamReader(ins, StandardCharsets.UTF_8));
+        Iterator<CSVRecord> in = parser.stream().iterator();
+        String[] headerLine = in.next().values();
         if (headerLine == null) {
             throw new EpiException("No data, cannot read header line");
         }
@@ -53,6 +56,8 @@ public class CSVInput {
         if (headerLine.length > 1 && headerLine[0].equals("#")) {
             hasPreamble = true;
         }
+        this.parser = parser;
+        this.in = parser.stream().iterator();
     }
     
     private String safeColName(String col) {
@@ -71,9 +76,9 @@ public class CSVInput {
      * Return a look ahead to the next row.
      * Repeat calls do not advance to further rows, 
      */
-    public String[] getPeekRow() throws IOException, CsvValidationException {
+    public String[] getPeekRow() {
         if (peekRow == null) {
-            peekRow = in.readNext();
+            peekRow = in.next().values();
         }
         return peekRow;
     }
@@ -82,8 +87,8 @@ public class CSVInput {
      * Advances to the next row after a prior peek.
      * Returns true if a new peek was available.
      */
-    public boolean advancePeek() throws IOException, CsvValidationException {
-        peekRow = in.readNext();
+    public boolean advancePeek() {
+        peekRow = in.next().values();
         lineNumber++;
         return peekRow != null;
     }
@@ -95,9 +100,9 @@ public class CSVInput {
      * If there have been any peek rows then returns an env based
      * on the last peeked row.
      */
-    public CsvBindingEnv nextRow() throws IOException, CsvValidationException {
+    public CsvBindingEnv nextRow() {
         if (in != null) {
-            String[] rowValues = (peekRow != null) ? peekRow : in.readNext();
+            String[] rowValues = (peekRow != null) ? peekRow : in.hasNext() ? in.next().values() : null;
             lineNumber++;
             peekRow = null;
             if (rowValues == null || rowValues.length == 0) {
@@ -147,7 +152,7 @@ public class CSVInput {
 
     public void close() {
         try {
-            in.close();
+            parser.close();
         } catch (IOException e) {
             // swallow errors in closing, not useful here
         }
