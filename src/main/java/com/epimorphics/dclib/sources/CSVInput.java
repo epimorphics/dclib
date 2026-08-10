@@ -39,7 +39,7 @@ public class CSVInput {
     }
     
     public CSVInput(InputStream ins) throws IOException, CsvValidationException {
-        in = new CSVReaderBuilder(new InputStreamReader(ins, StandardCharsets.UTF_8)).build();
+        in = new CSVReaderBuilder(new InputStreamReader(ins, StandardCharsets.UTF_8)).withKeepCarriageReturn(true).build();
         
         String[] headerLine = in.readNext();
         if (headerLine == null) {
