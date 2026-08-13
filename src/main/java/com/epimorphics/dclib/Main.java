@@ -209,6 +209,7 @@ public class Main {
                     Template template = TemplateFactory.templateFrom(templateName, dc);
                     
                     File dataFileF = new File(dataFile);
+                    long fileSize = dataFileF.length();
                     String filename = dataFileF.getName();
                     String filebasename = NameUtils.removeExtension(filename);
                     dc.getGlobalEnv().put(ConverterProcess.FILE_NAME, filename);
@@ -220,6 +221,7 @@ public class Main {
                     process.setTemplate( template );
                     process.setMessageReporter( reporter );
                     process.setAllowNullRows( !args.isNullRowAborts() );
+                    process.setTotalBytes(fileSize);
                     
                     StreamRDF stream = StreamRDFWriter.getWriterStream(out,  args.isNtriples() ? Lang.NTRIPLES : Lang.TURTLE);
                     process.setOutputStream( stream );

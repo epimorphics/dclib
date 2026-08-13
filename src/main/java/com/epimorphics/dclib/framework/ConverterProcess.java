@@ -11,8 +11,10 @@ package com.epimorphics.dclib.framework;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Map.Entry;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
+import com.epimorphics.dclib.sources.CsvBindingEnv;
 import com.opencsv.exceptions.CsvValidationException;
 import org.apache.commons.collections.map.LRUMap;
 import org.apache.jena.riot.RDFDataMgr;
@@ -49,6 +51,7 @@ import org.apache.jena.rdf.model.ModelFactory;
  */
 public class ConverterProcess {
     static final Logger log = LoggerFactory.getLogger( ConverterProcess.class );
+    public static Charset CHARSET = StandardCharsets.UTF_8;
     
     public static final int MAX_FETCH_CACHE = 500;
     
@@ -142,6 +145,11 @@ public class ConverterProcess {
     public void setDebug(boolean debugOn) {
         this.debug = debugOn;
     }
+
+    private long totalBytes = 0;
+    public void setTotalBytes(long totalBytes) {
+        this.totalBytes = totalBytes;
+    }
     
     public boolean isDebugging() {
         return debug;
@@ -159,6 +167,15 @@ public class ConverterProcess {
      * @return true if the conversion succeeded
      */
     public boolean process() {
+        int rowNumber = 0;
+        long processedBytes = 0;
+        if (totalBytes > 0) {
+            String[] headers = getHeaders();
+            totalBytes -= headers.length; // assume 1 byte for each column separator
+            for (String header: getHeaders()) {
+                totalBytes -= header.getBytes(CHARSET).length;
+            }
+        }
         try {
             current.set(this);
             Node now = RDFUtil.fromDateTime( System.currentTimeMillis() ).asNode();
@@ -177,20 +194,26 @@ public class ConverterProcess {
                 messageReporter.reportError("Data shape does not match template, missing columns: " + ((TemplateBase)template).listMissingColumns(getHeaders()));
                 return false;
             }
-    
+
             boolean started = false;
             while(true) {
-                int lineNumber = dataSource.getLineNumber();
-//                log.debug("Line " + lineNumber);
-                if (lineNumber % BATCH_SIZE == 0) {
-                    messageReporter.report("Processing row " + lineNumber);
-                }
-                BindingEnv row = nextRow();
+                CsvBindingEnv row = nextRow();
                 if (row != null) {
+                    int lineNumber = dataSource.getLineNumber();
+                    rowNumber = lineNumber - 1;
+
+                    if ((rowNumber - 1) % BATCH_SIZE == 0) {
+                        if (totalBytes > 0) {
+                            messageReporter.setProgress(Math.toIntExact(((processedBytes * 100) / totalBytes)));
+                            messageReporter.report(String.format("Processing row %d (%d%%)", rowNumber, messageReporter.getProgress()), lineNumber);
+                        } else {
+                            messageReporter.report("Processing row " + rowNumber);
+                        }
+                    }
                     started = true;
-                    row.put(ROW_OBJECT_NAME, new Row(lineNumber));
+                    row.put(ROW_OBJECT_NAME, new Row(rowNumber));
                     try {
-                        Node result = template.convertRow(this, row, lineNumber);
+                        Node result = template.convertRow(this, row, rowNumber);
                         if (result == null) {
                             if (allowNullRows) {
                                 messageReporter.report("Warning: no templates matched line " + lineNumber, lineNumber);
@@ -201,7 +224,6 @@ public class ConverterProcess {
                     } catch (Exception e) {
                         if (!(e instanceof NullResult)) {
                             messageReporter.reportError("Error: " + e, lineNumber);
-//                            log.error("Error processing line " + lineNumber, e);
                         } else {
                             if (allowNullRows) {
                                 messageReporter.report("Warning: no templates matched line " + lineNumber + ", " + e, lineNumber);
@@ -209,6 +231,8 @@ public class ConverterProcess {
                                 messageReporter.reportError("Error: no templates matched line " + lineNumber + ", " + e, lineNumber);
                             }
                         }
+                    } finally {
+                        processedBytes += row.sourceBytes();
                     }
                 } else {
                     break;
@@ -227,7 +251,7 @@ public class ConverterProcess {
         } finally {
             current.set(null);
         }
-        messageReporter.report("Processed " + (dataSource.getLineNumber() - 1) + " lines");
+        messageReporter.report("Processed " + rowNumber + " rows");
         messageReporter.setState(TaskState.Terminated);
         close();
         
@@ -260,15 +284,20 @@ public class ConverterProcess {
         }
     }
     
-    public BindingEnv nextRow() throws IOException {
+    public CsvBindingEnv nextRow() throws IOException {
         try {
-            BindingEnv row = dataSource.nextRow();
+//            BindingEnv row = dataSource.nextRow();
+//            if (row == null) return null;
+//            BindingEnv wrapped = new BindingEnv(env);
+//            for (Entry<String, Object> entry : row.entrySet()) {
+//                wrapped.put(entry.getKey(), ValueFactory.asValue(entry.getValue().toString().trim()));
+//            }
+//            return wrapped;
+            CsvBindingEnv row = dataSource.nextRow();
             if (row == null) return null;
-            BindingEnv wrapped = new BindingEnv(env);
-            for (Entry<String, Object> entry : row.entrySet()) {
-                wrapped.put(entry.getKey(), ValueFactory.asValue(entry.getValue().toString().trim()));
-            }
-            return wrapped;
+            row.setParent(env);
+            row.replaceAll((k, v) -> ValueFactory.asValue(v.toString().trim()));
+            return row;
         } catch (Exception e) {
             // Most likely problem here is bad data such as an unterminated line
             messageReporter.reportError("Error during CSV reading, unterminated final line? " + e, dataSource.getLineNumber());

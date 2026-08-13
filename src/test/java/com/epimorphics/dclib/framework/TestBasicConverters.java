@@ -116,7 +116,7 @@ public class TestBasicConverters {
         SimpleProgressMonitor monitor = new SimpleProgressMonitor();
         service.simpleConvert("test/mapping/dept-type-required.json", "test/mapping/dept-type-data-error.csv", monitor);
         assertFalse( monitor.succeeded() );
-        assertEquals(2, monitor.getMessages().size());
+        assertEquals(3, monitor.getMessages().size());
 //        System.out.println(monitor.getMessages().get(0));
 
         // Non-sensical example to provide test of asNodeURI in situ

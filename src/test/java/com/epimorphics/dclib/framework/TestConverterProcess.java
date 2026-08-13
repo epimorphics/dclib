@@ -12,6 +12,7 @@ package com.epimorphics.dclib.framework;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -36,11 +37,20 @@ public class TestConverterProcess {
     
     @Test
     public void testBaseCase() throws IOException {
+        SimpleProgressMonitor monitor = new SimpleProgressMonitor();
         ConverterProcess process = setUp("test/test-ok.csv");
+        process.setMessageReporter(monitor);
+        process.setBatchSize(1);
         boolean ok = process.process();
         assertTrue(ok);
         assertTrue( contains(process, "1", "a", "10") );
         assertTrue( contains(process, "2", "b", "20") );
+
+        List<ProgressMessage> msgs = monitor.getMessages();
+        assertEquals(3, msgs.size());
+        assertEquals("Processing row 1 (0%)", msgs.get(0).getMessage());
+        assertEquals("Processing row 2 (50%)", msgs.get(1).getMessage());
+        assertEquals("Processed 2 rows", msgs.get(2).getMessage());
     }
     
     @Test
@@ -48,23 +58,28 @@ public class TestConverterProcess {
         SimpleProgressMonitor monitor = new SimpleProgressMonitor();
         ConverterProcess process = setUp("test/test-fail.csv");
         process.setMessageReporter(monitor);
+        process.setBatchSize(2);
         @SuppressWarnings("unused")
         boolean ok = process.process();
 //        assertFalse(ok);  - failed row convert no longer itself fatal
         assertTrue( contains(process, "1", "a", "10") );
         assertTrue( contains(process, "2", "b", "20") );
         assertTrue( contains(process, "4", "d", "10") );
-        List<ProgressMessage> messages = monitor.getMessages();
-        assertEquals(2, messages.size());
-        ProgressMessage message = messages.get(0);
-        assertEquals(3, message.getLineNumber());
-        assertTrue( message.getMessage().contains("Value exceeds test threshold") );
+
+        List<ProgressMessage> msgs = monitor.getMessages();
+        assertEquals(4, msgs.size());
+        assertEquals("Processing row 1 (0%)", msgs.get(0).getMessage());
+        assertEquals("Processing row 3 (52%)", msgs.get(1).getMessage());
+        assertEquals("Warning: no templates matched line 4, com.epimorphics.dclib.framework.NullResult: Value exceeds test threshold of 20", msgs.get(2).getMessage());
+        assertEquals(4, msgs.get(2).getLineNumber());
+        assertEquals("Processed 4 rows", msgs.get(3).getMessage());
     }
     
     private ConverterProcess setUp(String file) throws IOException {
         InputStream is = new FileInputStream(file);
         ConverterProcess process = new ConverterProcess(new DataContext(), is);
         process.setTemplate( new TestTemplate() );
+        process.setTotalBytes(new File(file).length());
         return process;
     }
     

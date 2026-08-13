@@ -37,13 +37,15 @@ import com.epimorphics.tasks.ProgressReporter;
 import com.epimorphics.util.EpiException;
 import com.epimorphics.util.NameUtils;
 
+import static com.epimorphics.dclib.framework.ConverterProcess.CHARSET;
+
 /**
  * A simple packaged value.
  * 
  * @author <a href="mailto:dave@epimorphics.com">Dave Reynolds</a>
  */
 public abstract class ValueBase<T> implements Value {
-    
+
     protected T value;
     
     public ValueBase(T value) {
@@ -393,7 +395,7 @@ public abstract class ValueBase<T> implements Value {
 		}
     	
 		try {
-			bytes = md.digest(value.toString().getBytes("UTF-8"));
+			bytes = md.digest(value.toString().getBytes(CHARSET));
 			if ( base64 ) {
 			  res = new ValueString( new String( Base64.encodeBase64URLSafe(bytes), "UTF-8"));
 			} else {
