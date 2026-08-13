@@ -13,18 +13,16 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
 
-import com.opencsv.CSVParser;
-import com.opencsv.CSVParserBuilder;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 import com.opencsv.exceptions.CsvValidationException;
 import org.apache.commons.io.input.BOMInputStream;
 
-import com.epimorphics.dclib.framework.BindingEnv;
 import com.epimorphics.util.EpiException;
 import com.epimorphics.util.NameUtils;
+
+import static com.epimorphics.dclib.framework.ConverterProcess.CHARSET;
 
 /**
  * Read a UTF-8 CSV file line by line
@@ -42,7 +40,7 @@ public class CSVInput {
     }
     
     public CSVInput(InputStream ins) throws IOException, CsvValidationException {
-        in = new CSVReaderBuilder(new InputStreamReader(ins, StandardCharsets.UTF_8)).build();
+        in = new CSVReaderBuilder(new InputStreamReader(ins, CHARSET)).build();
         
         String[] headerLine = in.readNext();
         if (headerLine == null) {
@@ -98,7 +96,7 @@ public class CSVInput {
      * If there have been any peek rows then returns an env based
      * on the last peeked row.
      */
-    public BindingEnv nextRow() throws IOException, CsvValidationException {
+    public CsvBindingEnv nextRow() throws IOException, CsvValidationException {
         if (in != null) {
             String[] rowValues = (peekRow != null) ? peekRow : in.readNext();
             lineNumber++;
@@ -106,16 +104,27 @@ public class CSVInput {
             if (rowValues == null || rowValues.length == 0) {
                 return null;
             }
-            int safeLength = Math.min(rowValues.length,headers.length);
-            BindingEnv row = new BindingEnv( );
-            for (int i = 0; i < safeLength; i++) {
-                row.put(headers[i], rowValues[i]);
-            }
-            return row;
+            return getRow(rowValues);
         }
         return null;
     }
-    
+
+    private CsvBindingEnv getRow(String[] rowValues) {
+        int rowLength = rowValues.length;
+        int sourceBytes = rowLength; // assume 1 byte for each column separator
+        int safeLength = Math.min(rowLength,headers.length);
+        CsvBindingEnv row = new CsvBindingEnv();
+        for (int i = 0; i < rowLength; i++) {
+            String rowValue = rowValues[i];
+            sourceBytes += rowValue.getBytes(CHARSET).length;
+            if (i < safeLength) {
+                row.put(headers[i], rowValue);
+            }
+        }
+        row.setSourceBytes(sourceBytes);
+        return row;
+    }
+
     public boolean hasHeader(String header) {
         for (String h : headers) {
             if (h.equals(header)) {
@@ -144,7 +153,4 @@ public class CSVInput {
             // swallow errors in closing, not useful here
         }
     }
-    
-    
-     
 }
