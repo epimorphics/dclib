@@ -11,6 +11,8 @@ package com.epimorphics.dclib.framework;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 import com.epimorphics.dclib.sources.CsvBindingEnv;
 import com.opencsv.exceptions.CsvValidationException;
@@ -49,6 +51,7 @@ import org.apache.jena.rdf.model.ModelFactory;
  */
 public class ConverterProcess {
     static final Logger log = LoggerFactory.getLogger( ConverterProcess.class );
+    public static Charset CHARSET = StandardCharsets.UTF_8;
     
     public static final int MAX_FETCH_CACHE = 500;
     
@@ -170,7 +173,7 @@ public class ConverterProcess {
             String[] headers = getHeaders();
             totalBytes -= headers.length; // assume 1 byte for each column separator
             for (String header: getHeaders()) {
-                totalBytes -= header.getBytes().length;
+                totalBytes -= header.getBytes(CHARSET).length;
             }
         }
         try {

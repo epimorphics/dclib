@@ -13,7 +13,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
 
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
@@ -22,6 +21,8 @@ import org.apache.commons.io.input.BOMInputStream;
 
 import com.epimorphics.util.EpiException;
 import com.epimorphics.util.NameUtils;
+
+import static com.epimorphics.dclib.framework.ConverterProcess.CHARSET;
 
 /**
  * Read a UTF-8 CSV file line by line
@@ -39,7 +40,7 @@ public class CSVInput {
     }
     
     public CSVInput(InputStream ins) throws IOException, CsvValidationException {
-        in = new CSVReaderBuilder(new InputStreamReader(ins, StandardCharsets.UTF_8)).build();
+        in = new CSVReaderBuilder(new InputStreamReader(ins, CHARSET)).build();
         
         String[] headerLine = in.readNext();
         if (headerLine == null) {
@@ -115,7 +116,7 @@ public class CSVInput {
         CsvBindingEnv row = new CsvBindingEnv();
         for (int i = 0; i < rowLength; i++) {
             String rowValue = rowValues[i];
-            sourceBytes += rowValue.getBytes().length;
+            sourceBytes += rowValue.getBytes(CHARSET).length;
             if (i < safeLength) {
                 row.put(headers[i], rowValue);
             }
