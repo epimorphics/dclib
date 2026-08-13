@@ -11,6 +11,8 @@ package com.epimorphics.dclib.framework;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 import com.epimorphics.dclib.sources.CsvBindingEnv;
 import com.opencsv.exceptions.CsvValidationException;
@@ -49,6 +51,7 @@ import org.apache.jena.rdf.model.ModelFactory;
  */
 public class ConverterProcess {
     static final Logger log = LoggerFactory.getLogger( ConverterProcess.class );
+    public static Charset CHARSET = StandardCharsets.UTF_8;
     
     public static final int MAX_FETCH_CACHE = 500;
     
@@ -71,7 +74,6 @@ public class ConverterProcess {
     
     protected CSVInput dataSource;
 
-    protected int rowCount;
     protected boolean debug = false;
     protected boolean allowNullRows = true;
     
@@ -144,14 +146,6 @@ public class ConverterProcess {
         this.debug = debugOn;
     }
 
-    /**
-     * Set the total number of rows (not lines) to be processed for the purpose of computing progress percentage.
-     */
-    public void setRowCount(int rowCount) {
-        this.rowCount = rowCount;
-    }
-
-
     private long totalBytes = 0;
     public void setTotalBytes(long totalBytes) {
         this.totalBytes = totalBytes;
@@ -179,7 +173,7 @@ public class ConverterProcess {
             String[] headers = getHeaders();
             totalBytes -= headers.length; // assume 1 byte for each column separator
             for (String header: getHeaders()) {
-                totalBytes -= header.length();
+                totalBytes -= header.getBytes(CHARSET).length;
             }
         }
         try {

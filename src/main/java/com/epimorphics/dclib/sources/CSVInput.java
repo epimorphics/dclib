@@ -25,6 +25,8 @@ import org.apache.commons.io.input.BOMInputStream;
 import com.epimorphics.util.EpiException;
 import com.epimorphics.util.NameUtils;
 
+import static com.epimorphics.dclib.framework.ConverterProcess.CHARSET;
+
 /**
  * Read a UTF-8 CSV file line by line
  * @author <a href="mailto:dave@epimorphics.com">Dave Reynolds</a>
@@ -40,11 +42,12 @@ public class CSVInput {
     public CSVInput(String filename) throws IOException, CsvValidationException {
         this(BOMInputStream.builder().setInputStream( new FileInputStream(filename) ).get());
     }
-    
+
     public CSVInput(InputStream ins) throws IOException {
-        CSVParser parser = CSVFormat.RFC4180.parse(new InputStreamReader(ins, StandardCharsets.UTF_8));
+        CSVParser parser = CSVFormat.RFC4180.parse(new InputStreamReader(ins, CHARSET));
         Iterator<CSVRecord> in = parser.stream().iterator();
         String[] headerLine = in.next().values();
+
         if (headerLine == null) {
             throw new EpiException("No data, cannot read header line");
         }
@@ -120,7 +123,7 @@ public class CSVInput {
         CsvBindingEnv row = new CsvBindingEnv();
         for (int i = 0; i < rowLength; i++) {
             String rowValue = rowValues[i];
-            sourceBytes += rowValue.length();
+            sourceBytes += rowValue.getBytes(CHARSET).length;
             if (i < safeLength) {
                 row.put(headers[i], rowValue);
             }
