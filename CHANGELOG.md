@@ -7,11 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [3.0.2]
 
-* Update appbase to 4.0.6 to address transitive dependency vulnerabilities.
-
-## [3.0.2-SNAPSHOT]
-
-* Update appbase 4.0.0 -> 4.0.6 to address transitive dependency vulnerabilities.
+* Update appbase to 4.0.7 to address transitive dependency vulnerabilities.
 * Update test dependency on logback-classic 1.5.32 -> 1.5.34 to address transitive dependency vulnerabilities.
 * Add toCamelCaseSegment formatting option on ValueBase.
 * Add percentage completion to progress logs.
