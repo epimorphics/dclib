@@ -9,5 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 * Update appbase to 4.0.7 to address transitive dependency vulnerabilities.
 * Update test dependency on logback-classic 1.5.32 -> 1.5.34 to address transitive dependency vulnerabilities.
+* Add percentage completion to progress logs.
+* Retain carriage returns in CSV source data.
 * Add toCamelCaseSegment formatting option on ValueBase.
 * Add percentage completion to progress logs.

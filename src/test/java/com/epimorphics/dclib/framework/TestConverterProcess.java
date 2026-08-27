@@ -12,10 +12,7 @@ package com.epimorphics.dclib.framework;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -51,6 +48,17 @@ public class TestConverterProcess {
         assertEquals("Processing row 1 (0%)", msgs.get(0).getMessage());
         assertEquals("Processing row 2 (50%)", msgs.get(1).getMessage());
         assertEquals("Processed 2 rows", msgs.get(2).getMessage());
+    }
+
+    @Test
+    public void testMultiLine() throws IOException {
+        SimpleProgressMonitor monitor = new SimpleProgressMonitor();
+        ConverterProcess process = setUp("test/test-cr.csv");
+        process.setMessageReporter(monitor);
+        boolean ok = process.process();
+        assertTrue(ok);
+        assertTrue( contains(process, "1", "multi\nline\nstring", "10") );
+        assertTrue( contains(process, "2", "carriage\r\nreturn", "20") );
     }
     
     @Test
