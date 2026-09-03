@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.epimorphics</groupId>
   <artifactId>dclib</artifactId>
-  <version>3.0.3-SNAPSHOT</version>
+  <version>3.0.4-SNAPSHOT</version>
   <name>Data Converter library</name>
   <description>Data converter library</description>
 
@@ -89,7 +89,7 @@
     <dependency>
       <groupId>com.epimorphics</groupId>
       <artifactId>appbase</artifactId>
-      <version>4.0.7</version>
+      <version>4.0.8</version>
     </dependency>
     <dependency>
       <groupId>org.apache.commons</groupId>
