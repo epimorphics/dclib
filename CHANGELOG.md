@@ -5,8 +5,9 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-### [Unreleased]
+## [Unreleased]
 
+## [3.0.5] - 2026-11-04
 * Update appbase to 4.0.11 to address transitive dependency vulnerabilities.
 * Update test dependency on logback-classic 1.6.6 to address reported CVEs.
 * Added explicit dependency on org.apache.commons:commons-text 1.15.0 to address symbol resolution failure after other dependency updates.
